@@ -9,7 +9,7 @@ import { properties } from './properties';
 //  src/properties/<slug>.ts.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const APP_TITLE = 'Guess The House 🇮🇪';
+export const APP_TITLE = 'Guess The House';
 
 // How many tries the player gets (matches the number of images & facts per property).
 export const MAX_TRIES = 6;

@@ -11,6 +11,8 @@ export interface PropertyConfig {
   facts: string[];
   // The correct answer (EUR). Never shown as a fact — only revealed at the end.
   soldPrice: number;
+  // Listing URL shown as a "link to property" link on the win/lose screen.
+  propertyUrl: string;
 }
 
 // Arrow shown next to a guess. The arrow points toward where the real price is:

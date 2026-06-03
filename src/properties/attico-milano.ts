@@ -14,4 +14,5 @@ export const atticoMilano: PropertyConfig = {
     'No private lot (apartment)',
   ],
   soldPrice: 1250000,
+  propertyUrl: 'https://www.immobiliare.it/',
 };

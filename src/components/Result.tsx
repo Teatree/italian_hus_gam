@@ -6,10 +6,11 @@ interface ResultProps {
   status: Exclude<GameStatus, 'playing'>;
   soldPrice: number;
   percentOff: number; // closest guess's distance from the exact price
+  propertyUrl: string;
   onShare: () => Promise<boolean>;
 }
 
-export function Result({ status, soldPrice, percentOff, onShare }: ResultProps) {
+export function Result({ status, soldPrice, percentOff, propertyUrl, onShare }: ResultProps) {
   const [copied, setCopied] = useState(false);
   const won = status === 'won';
 
@@ -30,8 +31,19 @@ export function Result({ status, soldPrice, percentOff, onShare }: ResultProps) 
         {won ? 'Good Job!' : 'You Suck!'}
       </p>
       <p className="text-slate-200">
-        This house was sold for: <span className="font-bold text-white">{formatEuro(soldPrice)}</span>
-        , you were <span className="font-bold text-white">{percentOff}%</span> from the exact price.
+        This house is being sold for:{' '}
+        <span className="font-bold text-white">{formatEuro(soldPrice)}</span>, you were{' '}
+        <span className="font-bold text-white">{percentOff}%</span> from the exact price.
+      </p>
+      <p>
+        <a
+          href={propertyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sky-400 underline underline-offset-2 hover:text-sky-300"
+        >
+          link to property
+        </a>
       </p>
       <button
         onClick={handleShare}

@@ -5,16 +5,17 @@ import type { PropertyConfig } from '../types';
 // public/properties/villa-chianti/<filename>.
 export const villaChianti: PropertyConfig = {
   slug: 'villa-chianti',
-  coordinates: { lat: 43.5836, lng: 11.3158 }, // Greve in Chianti
+  coordinates: { lat: 43.7339, lng: 11.21986 }, 
   mapZoom: 12,
   images: ['photo-1.png', 'photo-2.png', 'photo-3.png', 'photo-4.png', 'photo-5.png', 'photo-6.png'],
   facts: [
-    'Located in Greve in Chianti, Toscana',
-    '240 m² of living space',
-    '4 bed / 3 bath',
-    'Built in 1968',
-    'Lot size: 3,200 m²',
-    'Sold in May 2023',
+    'Located in Greve in Galluzzo, Florence',
+    '195 m² of living space',
+    '7 rooms / 2 baths',
+    'Built in 1976',
+	'...wooden floors',
+    '"Private Garden"',
   ],
-  soldPrice: 685000,
+  soldPrice: 590000,
+  propertyUrl: 'https://www.idealista.it/en/immobile/35736501/',
 };

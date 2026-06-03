@@ -14,4 +14,5 @@ export const trulloPuglia: PropertyConfig = {
     'Sold in July 2022',
   ],
   soldPrice: 215000,
+  propertyUrl: 'https://www.immobiliare.it/',
 };

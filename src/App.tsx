@@ -107,6 +107,7 @@ export default function App() {
           status={status}
           soldPrice={soldPrice}
           percentOff={closestPercentOff}
+          propertyUrl={property.propertyUrl}
           onShare={handleShare}
         />
       )}
