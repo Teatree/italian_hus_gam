@@ -33,28 +33,58 @@ You can click any **revealed** try button to look back at that try's photo; upco
 Progress is saved in the browser (`localStorage`) **per house**, so returning players resume
 where they left off, and switching the active house starts a fresh game.
 
-## Admin: choosing / configuring the house
+## Daily rotation & scheduling
 
-Everything is hardcoded in TypeScript — no admin UI.
+The puzzle rotates automatically every day at **10:00 Eastern European time** (`Europe/Kyiv`,
+daylight-saving aware). The property shown is the one whose **folder name matches the current
+date** in `DD_MM_YY` format (e.g. on 8 June 2026 it shows `08_06_26`). A folder is the active
+puzzle from 10:00 on its date until 10:00 the next day. If no folder matches the current day, a
+"check back soon" screen shows with a countdown. When the reset passes while someone is playing,
+the page auto-refreshes to load the new puzzle.
 
-- **`src/admin.ts`** — set `ACTIVE_SLUG` to the property you want to show right now. Also holds
-  `APP_TITLE`, `MAX_TRIES`, and `TOLERANCE`.
-- **`src/properties/<slug>.ts`** — per-house config: map `coordinates`, `mapZoom`, the ordered
-  list of 6 `images`, the `factOrder` (which structured fields become facts and in what order),
-  and the `hints` (place name, year built, beds/baths, living/lot m², sold date, and
-  `soldPrice` — the correct answer).
-- **`public/properties/<slug>/`** — the 6 image files referenced by that config.
+### Adding a house (just create a folder)
 
-### Adding a new house
+No code changes, no registration. Create one folder under `src/properties/`:
 
-1. Create `public/properties/my-house/` with 6 images (`photo-1…6.png`, or any names you
-   reference in the config — `.jpg`/`.webp` work too).
-2. Create `src/properties/my-house.ts` exporting a `PropertyConfig` (copy an existing one).
-   Its `facts` are a plain ordered list of strings (one revealed per wrong guess).
-3. Register it in `src/properties/index.ts`.
-4. Point `ACTIVE_SLUG` at `'my-house'` in `src/admin.ts`.
+```
+src/properties/08_06_26/
+├─ config.json          # all parameters/hints (see below)
+├─ photo-1.png          # images, shown in filename order (.jpg/.webp/.avif also work)
+├─ photo-2.png
+└─ … photo-6.png
+```
 
-The three bundled properties use placeholder PNG images — replace them with real photos.
+`config.json`:
+
+```json
+{
+  "coordinates": [44.0099, 12.5975],
+  "mapZoom": 12,
+  "soldPrice": 1200000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35770070/",
+  "facts": [
+    "Located near Montescudo, Rimini",
+    "270 m² of living space",
+    "9 rooms / 5 baths",
+    "Built in 2001",
+    "Land plot of 2,700 m²",
+    "Listed as \"Urgent\""
+  ]
+}
+```
+
+The folder name becomes the slug/date. Facts reveal one-by-one (one per wrong guess); provide 6
+images and 6 facts. Folders are auto-discovered at build time via `import.meta.glob`.
+
+### Other admin settings (`src/admin.ts`)
+
+- `APP_TITLE`, `MAX_TRIES`, `TOLERANCE`
+- `RESET_HOUR` / `RESET_TIME_ZONE` — the daily reset time/zone
+- `OVERRIDE_SLUG` — force a specific property regardless of date (testing only); leave `null`
+  for normal date-based scheduling
+
+The bundled `villa-chianti` folder is a non-dated demo property (only reachable via
+`OVERRIDE_SLUG`, since its name never matches a date).
 
 ## Deploy to Render
 

@@ -32,8 +32,8 @@ export function Result({ status, soldPrice, percentOff, propertyUrl, onShare }: 
       </p>
       <p className="text-slate-200">
         This house is being sold for:{' '}
-        <span className="font-bold text-white">{formatEuro(soldPrice)}</span>, you were{' '}
-        <span className="font-bold text-white">{percentOff}%</span> from the exact price.
+        <span className="font-bold text-green-400">{formatEuro(soldPrice)}</span>, you were{' '}
+        <span className="font-bold text-green-400">{percentOff}%</span> from the exact price.
       </p>
       <p>
         <a

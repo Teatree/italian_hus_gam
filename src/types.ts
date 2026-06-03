@@ -1,18 +1,23 @@
-export interface PropertyConfig {
-  // Must match the folder name under public/properties/<slug>.
-  slug: string;
-  // Where the map is centered. No marker is drawn so the area stays a hint.
-  coordinates: { lat: number; lng: number };
+// The data authored by hand in each property's config.json.
+export interface PropertyData {
+  // Where the map is centered, as [lat, lng] — paste straight from Google Maps.
+  // No marker is drawn so the area stays a hint.
+  coordinates: [number, number];
   // Reasonable zoom so the player can tell roughly where they are (defaults to 12).
   mapZoom?: number;
-  // Exactly 6 image filenames (relative to the property folder), in reveal order.
-  images: string[];
   // Facts shown to the player, in reveal order (one more revealed per wrong guess).
   facts: string[];
   // The correct answer (EUR). Never shown as a fact — only revealed at the end.
   soldPrice: number;
   // Listing URL shown as a "link to property" link on the win/lose screen.
   propertyUrl: string;
+}
+
+// A fully resolved property: the config.json data plus the slug (folder name) and the
+// resolved image URLs collected from the folder.
+export interface PropertyConfig extends PropertyData {
+  slug: string;
+  images: string[];
 }
 
 // Arrow shown next to a guess. The arrow points toward where the real price is:

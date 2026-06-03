@@ -3,9 +3,10 @@ import type { Guess } from '../types';
 const WRONG = '🟥';
 const WIN = '🟩';
 const UNUSED = '⬛';
+const IRISH_FLAG = '🇮🇪';
 
-// Build the emoji grid: one cell per try. Wrong guesses are red, the winning guess is
-// green, and any unused tries are black. A loss is all red (no green).
+// Build the emoji grid: one cell per try, separated by spaces. Wrong guesses are red, the
+// winning guess is green, and any unused tries are black. A loss is all red (no green).
 export function buildEmojiGrid(guesses: Guess[], maxTries: number): string {
   const cells: string[] = [];
   for (let i = 0; i < maxTries; i++) {
@@ -14,17 +15,18 @@ export function buildEmojiGrid(guesses: Guess[], maxTries: number): string {
     else if (g.direction === 'correct') cells.push(WIN);
     else cells.push(WRONG);
   }
-  return cells.join('');
+  return cells.join(' ');
 }
 
-// The full text copied to the clipboard: title, emoji grid, and a link back to the game.
+// The full text copied to the clipboard: title (with flag), a flag + spaced emoji grid,
+// and a link back to the game.
 export function buildShareText(
   title: string,
   guesses: Guess[],
   maxTries: number,
   url: string,
 ): string {
-  return `${title}\n${buildEmojiGrid(guesses, maxTries)}\n${url}`;
+  return `${title} ${IRISH_FLAG}\n${IRISH_FLAG} ${buildEmojiGrid(guesses, maxTries)}\n${url}`;
 }
 
 // Copy text to the clipboard, with a fallback for browsers without the async API.

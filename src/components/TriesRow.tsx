@@ -8,6 +8,8 @@ interface TriesRowProps {
   revealedUpTo: number;
   // Which try's image is currently being viewed.
   selectedIndex: number;
+  // After a win, fade unused (idle) buttons to a slightly lighter blue.
+  lightenUnused: boolean;
   onSelect: (index: number) => void;
 }
 
@@ -21,6 +23,7 @@ export function TriesRow({
   isPlaying,
   revealedUpTo,
   selectedIndex,
+  lightenUnused,
   onSelect,
 }: TriesRowProps) {
   return (
@@ -31,7 +34,10 @@ export function TriesRow({
         const clickable = i <= revealedUpTo;
         const isSelected = i === selectedIndex;
 
-        let cls = 'bg-panel text-slate-400 border-white/10'; // idle / unused
+        // idle / unused — turns a slightly lighter blue once `lightenUnused` is set (post-win)
+        let cls = lightenUnused
+          ? 'bg-[#26496e] text-slate-200 border-white/10'
+          : 'bg-panel text-slate-400 border-white/10';
         if (guess?.direction === 'correct') cls = 'bg-green-600 text-white border-green-400';
         else if (guess) cls = 'bg-red-600 text-white border-red-400';
         else if (isActive) cls = 'bg-sky-500/20 text-sky-200 border-sky-400 ring-2 ring-sky-400';
@@ -49,7 +55,7 @@ export function TriesRow({
             disabled={!clickable}
             aria-pressed={isSelected}
             onClick={() => clickable && onSelect(i)}
-            className={`flex h-9 w-9 items-center justify-center rounded-md border text-sm font-semibold transition ${cls}${selectedRing}${cursor}`}
+            className={`flex h-6 w-6 items-center justify-center rounded-md border text-xs font-semibold transition-colors duration-700 ${cls}${selectedRing}${cursor}`}
           >
             {i + 1}
           </button>

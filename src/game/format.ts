@@ -17,3 +17,12 @@ export function parsePrice(input: string): number | null {
   const n = Number(cleaned);
   return Number.isFinite(n) && n > 0 ? n : null;
 }
+
+// Live-format what the player is typing for visual clarity: a "€ " prefix plus comma
+// grouping, e.g. "1234567" -> "€ 1,234,567". Returns "" when there are no digits yet,
+// so the placeholder stays visible.
+export function formatPriceInput(input: string): string {
+  const digits = input.replace(/[^0-9]/g, '');
+  if (digits === '') return '';
+  return `€ ${Number(digits).toLocaleString('en-US')}`;
+}

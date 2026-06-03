@@ -16,3 +16,23 @@ body {
   color: #e5edf5;
   font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
 }
+
+/* A quick 1-second fade-in pop when a new hint is revealed. */
+@keyframes hint-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(-3px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hint-new {
+  animation: hint-pop 1s ease-out 1;
+}
