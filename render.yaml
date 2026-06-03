@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: italian-guess-the-house
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: true
+    routes:
+      # SPA fallback so deep links resolve to index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
