@@ -2,11 +2,11 @@ import type { Guess } from '../types';
 
 const WRONG = '🟥';
 const WIN = '🟩';
-const UNUSED = '⬛';
+const UNUSED = '⬜';
 const IRISH_FLAG = '🇮🇪';
 
 // Build the emoji grid: one cell per try, separated by spaces. Wrong guesses are red, the
-// winning guess is green, and any unused tries are black. A loss is all red (no green).
+// winning guess is green, and any unused tries are white. A loss is all red (no green).
 export function buildEmojiGrid(guesses: Guess[], maxTries: number): string {
   const cells: string[] = [];
   for (let i = 0; i < maxTries; i++) {

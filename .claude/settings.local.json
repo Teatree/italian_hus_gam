@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(echo \"exit:$?\")"
+      "Bash(echo \"exit:$?\")",
+      "Bash(cwebp -version)",
+      "Bash(magick -version)"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "playwright"
+  ]
 }
