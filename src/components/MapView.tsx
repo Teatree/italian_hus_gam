@@ -15,7 +15,7 @@ export function MapView({ lat, lng, zoom }: MapViewProps) {
         key={`${lat},${lng}`}
         center={[lat, lng]}
         zoom={zoom}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
         style={{ height: '240px', width: '100%' }}
       >
         <TileLayer

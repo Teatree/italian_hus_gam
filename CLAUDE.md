@@ -19,7 +19,7 @@ A fully static Vite + React + TypeScript daily-puzzle game (no backend). Players
 
 The data flow is **content folders → build-time auto-discovery → date-based scheduling → single-game React tree**:
 
-- **Content as folders (`src/properties/<DD_MM_YY>/`)** — Each puzzle is a folder containing `config.json` (`coordinates`, `mapZoom`, `soldPrice`, `propertyUrl`, `facts[]`) plus `photo-*.png` images. Adding a puzzle means creating a folder; there is **no registration step and no code change**. The folder name is the slug.
+- **Content as folders (`src/properties/<DD_MM_YY>/`)** — Each puzzle is a folder containing `config.json` (`coordinates`, `mapZoom`, `soldPrice`, `propertyUrl`, `facts[]`) plus `photo-*.webp` images (the discovery glob also accepts `png/jpg/jpeg/avif`). Adding a puzzle means creating a folder; there is **no registration step and no code change**. The folder name is the slug.
 
 - **Auto-discovery (`src/properties/index.ts`)** — Uses Vite's `import.meta.glob` (eager) to collect all `config.json` files and all images at build time into a `properties` registry keyed by slug. Images are sorted by filename (numeric-aware), so `photo-1 … photo-6` order matters. The folder name slug doubling as a `DD_MM_YY` date is what links content to the schedule.
 

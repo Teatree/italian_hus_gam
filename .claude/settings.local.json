@@ -3,7 +3,8 @@
     "allow": [
       "Bash(echo \"exit:$?\")",
       "Bash(cwebp -version)",
-      "Bash(magick -version)"
+      "Bash(magick -version)",
+      "Bash(Select-String -Pattern \"error|Error|built in\")"
     ]
   },
   "enableAllProjectMcpServers": true,

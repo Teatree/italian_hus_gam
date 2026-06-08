@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { APP_TITLE, MAX_TRIES, TOLERANCE, OVERRIDE_SLUG } from './admin';
+import { APP_TITLE, MAX_TRIES, TOLERANCE, TOLERANCE_CAP, OVERRIDE_SLUG } from './admin';
+import { track, loadGeo, randomId, isMobile } from './analytics';
 import { properties } from './properties';
 import type { Guess, GameStatus, PropertyConfig } from './types';
 import { evaluateGuess, percentOff, revealedCount } from './game/logic';
@@ -33,6 +34,32 @@ export default function App() {
 
   const slug = OVERRIDE_SLUG ?? dateKey;
   const property = properties[slug] ?? null;
+
+  // One Sessions row per page load: who showed up, from where, on what. Fires after the geo
+  // lookup so ip/country/city are populated. Runs even on the come-back screen (still a visit).
+  useEffect(() => {
+    const seenKey = 'gth:analytics:seen';
+    const isReturning = localStorage.getItem(seenKey) === '1';
+    try {
+      localStorage.setItem(seenKey, '1');
+    } catch {
+      // ignore storage failures (private mode, etc.)
+    }
+    void loadGeo().then((g) => {
+      track('Sessions', {
+        puzzleDate: slug,
+        city: g.city,
+        isReturning,
+        referrer: document.referrer,
+        userAgent: navigator.userAgent,
+        device: isMobile() ? 'mobile' : 'desktop',
+        language: navigator.language,
+        screenW: window.innerWidth,
+      });
+    });
+    // Only once per mount (one page load = one session).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!property) {
     return <ComeBackScreen targetMs={nextResetMs} />;
@@ -68,6 +95,39 @@ function Game({ property, nextResetMs }: GameProps) {
   // Which try's image the player is viewing; null = follow the latest revealed image.
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
+  // ── Analytics state (per attempt) ──────────────────────────────────────────────────────
+  // One id per puzzle attempt; pairs the Guesses rows with their Results row. Because <Game>
+  // is keyed by slug it remounts per puzzle, so this re-inits naturally each new puzzle.
+  const [gameId] = useState(() => randomId('g_'));
+  const gameStartRef = useRef<number>(Date.now()); // for totalTimeMs
+  const lastGuessRef = useRef<number>(Date.now()); // for per-try timeOnTryMs
+  // The finished-game row is held here and flushed once — on share, page-hide, or unmount —
+  // so we can record whether the player shared without emitting two rows per game.
+  const pendingResultRef = useRef<Record<string, unknown> | null>(null);
+  const resultSentRef = useRef(false);
+
+  function flushResult() {
+    if (resultSentRef.current || !pendingResultRef.current) return;
+    resultSentRef.current = true;
+    track('Results', pendingResultRef.current);
+  }
+
+  // Flush the pending Results row when the player leaves (covers close, reload, navigate) or
+  // when this game unmounts (e.g. the puzzle rolls over). keepalive on the POST lets it land.
+  useEffect(() => {
+    const onHide = () => {
+      if (document.visibilityState === 'hidden') flushResult();
+    };
+    window.addEventListener('pagehide', flushResult);
+    document.addEventListener('visibilitychange', onHide);
+    return () => {
+      window.removeEventListener('pagehide', flushResult);
+      document.removeEventListener('visibilitychange', onHide);
+      flushResult();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Restore saved progress for the active house on mount (keyed per slug).
   useEffect(() => {
     const saved = loadGame(property.slug);
@@ -81,8 +141,12 @@ function Game({ property, nextResetMs }: GameProps) {
     setSelectedImage(null);
   }, [property.slug]);
 
+  // A guess that hit the price exactly (€0 / 0% off) — "right on the money".
+  const isExact = guesses.some((g) => g.value === soldPrice);
+
   // When the player wins: a little confetti burst from both sides, then (after a 2s delay)
-  // fade the unused try buttons to a slightly lighter blue.
+  // fade the unused try buttons to a slightly lighter blue. An exact guess gets an extra
+  // celebratory burst from the center.
   const [lightenUnused, setLightenUnused] = useState(false);
   useEffect(() => {
     if (status !== 'won') {
@@ -91,9 +155,12 @@ function Game({ property, nextResetMs }: GameProps) {
     }
     confetti({ particleCount: 70, angle: 60, spread: 55, startVelocity: 55, origin: { x: 0, y: 0.7 } });
     confetti({ particleCount: 70, angle: 120, spread: 55, startVelocity: 55, origin: { x: 1, y: 0.7 } });
+    if (isExact) {
+      confetti({ particleCount: 180, spread: 120, startVelocity: 45, origin: { x: 0.5, y: 0.6 }, scalar: 1.1 });
+    }
     const id = window.setTimeout(() => setLightenUnused(true), 2000);
     return () => window.clearTimeout(id);
-  }, [status]);
+  }, [status, isExact]);
 
   const wrongCount = guesses.filter((g) => g.direction !== 'correct').length;
   const revealed = revealedCount(wrongCount, MAX_TRIES); // facts/images shown
@@ -111,10 +178,13 @@ function Game({ property, nextResetMs }: GameProps) {
   const closestPercentOff = guesses.length
     ? Math.min(...guesses.map((g) => percentOff(g.value, soldPrice)))
     : 0;
+  const closestEuroOff = guesses.length
+    ? Math.min(...guesses.map((g) => Math.abs(g.value - soldPrice)))
+    : 0;
 
   function handleSubmit(value: number) {
     if (!isPlaying) return;
-    const direction = evaluateGuess(value, soldPrice, TOLERANCE);
+    const direction = evaluateGuess(value, soldPrice, TOLERANCE, TOLERANCE_CAP);
     const nextGuesses = [...guesses, { value, direction }];
 
     let nextStatus: GameStatus = 'playing';
@@ -125,10 +195,53 @@ function Game({ property, nextResetMs }: GameProps) {
     setStatus(nextStatus);
     setSelectedImage(null); // jump back to the latest image after guessing
     saveGame({ slug: property.slug, guesses: nextGuesses, status: nextStatus });
+
+    // ── Analytics ──────────────────────────────────────────────────────────────────────
+    const now = Date.now();
+    const timeOnTryMs = now - lastGuessRef.current;
+    lastGuessRef.current = now;
+
+    track('Guesses', {
+      gameId,
+      puzzleDate: property.slug,
+      tryNumber: nextGuesses.length,
+      guessValue: value,
+      direction,
+      percentOff: percentOff(value, soldPrice),
+      euroOff: Math.abs(value - soldPrice),
+      timeOnTryMs,
+      soldPrice,
+      // 'playing' = still in the game after this guess; 'won'/'lost' = this guess ended it.
+      win_status: nextStatus,
+    });
+
+    if (nextStatus !== 'playing') {
+      pendingResultRef.current = {
+        gameId,
+        puzzleDate: property.slug,
+        outcome: nextStatus,
+        triesUsed: nextGuesses.length,
+        exact: nextGuesses.some((g) => g.value === soldPrice),
+        closestPercentOff: Math.min(...nextGuesses.map((g) => percentOff(g.value, soldPrice))),
+        closestEuroOff: Math.min(...nextGuesses.map((g) => Math.abs(g.value - soldPrice))),
+        totalTimeMs: now - gameStartRef.current,
+        shared: false,
+      };
+    }
   }
 
   async function handleShare(): Promise<boolean> {
-    const text = buildShareText(APP_TITLE, guesses, MAX_TRIES, window.location.href);
+    // Record the share on this game's Results row, then flush it (once).
+    if (pendingResultRef.current) pendingResultRef.current.shared = true;
+    flushResult();
+    const text = buildShareText(
+      APP_TITLE,
+      guesses,
+      MAX_TRIES,
+      window.location.href,
+      closestPercentOff,
+      closestEuroOff,
+    );
     return copyToClipboard(text);
   }
 
@@ -179,6 +292,7 @@ function Game({ property, nextResetMs }: GameProps) {
             status={status}
             soldPrice={soldPrice}
             percentOff={closestPercentOff}
+            exact={isExact}
             propertyUrl={property.propertyUrl}
             onShare={handleShare}
           />

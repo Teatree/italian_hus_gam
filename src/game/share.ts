@@ -1,4 +1,5 @@
 import type { Guess } from '../types';
+import { formatEuro } from './format';
 
 const WRONG = '🟥';
 const WIN = '🟩';
@@ -19,14 +20,20 @@ export function buildEmojiGrid(guesses: Guess[], maxTries: number): string {
 }
 
 // The full text copied to the clipboard: title (with flag), a flag + spaced emoji grid,
-// and a link back to the game.
+// the closest guess's distance from the real price, and a link back to the game.
 export function buildShareText(
   title: string,
   guesses: Guess[],
   maxTries: number,
   url: string,
+  closestPercentOff: number,
+  closestEuroOff: number,
 ): string {
-  return `${title} ${IRISH_FLAG}\n${IRISH_FLAG} ${buildEmojiGrid(guesses, maxTries)}\n${url}`;
+  const distance =
+    closestEuroOff === 0
+      ? '🎯 RIGHT ON THE MONEY! (0% off)'
+      : `🎯 ${closestPercentOff}% off (${formatEuro(closestEuroOff)})`;
+  return `${title} ${IRISH_FLAG}\n${IRISH_FLAG} ${buildEmojiGrid(guesses, maxTries)}\n${distance}\n${url}`;
 }
 
 // Copy text to the clipboard, with a fallback for browsers without the async API.

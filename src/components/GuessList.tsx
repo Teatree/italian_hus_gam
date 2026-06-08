@@ -30,7 +30,7 @@ export function GuessList({ guesses }: GuessListProps) {
       {guesses.map((g, i) => (
         <li
           key={i}
-          className="flex items-center gap-2 rounded-md bg-panel px-3 py-2 text-sm"
+          className="flex items-center gap-2 rounded-md bg-panel px-3 py-2 text-lg"
         >
           <span className="font-medium text-white">{formatEuro(g.value)}</span>
           <span className="text-lg leading-none">{arrow(g.direction)}</span>

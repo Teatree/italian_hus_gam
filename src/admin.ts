@@ -23,6 +23,10 @@ export const MAX_TRIES = 6;
 // A guess within this fraction of the real price counts as correct (0.10 = ±10%).
 export const TOLERANCE = 0.1;
 
+// Upper bound (in €) on the win margin: even if TOLERANCE × price is larger than this,
+// the guess must still be within this many euros of the real price to count as correct.
+export const TOLERANCE_CAP = 200_000;
+
 // Daily reset: the puzzle switches at this wall-clock hour in this time zone.
 // 'Europe/Kyiv' is Eastern European (EET/EEST) and is daylight-saving aware, so the
 // reset stays at 10:00 on the local clock all year.
