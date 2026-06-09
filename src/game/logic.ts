@@ -3,21 +3,27 @@ import type { GuessDirection } from '../types';
 // Decide how a guess compares to the correct price. The arrow points toward where the
 // real price is relative to the guess:
 //  - within the win margin    -> 'correct' (the player wins)
-//  - guess too low  (price higher) -> 'up'   (or 'up-far'   if more than 50% off)
-//  - guess too high (price lower)  -> 'down' (or 'down-far' if more than 50% off)
+//  - guess too low  (price higher) -> 'up'   (or 'up-far'   if it misses by more than the far margin)
+//  - guess too high (price lower)  -> 'down' (or 'down-far' if it misses by more than the far margin)
 // The win margin is ±tolerance of the price, but capped at `cap` euros so that expensive
 // houses don't get an unreasonably wide window (e.g. 10% of €4M would be €400k otherwise).
+// The far margin (single vs double arrow) is the same shape: a fraction of the price capped
+// in euros, so on pricey houses the "way off" signal kicks in at a sane absolute distance
+// instead of a huge percentage.
 export function evaluateGuess(
   guess: number,
   correct: number,
   tolerance: number,
   cap: number,
+  farFraction: number,
+  farCap: number,
 ): GuessDirection {
   const delta = guess - correct;
   const margin = Math.min(correct * tolerance, cap);
   if (Math.abs(delta) <= margin) return 'correct';
 
-  const far = Math.abs(delta) > correct * 0.5;
+  const farMargin = Math.min(correct * farFraction, farCap);
+  const far = Math.abs(delta) > farMargin;
   if (delta < 0) {
     // guessed below the price -> price is higher -> point up
     return far ? 'up-far' : 'up';

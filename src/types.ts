@@ -23,7 +23,8 @@ export interface PropertyConfig extends PropertyData {
 // Arrow shown next to a guess. The arrow points toward where the real price is:
 //  up   = price is higher than your guess (you guessed too low)
 //  down = price is lower than your guess (you guessed too high)
-//  *-far = the guess is more than 50% away from the price (shown as a double arrow)
+//  *-far = the guess misses by more than the far margin (min of FAR_THRESHOLD × price and
+//          FAR_THRESHOLD_CAP euros) — shown as a double arrow
 export type GuessDirection = 'up' | 'down' | 'up-far' | 'down-far' | 'correct';
 
 export interface Guess {

@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { APP_TITLE, MAX_TRIES, TOLERANCE, TOLERANCE_CAP, OVERRIDE_SLUG } from './admin';
+import {
+  APP_TITLE,
+  MAX_TRIES,
+  TOLERANCE,
+  TOLERANCE_CAP,
+  FAR_THRESHOLD,
+  FAR_THRESHOLD_CAP,
+  OVERRIDE_SLUG,
+} from './admin';
 import { track, loadGeo, randomId, isMobile } from './analytics';
 import { properties } from './properties';
 import type { Guess, GameStatus, PropertyConfig } from './types';
@@ -162,29 +170,59 @@ function Game({ property, nextResetMs }: GameProps) {
     return () => window.clearTimeout(id);
   }, [status, isExact]);
 
+  // When the player loses: a short rain of 👎 emoji that falls from the top under gravity.
+  useEffect(() => {
+    if (status !== 'lost') return;
+    const thumb = confetti.shapeFromText({ text: '👎', scalar: 2 });
+    let frame = 0;
+    const id = window.setInterval(() => {
+      // Spawn a few each tick at random x just above the viewport, with no upward velocity, so
+      // gravity carries them straight down like falling rain.
+      confetti({
+        particleCount: 4,
+        startVelocity: 0,
+        ticks: 220,
+        gravity: 0.7,
+        spread: 70,
+        origin: { x: Math.random(), y: -0.1 },
+        shapes: [thumb],
+        scalar: 2,
+        flat: true,
+        disableForReducedMotion: true,
+      });
+      frame += 1;
+      if (frame >= 12) window.clearInterval(id);
+    }, 150);
+    return () => window.clearInterval(id);
+  }, [status]);
+
   const wrongCount = guesses.filter((g) => g.direction !== 'correct').length;
   const revealed = revealedCount(wrongCount, MAX_TRIES); // facts/images shown
   const latestImageIndex = Math.min(wrongCount, property.images.length - 1);
   const displayedImageIndex = selectedImage ?? latestImageIndex;
   const isPlaying = status === 'playing';
-  const won = status === 'won';
+  const isOver = !isPlaying; // 'won' or 'lost' — the game has finished
 
-  // On win, reveal every hint (one-by-one). The facts panel is shown while playing and on win.
-  const showFacts = isPlaying || won;
-  const factsToShow = won ? property.facts : property.facts.slice(0, revealed);
+  // Facts stay visible the whole game: revealed one-per-wrong-guess while playing, then every
+  // hint (revealed one-by-one) once it's over — the same on a loss as on a win.
+  const factsToShow = isOver ? property.facts : property.facts.slice(0, revealed);
   // Once the game is over the player can browse all of the tries' images.
   const triesRevealedUpTo = isPlaying ? latestImageIndex : property.images.length - 1;
 
   const closestPercentOff = guesses.length
     ? Math.min(...guesses.map((g) => percentOff(g.value, soldPrice)))
     : 0;
-  const closestEuroOff = guesses.length
-    ? Math.min(...guesses.map((g) => Math.abs(g.value - soldPrice)))
-    : 0;
 
   function handleSubmit(value: number) {
     if (!isPlaying) return;
-    const direction = evaluateGuess(value, soldPrice, TOLERANCE, TOLERANCE_CAP);
+    const direction = evaluateGuess(
+      value,
+      soldPrice,
+      TOLERANCE,
+      TOLERANCE_CAP,
+      FAR_THRESHOLD,
+      FAR_THRESHOLD_CAP,
+    );
     const nextGuesses = [...guesses, { value, direction }];
 
     let nextStatus: GameStatus = 'playing';
@@ -240,7 +278,6 @@ function Game({ property, nextResetMs }: GameProps) {
       MAX_TRIES,
       window.location.href,
       closestPercentOff,
-      closestEuroOff,
     );
     return copyToClipboard(text);
   }
@@ -251,7 +288,7 @@ function Game({ property, nextResetMs }: GameProps) {
 
       {/* Image stays centered; the hints list sits to its right (stacks below on narrow screens). */}
       <div className="flex flex-col items-center gap-4 lg:flex-row lg:items-start lg:justify-center">
-        {showFacts && <div className="hidden lg:block lg:w-56 lg:shrink-0" aria-hidden="true" />}
+        <div className="hidden lg:block lg:w-56 lg:shrink-0" aria-hidden="true" />
 
         <div className="w-full max-w-md lg:shrink-0">
           <ImageViewer
@@ -261,11 +298,9 @@ function Game({ property, nextResetMs }: GameProps) {
           />
         </div>
 
-        {showFacts && (
-          <div className="w-full max-w-md lg:w-56 lg:max-w-none lg:shrink-0">
-            <FactsList facts={factsToShow} highlightIndex={selectedImage} stagger={won} />
-          </div>
-        )}
+        <div className="w-full max-w-md lg:w-56 lg:max-w-none lg:shrink-0">
+          <FactsList facts={factsToShow} highlightIndex={selectedImage} stagger={isOver} />
+        </div>
       </div>
 
       <div className="mx-auto flex w-full max-w-md flex-col gap-4">

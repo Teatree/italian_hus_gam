@@ -1,5 +1,4 @@
 import type { Guess } from '../types';
-import { formatEuro } from './format';
 
 const WRONG = '🟥';
 const WIN = '🟩';
@@ -19,21 +18,27 @@ export function buildEmojiGrid(guesses: Guess[], maxTries: number): string {
   return cells.join(' ');
 }
 
-// The full text copied to the clipboard: title (with flag), a flag + spaced emoji grid,
-// the closest guess's distance from the real price, and a link back to the game.
+// The full text copied to the clipboard: title (with flag), a flag + spaced emoji grid, a
+// result line, and a link back to the game. On a win we share the closest guess's percentage
+// off — but never the euro amount, so it doesn't give away the actual price. On a loss we skip
+// the percentage entirely and just own it.
 export function buildShareText(
   title: string,
   guesses: Guess[],
   maxTries: number,
   url: string,
   closestPercentOff: number,
-  closestEuroOff: number,
 ): string {
-  const distance =
-    closestEuroOff === 0
-      ? '🎯 RIGHT ON THE MONEY! (0% off)'
-      : `🎯 ${closestPercentOff}% off (${formatEuro(closestEuroOff)})`;
-  return `${title} ${IRISH_FLAG}\n${IRISH_FLAG} ${buildEmojiGrid(guesses, maxTries)}\n${distance}\n${url}`;
+  const won = guesses.some((g) => g.direction === 'correct');
+  let result: string;
+  if (!won) {
+    result = 'Look how much I suck!';
+  } else if (closestPercentOff === 0) {
+    result = '🎯 RIGHT ON THE MONEY! (0% off)';
+  } else {
+    result = `🎯 ${closestPercentOff}% off`;
+  }
+  return `${title} ${IRISH_FLAG}\n${IRISH_FLAG} ${buildEmojiGrid(guesses, maxTries)}\n${result}\n${url}`;
 }
 
 // Copy text to the clipboard, with a fallback for browsers without the async API.
