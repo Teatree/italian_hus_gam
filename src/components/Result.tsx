@@ -8,10 +8,21 @@ interface ResultProps {
   percentOff: number; // closest guess's distance from the exact price
   exact: boolean; // true when a guess hit the price exactly (0% / €0 off)
   propertyUrl: string;
+  // True while a fresh win is waiting for the celebration video popup; hides Share so it
+  // doesn't get clicked (or steal attention) before the video moment.
+  hideShare?: boolean;
   onShare: () => Promise<boolean>;
 }
 
-export function Result({ status, soldPrice, percentOff, exact, propertyUrl, onShare }: ResultProps) {
+export function Result({
+  status,
+  soldPrice,
+  percentOff,
+  exact,
+  propertyUrl,
+  hideShare = false,
+  onShare,
+}: ResultProps) {
   const [copied, setCopied] = useState(false);
   const won = status === 'won';
 
@@ -53,12 +64,14 @@ export function Result({ status, soldPrice, percentOff, exact, propertyUrl, onSh
           link to property
         </a>
       </p>
-      <button
-        onClick={handleShare}
-        className="mx-auto block rounded-md bg-accent px-6 py-2.5 font-semibold text-white transition-colors hover:bg-green-500"
-      >
-        {copied ? 'Copied' : 'Share'}
-      </button>
+      {!hideShare && (
+        <button
+          onClick={handleShare}
+          className="mx-auto block rounded-md bg-accent px-6 py-2.5 font-semibold text-white transition-colors hover:bg-green-500"
+        >
+          {copied ? 'Copied' : 'Share'}
+        </button>
+      )}
     </div>
   );
 }

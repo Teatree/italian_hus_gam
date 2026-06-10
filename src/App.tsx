@@ -106,6 +106,9 @@ function Game({ property, nextResetMs }: GameProps) {
   // Win-only celebration video. Set on the winning guess itself (not on restored saved
   // wins, and never on a loss) so it plays once per victory.
   const [showWinVideo, setShowWinVideo] = useState(false);
+  // On a fresh win the Share button waits for the video popup; losses and restored
+  // wins (where the popup never fires) get it right away.
+  const [shareHeld, setShareHeld] = useState(false);
 
   // ── Analytics state (per attempt) ──────────────────────────────────────────────────────
   // One id per puzzle attempt; pairs the Guesses rows with their Results row. Because <Game>
@@ -234,7 +237,13 @@ function Game({ property, nextResetMs }: GameProps) {
     else if (nextGuesses.length >= MAX_TRIES) nextStatus = 'lost';
 
     // Hold the video back 3s so the win moment (confetti, result reveal) lands first.
-    if (nextStatus === 'won') window.setTimeout(() => setShowWinVideo(true), 3000);
+    if (nextStatus === 'won') {
+      setShareHeld(true);
+      window.setTimeout(() => {
+        setShowWinVideo(true);
+        setShareHeld(false);
+      }, 3000);
+    }
 
     setGuesses(nextGuesses);
     setStatus(nextStatus);
@@ -336,6 +345,7 @@ function Game({ property, nextResetMs }: GameProps) {
             percentOff={closestPercentOff}
             exact={isExact}
             propertyUrl={property.propertyUrl}
+            hideShare={shareHeld}
             onShare={handleShare}
           />
         )}
