@@ -25,7 +25,6 @@ import { GuessList } from './components/GuessList';
 import { NewGameTimer } from './components/NewGameTimer';
 import { MapView } from './components/MapView';
 import { Result } from './components/Result';
-import { WinVideoModal } from './components/WinVideoModal';
 
 // Resolves which property is active today and auto-refreshes the page at the daily reset.
 export default function App() {
@@ -103,12 +102,6 @@ function Game({ property, nextResetMs }: GameProps) {
   const [status, setStatus] = useState<GameStatus>('playing');
   // Which try's image the player is viewing; null = follow the latest revealed image.
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
-  // Win-only celebration video. Set on the winning guess itself (not on restored saved
-  // wins, and never on a loss) so it plays once per victory.
-  const [showWinVideo, setShowWinVideo] = useState(false);
-  // On a fresh win the Share button waits for the video popup; losses and restored
-  // wins (where the popup never fires) get it right away.
-  const [shareHeld, setShareHeld] = useState(false);
 
   // ── Analytics state (per attempt) ──────────────────────────────────────────────────────
   // One id per puzzle attempt; pairs the Guesses rows with their Results row. Because <Game>
@@ -236,15 +229,6 @@ function Game({ property, nextResetMs }: GameProps) {
     if (direction === 'correct') nextStatus = 'won';
     else if (nextGuesses.length >= MAX_TRIES) nextStatus = 'lost';
 
-    // Hold the video back 3s so the win moment (confetti, result reveal) lands first.
-    if (nextStatus === 'won') {
-      setShareHeld(true);
-      window.setTimeout(() => {
-        setShowWinVideo(true);
-        setShareHeld(false);
-      }, 3000);
-    }
-
     setGuesses(nextGuesses);
     setStatus(nextStatus);
     setSelectedImage(null); // jump back to the latest image after guessing
@@ -345,7 +329,6 @@ function Game({ property, nextResetMs }: GameProps) {
             percentOff={closestPercentOff}
             exact={isExact}
             propertyUrl={property.propertyUrl}
-            hideShare={shareHeld}
             onShare={handleShare}
           />
         )}
@@ -357,7 +340,6 @@ function Game({ property, nextResetMs }: GameProps) {
         />
       </div>
 
-      {showWinVideo && <WinVideoModal onClose={() => setShowWinVideo(false)} />}
     </div>
   );
 }

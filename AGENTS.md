@@ -1,8 +1,8 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
-> `AGENTS.md` is a verbatim mirror of this file for other agents — keep both in sync when editing.
+> This file is a verbatim mirror of `CLAUDE.md` — keep both in sync when editing.
 
 ## Commands
 
