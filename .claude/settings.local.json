@@ -5,7 +5,8 @@
       "Bash(cwebp -version)",
       "Bash(magick -version)",
       "Bash(Select-String -Pattern \"error|Error|built in\")",
-      "Bash(claude update *)"
+      "Bash(claude update *)",
+      "PowerShell(npm run *)"
     ]
   },
   "enableAllProjectMcpServers": true,
