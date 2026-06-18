@@ -3,6 +3,9 @@
   "mapZoom": 12,
   "soldPrice": 300000,
   "propertyUrl": "https://www.idealista.it/en/immobile/26326536/",
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
   "facts": [
     "Located in Periferia Nord, Sanremo",
 	"13 rooms / 4 baths",

@@ -11,6 +11,19 @@ export interface PropertyData {
   soldPrice: number;
   // Listing URL shown as a "link to property" link on the win/lose screen.
   propertyUrl: string;
+  // Maps each local photo slot to the idealista "foto" number to pull it from, e.g.
+  // { "1": 12, "2": 7 } → photo-1 from .../foto/12/, photo-2 from .../foto/7/. Used only by
+  // scripts/fetch-photos.mjs (the run-fetch.bat) at authoring time; ignored by the app.
+  prop_pictures?: Record<string, number>;
+  // ── Per-date theming (for covertly swapping in a non-Italian property) ──────────────────
+  // Filename (in public/) of the icon shown next to the title, e.g. 'finland_icon.png'.
+  // Defaults to DEFAULT_TITLE_ICON ('italy_icon.png') when omitted.
+  titleIcon?: string;
+  // Link the title icon points to. Defaults to DEFAULT_TITLE_ICON_URL when omitted.
+  titleIconUrl?: string;
+  // The flag emoji used in the share text (single unicode emoji, e.g. '🇫🇮').
+  // Defaults to DEFAULT_SHARE_FLAG ('🇮🇪') when omitted.
+  shareFlag?: string;
 }
 
 // A fully resolved property: the config.json data plus the slug (folder name) and the

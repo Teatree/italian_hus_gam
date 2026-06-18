@@ -278,13 +278,14 @@ function Game({ property, nextResetMs }: GameProps) {
       MAX_TRIES,
       window.location.href,
       closestPercentOff,
+      property.shareFlag,
     );
     return copyToClipboard(text);
   }
 
   return (
     <div className="mx-auto flex min-h-full max-w-5xl flex-col gap-4 px-4 pb-6 pt-2">
-      <Header title={APP_TITLE} />
+      <Header title={APP_TITLE} iconFile={property.titleIcon} iconHref={property.titleIconUrl} />
 
       {/* Image stays centered; the hints list sits to its right (stacks below on narrow screens). */}
       <div className="flex flex-col items-center gap-4 lg:flex-row lg:items-start lg:justify-center">

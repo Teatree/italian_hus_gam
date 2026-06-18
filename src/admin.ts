@@ -17,6 +17,16 @@
 
 export const APP_TITLE = 'Guess The House';
 
+// ── Per-date theming defaults ───────────────────────────────────────────────────────────────
+// A property's config.json may override these (titleIcon / titleIconUrl / shareFlag) to covertly
+// swap in a house from another country. When a config omits a field, these defaults apply.
+//  • DEFAULT_TITLE_ICON — filename (in public/) of the icon next to the title.
+//  • DEFAULT_TITLE_ICON_URL — where that icon links to.
+//  • DEFAULT_SHARE_FLAG — the flag emoji used in the share text.
+export const DEFAULT_TITLE_ICON = 'italy_icon.png';
+export const DEFAULT_TITLE_ICON_URL = 'https://youtu.be/IGBEp1zTbUw';
+export const DEFAULT_SHARE_FLAG = '🇮🇪';
+
 // How many tries the player gets (matches the number of images & facts per property).
 export const MAX_TRIES = 6;
 

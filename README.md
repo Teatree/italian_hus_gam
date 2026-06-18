@@ -62,6 +62,10 @@ src/properties/08_06_26/
   "mapZoom": 12,
   "soldPrice": 1200000,
   "propertyUrl": "https://www.idealista.it/en/immobile/35770070/",
+  "prop_pictures": { "1": 12, "2": 7, "3": 1, "4": 4, "5": 20, "6": 9 },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
   "facts": [
     "Located near Montescudo, Rimini",
     "270 m² of living space",
@@ -75,6 +79,60 @@ src/properties/08_06_26/
 
 The folder name becomes the slug/date. Facts reveal one-by-one (one per wrong guess); provide 6
 images and 6 facts. Folders are auto-discovered at build time via `import.meta.glob`.
+
+#### Autofilling the config (idealista only)
+
+Once `config.json` has a `propertyUrl`, you can have most of the rest filled in for you. **Double-click
+`1_autofill.bat`** in the folder (or run `node scripts/autofill-config.mjs src/properties/<date>`). It reads
+the listing and writes:
+
+- `coordinates` — the listing's map location.
+- `soldPrice` — the listing price.
+- a **draft `facts` list** following the usual wording, filling what it finds and leaving blanks for the
+  rest: `Located in …`, `N m² of living space`, `N rooms N baths`, `Built in N`, `N floors`,
+  `Land plot of N m²`, and `Private Garden` / `Swimming Pool` if present.
+
+It always writes exactly **6 facts** — anything it couldn't find (or padding to reach 6) is written as
+`<INSERT HINT HERE>` so you can search for and fill the gaps, and if more than 6 are found the extras are
+dropped (and printed in the console so you can swap them in). Everything else (`propertyUrl`,
+`prop_pictures`, the title-icon/flag fields) is preserved. Treat the facts as a **draft** — replace the
+placeholders and add your own flavour. Same visible-Chrome / one-time-slider flow as photo fetching below
+(idealista only).
+
+#### Pulling the photos automatically (idealista only)
+
+Instead of screenshotting the listing photos by hand, you can have the photos downloaded for
+you. Add a `prop_pictures` map to `config.json` that points each local photo slot at the
+idealista **foto** number (the `…/foto/12/` number you see clicking through the gallery):
+
+```json
+"prop_pictures": { "1": 12, "2": 7, "3": 1, "4": 4, "5": 20, "6": 9 }
+```
+
+Then **double-click `2_run-fetch.bat`** inside the folder (or run
+`node scripts/fetch-photos.mjs src/properties/<date>`). It opens Chrome, grabs each photo at full
+resolution, and saves it as `photo-1.png … photo-6.png` (1537×1023), replacing any same-named
+photo. Afterwards run `npm run images:webp` to convert them — the fetch step deliberately leaves
+PNGs so the conversion stays a separate step.
+
+> **idealista uses DataDome anti-bot protection**, so the Chrome window is **visible** and you
+> may have to solve a one-time slider verification when it appears — solve it and the download
+> continues on its own. The script paces its requests to avoid re-triggering it, and keeps a
+> Chrome profile under `scripts/.pw-chrome-profile` (gitignored) so the "you're human" cookie
+> persists between runs. This only works for idealista listings; other sites (e.g. etuovi.com)
+> still need manual screenshots.
+
+To covertly swap in a house from another country, set these **optional** per-date fields (each
+falls back to the Italy default if omitted):
+
+- `titleIcon` — filename of the icon shown next to the title. Drop the image in **`public/`**
+  (e.g. `public/finland_icon.png`) and reference it by filename. Defaults to `italy_icon.png`.
+- `titleIconUrl` — where that icon links. Defaults to the bundled bonus video.
+- `shareFlag` — the flag emoji used in the share text (both flag spots). Pass any single unicode
+  emoji, e.g. `"🇫🇮"`. Defaults to `"🇮🇪"`.
+
+These defaults live in `src/admin.ts` (`DEFAULT_TITLE_ICON` / `DEFAULT_TITLE_ICON_URL` /
+`DEFAULT_SHARE_FLAG`).
 
 ### Other admin settings (`src/admin.ts`)
 

@@ -1,0 +1,25 @@
+{
+  "coordinates": [42.75661383846688, 10.22987402901382],
+  "mapZoom": 12,
+  "soldPrice": 240000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/28854057/",
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located near Turin",
+	"170 m² of living space",
+	"Built in 1970",
+	"5 rooms 2 baths",
+	"Private Garden",
+	"18% discount!"
+  ],
+  "prop_pictures": { 
+	"1": 1,
+	"2": 6,
+	"3": 14,
+	"4": 13,
+	"5": 16,
+	"6": 21
+  }
+}

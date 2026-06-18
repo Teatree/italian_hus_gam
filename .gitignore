@@ -5,3 +5,7 @@ dist-ssr
 .DS_Store
 npm-debug.log*
 .vite
+
+# Chrome profile used by scripts/fetch-photos.mjs (keeps idealista cookies between runs)
+scripts/.pw-chrome-profile
+.playwright-mcp

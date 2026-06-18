@@ -1,0 +1,25 @@
+{
+  "coordinates": [35.5139507, 12.6256108],
+  "mapZoom": 12,
+  "soldPrice": 1290000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/32246979/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 6,
+    "3": 14,
+    "4": 13,
+    "5": 16,
+    "6": 21
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Lampedusa e Linosa",
+    "265 m² of living space",
+    "7 rooms 5 baths",
+    "Built in 2000",
+    "2 floors",
+    "Land plot of 2,000 m²"
+  ]
+}

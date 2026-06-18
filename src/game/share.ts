@@ -1,9 +1,9 @@
 import type { Guess } from '../types';
+import { DEFAULT_SHARE_FLAG } from '../admin';
 
 const WRONG = '🟥';
 const WIN = '🟩';
 const UNUSED = '⬜';
-const IRISH_FLAG = '🇮🇪';
 
 // Build the emoji grid: one cell per try, separated by spaces. Wrong guesses are red, the
 // winning guess is green, and any unused tries are white. A loss is all red (no green).
@@ -19,15 +19,17 @@ export function buildEmojiGrid(guesses: Guess[], maxTries: number): string {
 }
 
 // The full text copied to the clipboard: title (with flag), a flag + spaced emoji grid, a
-// result line, and a link back to the game. On a win we share the closest guess's percentage
-// off — but never the euro amount, so it doesn't give away the actual price. On a loss we skip
-// the percentage entirely and just own it.
+// result line, and a link back to the game. The `flag` emoji (both occurrences) is per-date so
+// a swapped-in non-Italian house shares its own country's flag. On a win we share the closest
+// guess's percentage off — but never the euro amount, so it doesn't give away the actual price.
+// On a loss we skip the percentage entirely and just own it.
 export function buildShareText(
   title: string,
   guesses: Guess[],
   maxTries: number,
   url: string,
   closestPercentOff: number,
+  flag: string = DEFAULT_SHARE_FLAG,
 ): string {
   const won = guesses.some((g) => g.direction === 'correct');
   let result: string;
@@ -38,7 +40,7 @@ export function buildShareText(
   } else {
     result = `🎯 ${closestPercentOff}% off`;
   }
-  return `${title} ${IRISH_FLAG}\n${IRISH_FLAG} ${buildEmojiGrid(guesses, maxTries)}\n${result}\n${url}`;
+  return `${title} ${flag}\n${flag} ${buildEmojiGrid(guesses, maxTries)}\n${result}\n${url}`;
 }
 
 // Copy text to the clipboard, with a fallback for browsers without the async API.

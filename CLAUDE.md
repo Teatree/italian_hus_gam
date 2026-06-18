@@ -12,6 +12,10 @@ npm run dev          # Vite dev server at http://localhost:5173
 npm run build        # tsc --noEmit type-check, then vite build -> ./dist
 npm run preview      # serve the production ./dist build locally
 npm run images:webp  # convert property photo-*.png to .webp in place (sharp; --keep, --dry-run)
+
+# Authoring-time only (not part of the build):
+node scripts/autofill-config.mjs src/properties/<DD_MM_YY> # fill coordinates/soldPrice/draft facts from idealista
+node scripts/fetch-photos.mjs src/properties/<DD_MM_YY>    # download a property's photos from idealista
 ```
 
 There is no test suite, linter, or formatter configured. `npm run build` (which runs `tsc --noEmit`) is the only automated check — run it to verify type-correctness after changes.
@@ -22,7 +26,11 @@ A fully static Vite + React + TypeScript daily-puzzle game (no backend of our ow
 
 The data flow is **content folders → build-time auto-discovery → date-based scheduling → single-game React tree**:
 
-- **Content as folders (`src/properties/<DD_MM_YY>/`)** — Each puzzle is a folder containing `config.json` (`coordinates`, `mapZoom`, `soldPrice`, `propertyUrl`, `facts[]`) plus `photo-*.webp` images (the discovery glob also accepts `png/jpg/jpeg/avif`). Adding a puzzle means creating a folder; there is **no registration step and no code change**. The folder name is the slug. Drop raw `photo-*.png` files and run `npm run images:webp` to convert/downscale them.
+- **Content as folders (`src/properties/<DD_MM_YY>/`)** — Each puzzle is a folder containing `config.json` (`coordinates`, `mapZoom`, `soldPrice`, `propertyUrl`, `facts[]`, plus optional per-date theming `titleIcon`/`titleIconUrl`/`shareFlag` and an authoring-only `prop_pictures` map) plus `photo-*.webp` images (the discovery glob also accepts `png/jpg/jpeg/avif`). Adding a puzzle means creating a folder; there is **no registration step and no code change**. The folder name is the slug. Drop raw `photo-*.png` files and run `npm run images:webp` to convert/downscale them.
+
+- **Photo fetching (`scripts/fetch-photos.mjs` + per-folder `2_run-fetch.bat`)** — Authoring-time helper that downloads a property's photos straight from its **idealista** listing instead of manual screenshots. `config.json`'s `prop_pictures` maps each local slot to an idealista *foto* number (`{ "1": 12 }` → `photo-1` from `…/foto/12/`); the script reads the foto page's `og:image` (ground truth for that photo), pulls the full-res image from the CDN, and saves `photo-N.png` at 1537×1023, **replacing any same-named `photo-N.*`**. It drives a **visible** Chrome via `playwright-core` (channel `chrome`) because idealista's **DataDome** blocks plain fetches and may show a one-time slider the human solves; a persisted profile lives at `scripts/.pw-chrome-profile` (gitignored). It does **not** convert to webp — that stays `npm run images:webp`. `prop_pictures`/the `.bat`s are ignored by the app at runtime.
+
+- **Config autofill (`scripts/autofill-config.mjs` + per-folder `1_autofill.bat`)** — Authoring-time helper that fills `config.json` from the idealista listing named in `propertyUrl`: `coordinates` (from the listing's Google static-map `center=`, captured off the network), `soldPrice` (parsed from the price), and a **draft** `facts[]` (location subtitle, m², rooms/baths, year, floors, land plot, garden/pool) following the existing configs' wording. It always writes exactly 6 facts: it caps the list at 6 (extras are dropped and logged) and pads with `<INSERT HINT HERE>` for anything it couldn't find. Preserves all other fields and writes 2-space JSON with `coordinates` inline. Same visible-Chrome + DataDome-slider flow as the fetcher; the output is a draft to finalize. (The two `.bat`s are numbered `1_`/`2_` to suggest the order: autofill, then fetch photos.)
 
 - **Auto-discovery (`src/properties/index.ts`)** — Uses Vite's `import.meta.glob` (eager) to collect all `config.json` files and all images at build time into a `properties` registry keyed by slug. Images are sorted by filename (numeric-aware), so `photo-1 … photo-6` order matters. The folder name slug doubling as a `DD_MM_YY` date is what links content to the schedule.
 

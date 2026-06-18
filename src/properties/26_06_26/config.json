@@ -1,0 +1,25 @@
+{
+  "coordinates": [39.0713525, 8.448539],
+  "mapZoom": 12,
+  "soldPrice": 89000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34173319/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 8,
+    "3": 21,
+    "4": 2,
+    "5": 3,
+    "6": 12
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Sant'Antioco",
+    "68 m² of living space",
+	"They got AC",
+    "3 rooms 1 baths",
+    "Built in 1950",
+    "2 floors"
+  ]
+}
