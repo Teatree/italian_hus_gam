@@ -1,0 +1,26 @@
+{
+  "coordinates": [60.020144610556876, 22.493601399594482],
+  "mapZoom": 12,
+  "soldPrice": 30000,
+  "propertyUrl": "https://www.etuovi.com/kohde/80512344?haku=M2509488549",
+  "prop_pictures": {
+    "1": 1,
+    "2": 8,
+    "3": 21,
+    "4": 2,
+    "5": 3,
+    "6": 12
+  },
+  "titleIcon": "finland_icon.png",
+  "titleIconUrl": "https://youtu.be/z7_pVrIshxA",
+  "shareFlag": "🇫🇮",
+  "facts": [
+    "Located near Dalsbruk",
+	"Built in 1948",
+    "Auction 'TARJOUSKAUPPA'",
+	"93 m² of living space",
+    "3 rooms 1 baths",
+    "Detached House (fixed)",
+    "Land Plot of 2530 m²"
+  ]
+}

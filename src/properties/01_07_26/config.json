@@ -1,0 +1,25 @@
+{
+  "coordinates": [45.9615231, 8.5740608],
+  "mapZoom": 12,
+  "soldPrice": 1700000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/30406675/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 4,
+    "3": 12,
+    "4": 13,
+    "5": 18,
+    "6": 32
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Bee 🐝",
+	"Built in 1823, but it looks brand new...",
+    "570 m² of living space",
+    "Of course the kitchen looks like that",
+    "10 rooms 8 baths",
+    "Land plot of 1,900 m²"
+  ]
+}

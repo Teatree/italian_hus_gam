@@ -32,11 +32,9 @@ export function FactsList({ facts, highlightIndex, stagger = false }: FactsListP
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stagger, facts.length]);
 
-  // Newest hint on top. Each <li> animates once when it first mounts (`hint-new`).
-  const ordered = facts
-    .slice(0, shownCount)
-    .map((fact, i) => ({ fact, i }))
-    .reverse();
+  // Reveal order: oldest hint on top, newest at the bottom. Each <li> animates once
+  // when it first mounts (`hint-new`).
+  const ordered = facts.slice(0, shownCount).map((fact, i) => ({ fact, i }));
 
   return (
     <ul className="space-y-1.5">

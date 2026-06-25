@@ -1,0 +1,25 @@
+{
+  "coordinates": [46.6062931, 10.8761547],
+  "mapZoom": 12,
+  "soldPrice": 655000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35647069/",
+  "prop_pictures": {
+    "1": 10,
+    "2": 6,
+    "3": 15,
+    "4": 18,
+    "5": 2,
+    "6": 13
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Laces-Latsch",
+    "193 m² of living space",
+    "5 rooms 3 baths",
+    "Built in 1995",
+    "4 floors",
+    "Private Garden"
+  ]
+}

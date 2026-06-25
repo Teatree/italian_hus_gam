@@ -1,0 +1,25 @@
+{
+  "coordinates": [42.9145932, 11.0712292],
+  "mapZoom": 12,
+  "soldPrice": 1961000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/23630002/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 14,
+    "3": 12,
+    "4": 13,
+    "5": 10,
+    "6": 20
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Grosseto",
+	"Looks cozy...",
+	"Land plot of 14,000 m²",
+    "610 m² of living space",
+    "18 rooms 10 baths",
+    "Built in 1900"
+  ]
+}

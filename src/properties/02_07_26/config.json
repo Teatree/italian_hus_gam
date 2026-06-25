@@ -1,0 +1,25 @@
+{
+  "coordinates": [45.9835115, 9.2184466],
+  "mapZoom": 12,
+  "soldPrice": 2750000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/27256246/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 3,
+    "3": 12,
+    "4": 26,
+    "5": 39,
+    "6": 25
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Tremezzina",
+	"Nice views...",
+    "460 m² of living space",
+    "7 rooms 5 baths",
+    "2 floors",
+    "Swimming Pool"
+  ]
+}
