@@ -23,10 +23,11 @@
 // can solve a captcha if idealista ever throws one; pass --headless to hide it.
 
 import { readFile, readdir, unlink, mkdir } from 'node:fs/promises';
-import { join, dirname, resolve, basename } from 'node:path';
+import { join, dirname, resolve, basename, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
 import sharp from 'sharp';
+import { findDuplicateUrl } from './duplicate-url-check.mjs';
 
 // Required output size (px). idealista's largest native variant is ~1500x1125 (4:3); the
 // target is 3:2, so we scale-to-fill and centre-crop (no distortion, small top/bottom trim).
@@ -87,6 +88,14 @@ async function main() {
 
   const { propertyUrl, prop_pictures: map } = config;
   if (!propertyUrl) fail(`${slug}/config.json has no "propertyUrl".`);
+
+  const dupes = await findDuplicateUrl(join(ROOT, 'src', 'properties'), folder, propertyUrl);
+  if (dupes.length) {
+    fail(
+      `${slug}: this propertyUrl is already used by: ${dupes.map((d) => relative(ROOT, d)).join(', ')}\n` +
+        `  Each property must be a unique listing — fix propertyUrl in config.json and re-run.`,
+    );
+  }
   if (!map || Object.keys(map).length === 0) {
     console.log(`${slug}: no "prop_pictures" in config.json — nothing to fetch.`);
     return;

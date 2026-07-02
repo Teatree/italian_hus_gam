@@ -6,7 +6,11 @@
       "Bash(magick -version)",
       "Bash(Select-String -Pattern \"error|Error|built in\")",
       "Bash(claude update *)",
-      "PowerShell(npm run *)"
+      "PowerShell(npm run *)",
+      "PowerShell($c = Get-Content CLAUDE.md -Raw; $a = Get-Content AGENTS.md -Raw; if \\($c -eq $a\\) { 'IDENTICAL' } else { Compare-Object \\(Get-Content CLAUDE.md\\) \\(Get-Content AGENTS.md\\) | Format-Table -AutoSize | Out-String })",
+      "PowerShell(Compare-Object *)",
+      "PowerShell(Get-ChildItem src\\\\properties -Directory | Where-Object { $_.Name -match '^\\(\\\\d{2}\\)_\\(\\\\d{2}\\)_\\(\\\\d{2}\\)$' } | ForEach-Object { $p = $_.Name -split '_'; $mdir = \"20$\\($p[2]\\)_$\\($p[1]\\)\"; if \\(-not \\(Test-Path \"src\\\\properties\\\\$mdir\"\\)\\) { New-Item -ItemType Directory \"src\\\\properties\\\\$mdir\" | Out-Null }; git mv \"src/properties/$\\($_.Name\\)\" \"src/properties/$mdir/$\\($_.Name\\)\"; if \\(-not $?\\) { Write-Output \"FAILED: $\\($_.Name\\)\" } }; Write-Output '--- result ---'; Get-ChildItem src\\\\properties | Select-Object Name; Get-ChildItem src\\\\properties\\\\2026_06, src\\\\properties\\\\2026_07 -Directory | Measure-Object | Select-Object -ExpandProperty Count)",
+      "PowerShell(Move-Item *)"
     ]
   },
   "enableAllProjectMcpServers": true,

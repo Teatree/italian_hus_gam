@@ -2,31 +2,32 @@ import type { PropertyConfig, PropertyData } from '../types';
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  AUTO-DISCOVERY
-//  Every folder under src/properties/<name>/ that contains a `config.json` becomes a
-//  property automatically — no registration needed. The folder name is the slug (use the
-//  DD_MM_YY date format to schedule it). Images in the folder are picked up and ordered by
-//  filename (photo-1.png, photo-2.png, …).
+//  Every folder under src/properties/ (at any depth) that contains a `config.json` becomes
+//  a property automatically — no registration needed. The property's own folder name is the
+//  slug (use the DD_MM_YY date format to schedule it); parent folders like 2026_06/ are
+//  purely organizational (grouping by month) and never part of the slug. Images in the
+//  folder are picked up and ordered by filename (photo-1.png, photo-2.png, …).
 //
-//  To add a property: create src/properties/<DD_MM_YY>/ with a config.json and 6 images.
-//  That's it.
+//  To add a property: create src/properties/<YYYY_MM>/<DD_MM_YY>/ with a config.json and
+//  6 images. That's it.
 // ─────────────────────────────────────────────────────────────────────────────
 
 // All config.json files, eagerly loaded as parsed objects.
-const configModules = import.meta.glob('./*/config.json', { eager: true }) as Record<
+const configModules = import.meta.glob('./**/config.json', { eager: true }) as Record<
   string,
   { default: PropertyData }
 >;
 
 // All images, eagerly loaded as resolved (hashed) URL strings.
-const imageModules = import.meta.glob('./*/*.{png,jpg,jpeg,webp,avif}', {
+const imageModules = import.meta.glob('./**/*.{png,jpg,jpeg,webp,avif}', {
   eager: true,
   query: '?url',
   import: 'default',
 }) as Record<string, string>;
 
-// './04_06_26/config.json' -> '04_06_26'
+// The property folder is the file's direct parent: './2026_06/04_06_26/config.json' -> '04_06_26'
 function folderOf(path: string): string {
-  return path.match(/^\.\/([^/]+)\//)?.[1] ?? '';
+  return path.match(/\/([^/]+)\/[^/]+$/)?.[1] ?? '';
 }
 
 function byFilename(a: string, b: string): number {

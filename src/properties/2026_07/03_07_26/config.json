@@ -1,0 +1,25 @@
+{
+  "coordinates": [42.743961, 10.957953],
+  "mapZoom": 12,
+  "soldPrice": 230000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35145963/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 14,
+    "3": 12,
+    "4": 19,
+    "5": 3,
+    "6": 2
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Il Cristo-Le Marze, Grosseto",
+    "60 m² of living space",
+    "3 rooms 1 baths",
+    "Built in 2004",
+    "1 floors",
+    "Land plot of 350 m²"
+  ]
+}

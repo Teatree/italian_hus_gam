@@ -18,9 +18,10 @@
 //   Private Garden (if present) ·  Swimming Pool (if present)
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { join, dirname, resolve, basename } from 'node:path';
+import { join, dirname, resolve, basename, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
+import { findDuplicateUrl } from './duplicate-url-check.mjs';
 
 // Prefix for the location fact. Your configs use both "Located in" and "Located near";
 // "in" is the more common, so it's the default — change here if you prefer "near".
@@ -103,6 +104,14 @@ async function main() {
   if (!cfg.propertyUrl) fail(`${slug}/config.json has no "propertyUrl" to read from.`);
   if (!/idealista\.[a-z.]+/i.test(cfg.propertyUrl)) {
     fail(`${slug}: propertyUrl is not an idealista listing. Autofill only supports idealista.`);
+  }
+
+  const dupes = await findDuplicateUrl(join(ROOT, 'src', 'properties'), folder, cfg.propertyUrl);
+  if (dupes.length) {
+    fail(
+      `${slug}: this propertyUrl is already used by: ${dupes.map((d) => relative(ROOT, d)).join(', ')}\n` +
+        `  Each property must be a unique listing — fix propertyUrl in config.json and re-run.`,
+    );
   }
 
   console.log(`${slug}: reading ${cfg.propertyUrl}  (browser: ${headless ? 'headless' : 'visible'})\n`);
