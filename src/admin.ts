@@ -9,7 +9,8 @@
 //  If no property matches the current day, a "check back soon" screen shows.
 //
 //  ADDING A PROPERTY (no code changes needed):
-//    1. Create src/properties/<DD_MM_YY>/
+//    1. Create src/properties/<YYYY_MM>/<DD_MM_YY>/  (the month folder is just for tidiness;
+//       only the property's own folder name is the slug)
 //    2. Drop in config.json (coordinates, mapZoom, soldPrice, propertyUrl, facts[])
 //    3. Drop in the images (photo-1.png … photo-6.png — ordered by filename)
 //  The folder is auto-discovered at build time; nothing else to register.

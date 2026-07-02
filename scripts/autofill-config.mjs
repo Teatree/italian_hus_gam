@@ -5,8 +5,8 @@
 // can't find. All other fields (propertyUrl, prop_pictures, titleIcon/titleIconUrl/shareFlag)
 // are preserved. The result is a DRAFT: review/trim the facts to 6 and add your own flavour.
 //
-//   node scripts/autofill-config.mjs src/properties/24_06_26      # one folder
-//   node scripts/autofill-config.mjs src/properties/24_06_26 --headless
+//   node scripts/autofill-config.mjs src/properties/2026_06/24_06_26      # one folder
+//   node scripts/autofill-config.mjs src/properties/2026_06/24_06_26 --headless
 //
 // Each property folder has an autofill.bat that calls this with its own path, so the usual way
 // is to double-click that .bat. Like the photo fetcher, idealista's DataDome may show a one-time

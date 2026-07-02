@@ -4,8 +4,8 @@
 // map, opens the matching idealista photo page, grabs the full-resolution image, and
 // saves it next to the config as photo-<key>.png (replacing any same-named photo).
 //
-//   node scripts/fetch-photos.mjs src/properties/08_06_26      # one folder
-//   node scripts/fetch-photos.mjs src/properties/08_06_26 --headless
+//   node scripts/fetch-photos.mjs src/properties/2026_06/08_06_26      # one folder
+//   node scripts/fetch-photos.mjs src/properties/2026_06/08_06_26 --headless
 //
 // Each property folder also has a run-fetch.bat that calls this with its own path, so the
 // usual workflow is just double-clicking that .bat. PNGs are intentionally NOT converted

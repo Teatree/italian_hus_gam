@@ -44,10 +44,12 @@ the page auto-refreshes to load the new puzzle.
 
 ### Adding a house (just create a folder)
 
-No code changes, no registration. Create one folder under `src/properties/`:
+No code changes, no registration. Create one folder under `src/properties/`, inside the
+matching month folder (the `YYYY_MM` folder is just so months sort chronologically in a file
+explorer — only the property's own folder name matters to the app):
 
 ```
-src/properties/08_06_26/
+src/properties/2026_06/08_06_26/
 ├─ config.json          # all parameters/hints (see below)
 ├─ photo-1.png          # images, shown in filename order (.jpg/.webp/.avif also work)
 ├─ photo-2.png
@@ -83,8 +85,10 @@ images and 6 facts. Folders are auto-discovered at build time via `import.meta.g
 #### Autofilling the config (idealista only)
 
 Once `config.json` has a `propertyUrl`, you can have most of the rest filled in for you. **Double-click
-`1_autofill.bat`** in the folder (or run `node scripts/autofill-config.mjs src/properties/<date>`). It reads
-the listing and writes:
+`1_autofill.bat`** in the folder (or run `node scripts/autofill-config.mjs src/properties/<YYYY_MM>/<date>`).
+Both this and the photo fetcher first check that no other property already uses the same listing URL —
+if one does, they stop with a warning naming the folder, so you can't accidentally schedule the same
+house twice. It reads the listing and writes:
 
 - `coordinates` — the listing's map location.
 - `soldPrice` — the listing price.
@@ -110,7 +114,7 @@ idealista **foto** number (the `…/foto/12/` number you see clicking through th
 ```
 
 Then **double-click `2_run-fetch.bat`** inside the folder (or run
-`node scripts/fetch-photos.mjs src/properties/<date>`). It opens Chrome, grabs each photo at full
+`node scripts/fetch-photos.mjs src/properties/<YYYY_MM>/<date>`). It opens Chrome, grabs each photo at full
 resolution, and saves it as `photo-1.png … photo-6.png` (1537×1023), replacing any same-named
 photo. Afterwards run `npm run images:webp` to convert them — the fetch step deliberately leaves
 PNGs so the conversion stays a separate step.
