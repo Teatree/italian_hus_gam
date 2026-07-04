@@ -1,0 +1,25 @@
+{
+  "coordinates": [45.8027613, 11.9564913],
+  "mapZoom": 12,
+  "soldPrice": 600000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/33411220/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 16,
+    "3": 9,
+    "4": 11,
+    "5": 3,
+    "6": 14
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Maser",
+    "220 m² of living space",
+    "3 rooms 2 baths",
+    "Built in 1974",
+    "1 floors",
+    "Private Garden"
+  ]
+}

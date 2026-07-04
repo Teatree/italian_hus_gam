@@ -1,0 +1,25 @@
+{
+  "coordinates": [45.6990292, 11.4920604],
+  "mapZoom": 12,
+  "soldPrice": 360000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34748408/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 6,
+    "3": 10,
+    "4": 11,
+    "5": 12,
+    "6": 26
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Thiene",
+    "347 m² of living space",
+    "9 rooms 4 baths",
+    "Built in 1985",
+    "3 floors",
+    "Private Garden"
+  ]
+}

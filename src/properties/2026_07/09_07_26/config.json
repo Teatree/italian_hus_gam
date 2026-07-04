@@ -1,0 +1,25 @@
+{
+  "coordinates": [45.6656643, 10.7760101],
+  "mapZoom": 12,
+  "soldPrice": 275000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35759985/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 13,
+    "3": 15,
+    "4": 4,
+    "5": 7,
+    "6": 1
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in San Zeno di Montagna",
+    "150 m² of living space",
+    "4 rooms 1 baths",
+    "Built in 1974",
+    "2 floors",
+    "Land plot of 3,200 m²"
+  ]
+}

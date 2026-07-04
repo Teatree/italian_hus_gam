@@ -1,0 +1,25 @@
+{
+  "coordinates": [45.7927535, 11.3640824],
+  "mapZoom": 12,
+  "soldPrice": 205000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36181916/",
+  "prop_pictures": {
+    "1": 7,
+    "2": 13,
+    "3": 10,
+    "4": 9,
+    "5": 11,
+    "6": 14
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Velo d'Astico",
+    "300 m² of living space",
+    "10 rooms 2 baths",
+    "Built in 1970",
+    "4 floors",
+    "Here is a corridor, I dono"
+  ]
+}

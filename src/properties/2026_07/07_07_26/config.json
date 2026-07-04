@@ -1,0 +1,25 @@
+{
+  "coordinates": [45.6723829, 12.252288],
+  "mapZoom": 12,
+  "soldPrice": 1350000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/21050804/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 3,
+    "3": 7,
+    "4": 9,
+    "5": 12,
+    "6": 13
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Passeggi - Ospedale San Camillo, Treviso",
+    "400 m² of living space",
+    "8 rooms 3 baths",
+    "Built in 1926, not 1700 for sure",
+    "3 floors",
+    "Land plot of 400 m²"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "coordinates": [45.5813257, 10.4930776],
+  "mapZoom": 12,
+  "soldPrice": 790000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/30975577/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 13,
+    "3": 20,
+    "4": 23,
+    "5": 29,
+    "6": 31
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Puegnago sul Garda",
+    "145 m² of living space",
+    "5 rooms 1 baths",
+    "Built in 2007",
+    "2 floors",
+    "Private Garden"
+  ]
+}
