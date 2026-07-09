@@ -1,25 +1,26 @@
 {
-  "coordinates": [45.8027613, 11.9564913],
+  "coordinates": [60.209413248200605, 24.962016536817917],
   "mapZoom": 12,
-  "soldPrice": 600000,
-  "propertyUrl": "https://www.idealista.it/en/immobile/33411220/",
+  "soldPrice": 298000,
+  "propertyUrl": "https://www.etuovi.com/kohde/80486941?haku=M2521661306",
   "prop_pictures": {
     "1": 1,
-    "2": 16,
-    "3": 9,
-    "4": 11,
+    "2": 8,
+    "3": 21,
+    "4": 2,
     "5": 3,
-    "6": 14
+    "6": 12
   },
-  "titleIcon": "italy_icon.png",
-  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
-  "shareFlag": "🇮🇪",
+  "titleIcon": "finland_icon.png",
+  "titleIconUrl": "https://youtu.be/z7_pVrIshxA",
+  "shareFlag": "🇫🇮",
   "facts": [
-    "Located in Maser",
-    "220 m² of living space",
-    "3 rooms 2 baths",
-    "Built in 1974",
-    "1 floors",
-    "Private Garden"
+    "Located Helsinki",
+	"Looks like a Cat House or something",
+    "Built in 1928",
+    "Agent's Name is Pekka",
+	"114 m² of living space",
+    "3 rooms, 2 kitchens(?), 1 baths + basement",
+    "Detached House (fixed)"
   ]
 }
