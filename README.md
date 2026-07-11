@@ -94,11 +94,17 @@ house twice. It reads the listing and writes:
 - `soldPrice` — the listing price.
 - a **draft `facts` list** following the usual wording, filling what it finds and leaving blanks for the
   rest: `Located in …`, `N m² of living space`, `N rooms N baths`, `Built in N`, `N floors`,
-  `Land plot of N m²`, and `Private Garden` / `Swimming Pool` if present.
+  `Land plot of N m²`, and `Private Garden` / `Swimming Pool` if present — plus one **measured** fact:
+  the free-flow car time to the nearest big city (e.g. `1h 20m to Venice by Car`), computed from the
+  coordinates via the free OSRM routing server against the 70k+-population city list in
+  `scripts/big-cities.mjs`. If the property is already in/near a big city (under 20 minutes' drive)
+  this fact is never added.
 
-It always writes exactly **6 facts** — anything it couldn't find (or padding to reach 6) is written as
-`<INSERT HINT HERE>` so you can search for and fill the gaps, and if more than 6 are found the extras are
-dropped (and printed in the console so you can swap them in). Everything else (`propertyUrl`,
+It always writes exactly **6 facts**, in **randomized order**: the first is always the location fact; the
+other 5 slots go to the priority facts (living space, built-in year, drive time) whenever available plus
+a random draw of the remaining ones, shuffled. Anything it couldn't find (or padding to reach 6) is
+written as `<INSERT HINT HERE>` so you can search for and fill the gaps, and facts that lose the random
+draw are printed in the console so you can swap them in. Everything else (`propertyUrl`,
 `prop_pictures`, the title-icon/flag fields) is preserved. Treat the facts as a **draft** — replace the
 placeholders and add your own flavour. Same visible-Chrome / one-time-slider flow as photo fetching below
 (idealista only).
@@ -137,6 +143,19 @@ falls back to the Italy default if omitted):
 
 These defaults live in `src/admin.ts` (`DEFAULT_TITLE_ICON` / `DEFAULT_TITLE_ICON_URL` /
 `DEFAULT_SHARE_FLAG`).
+
+### The price-verdict popup (optional, per property)
+
+Set `"priceVerdict": true` in a property's `config.json` and pressing Share on that house asks
+*"What do you think of the price for this property?"* (the link goes to the listing) — 🤑 Steal /
+🤝 Fair / 🚨 Rip-off — under the property's first photo, which zooms full-screen on click just
+like on the game page (closing the zoom returns to the popup). A vote is appended to the share
+text as a `🧾 My verdict: ||…||` line (an opinion only — never the euro amount — and the verdict
+sits inside `||…||` Discord/Telegram spoiler marks so it doesn't hint at the price), remembered forever
+for that house, and recorded in the `verdict` column of the analytics `Results` row (the Google
+Apps Script needs that column added on the sheet side). The "skip →" link or clicking away
+still copies the share text, just without a verdict — and isn't remembered, so the question
+returns on every Share until the player votes. Omit the flag and nothing changes.
 
 ### Other admin settings (`src/admin.ts`)
 
