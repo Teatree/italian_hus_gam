@@ -1,7 +1,7 @@
 // The data authored by hand in each property's config.json.
 export interface PropertyData {
   // Where the map is centered, as [lat, lng] — paste straight from Google Maps.
-  // No marker is drawn so the area stays a hint.
+  // A pin is drawn at this exact spot.
   coordinates: [number, number];
   // Reasonable zoom so the player can tell roughly where they are (defaults to 12).
   mapZoom?: number;
@@ -24,6 +24,9 @@ export interface PropertyData {
   // The flag emoji used in the share text (single unicode emoji, e.g. '🇫🇮').
   // Defaults to DEFAULT_SHARE_FLAG ('🇮🇪') when omitted.
   shareFlag?: string;
+  // Opt-in: after pressing Share, ask the player whether the sold price was a steal / fair /
+  // rip-off before the text is copied. The vote joins the share text and analytics.
+  priceVerdict?: boolean;
 }
 
 // A fully resolved property: the config.json data plus the slug (folder name) and the
@@ -47,8 +50,14 @@ export interface Guess {
 
 export type GameStatus = 'playing' | 'won' | 'lost';
 
+// The player's opinion of the sold price, asked (when the property opts in via
+// `priceVerdict`) every time they press Share until they actually vote. Only a real
+// vote is saved; skipping/dismissing the popup is not remembered.
+export type Verdict = 'steal' | 'fair' | 'ripoff';
+
 export interface SavedGame {
   slug: string;
   guesses: Guess[];
   status: GameStatus;
+  verdict?: Verdict;
 }

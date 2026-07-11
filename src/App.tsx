@@ -11,7 +11,7 @@ import {
 } from './admin';
 import { track, loadGeo, randomId, isMobile } from './analytics';
 import { properties } from './properties';
-import type { Guess, GameStatus, PropertyConfig } from './types';
+import type { Guess, GameStatus, PropertyConfig, Verdict } from './types';
 import { evaluateGuess, percentOff, revealedCount } from './game/logic';
 import { getScheduleInfo } from './game/schedule';
 import { buildShareText, copyToClipboard } from './game/share';
@@ -25,6 +25,7 @@ import { GuessList } from './components/GuessList';
 import { NewGameTimer } from './components/NewGameTimer';
 import { MapView } from './components/MapView';
 import { Result } from './components/Result';
+import { VerdictPopup } from './components/VerdictPopup';
 
 // Resolves which property is active today and auto-refreshes the page at the daily reset.
 export default function App() {
@@ -102,6 +103,14 @@ function Game({ property, nextResetMs }: GameProps) {
   const [status, setStatus] = useState<GameStatus>('playing');
   // Which try's image the player is viewing; null = follow the latest revealed image.
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  // The player's price verdict for this house. Only an actual vote is persisted (with the
+  // saved game); skipping the popup isn't remembered, so it re-appears on every Share until
+  // they vote. Only asked when the property opts in via `priceVerdict`.
+  const [verdict, setVerdict] = useState<Verdict | null>(null);
+  const [verdictOpen, setVerdictOpen] = useState(false);
+  // Resolves the Result button's in-flight onShare() promise once the popup detour finishes,
+  // so its "Copied" feedback appears when the text actually lands on the clipboard.
+  const shareResolveRef = useRef<((ok: boolean) => void) | null>(null);
 
   // ── Analytics state (per attempt) ──────────────────────────────────────────────────────
   // One id per puzzle attempt; pairs the Guesses rows with their Results row. Because <Game>
@@ -142,9 +151,13 @@ function Game({ property, nextResetMs }: GameProps) {
     if (saved) {
       setGuesses(saved.guesses);
       setStatus(saved.status);
+      // Older saves may hold a legacy 'skipped' marker — treat anything but a real vote as none.
+      const v = saved.verdict;
+      setVerdict(v === 'steal' || v === 'fair' || v === 'ripoff' ? v : null);
     } else {
       setGuesses([]);
       setStatus('playing');
+      setVerdict(null);
     }
     setSelectedImage(null);
   }, [property.slug]);
@@ -264,13 +277,17 @@ function Game({ property, nextResetMs }: GameProps) {
         closestEuroOff: Math.min(...nextGuesses.map((g) => Math.abs(g.value - soldPrice))),
         totalTimeMs: now - gameStartRef.current,
         shared: false,
+        verdict: '',
       };
     }
   }
 
-  async function handleShare(): Promise<boolean> {
-    // Record the share on this game's Results row, then flush it (once).
-    if (pendingResultRef.current) pendingResultRef.current.shared = true;
+  // Mark the Results row shared (with the verdict, if any), flush it, and copy the share text.
+  async function completeShare(v: Verdict | null): Promise<boolean> {
+    if (pendingResultRef.current) {
+      pendingResultRef.current.shared = true;
+      if (v) pendingResultRef.current.verdict = v;
+    }
     flushResult();
     const text = buildShareText(
       APP_TITLE,
@@ -279,8 +296,45 @@ function Game({ property, nextResetMs }: GameProps) {
       window.location.href,
       closestPercentOff,
       property.shareFlag,
+      v,
     );
     return copyToClipboard(text);
+  }
+
+  // Close the popup and finish the share that opened it (the copy runs inside the closing
+  // click's user gesture, so clipboard access still works).
+  function finishShareFromPopup(v: Verdict | null) {
+    setVerdictOpen(false);
+    void completeShare(v).then((ok) => {
+      shareResolveRef.current?.(ok);
+      shareResolveRef.current = null;
+    });
+  }
+
+  // A vote: remember it forever for this house, share with the verdict line.
+  function handleVote(v: Verdict) {
+    setVerdict(v);
+    saveGame({ slug: property.slug, guesses, status, verdict: v });
+    finishShareFromPopup(v);
+  }
+
+  // A skip or click-away: share without a verdict line. Deliberately not persisted — the
+  // popup comes back on every Share until the player votes.
+  function handleSkip() {
+    finishShareFromPopup(null);
+  }
+
+  async function handleShare(): Promise<boolean> {
+    // Un-voted share on a verdict-enabled house: detour through the popup. The returned
+    // promise resolves after the player votes/skips there, so the Share button's "Copied"
+    // feedback waits for the actual copy.
+    if (property.priceVerdict && !verdict) {
+      setVerdictOpen(true);
+      return new Promise((resolve) => {
+        shareResolveRef.current = resolve;
+      });
+    }
+    return completeShare(verdict);
   }
 
   return (
@@ -341,6 +395,15 @@ function Game({ property, nextResetMs }: GameProps) {
         />
       </div>
 
+      {verdictOpen && (
+        <VerdictPopup
+          soldPrice={soldPrice}
+          image={property.images[0]}
+          propertyUrl={property.propertyUrl}
+          onVote={handleVote}
+          onSkip={handleSkip}
+        />
+      )}
     </div>
   );
 }

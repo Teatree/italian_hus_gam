@@ -27,14 +27,14 @@ function ZoomIcon({ className }: { className?: string }) {
   );
 }
 
-export function ImageViewer({ src, index, total }: ImageViewerProps) {
-  const [zoomed, setZoomed] = useState(false);
-
-  // While the lightbox is open: close on Escape and lock background scrolling.
+// Full-screen photo overlay, shared by the image viewer and the verdict popup. z-[9999]
+// keeps it above everything else (including the verdict popup at z-[1100]); a click anywhere
+// or Escape closes only the lightbox, revealing whatever was underneath.
+export function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  // While open: close on Escape and lock background scrolling.
   useEffect(() => {
-    if (!zoomed) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setZoomed(false);
+      if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', onKey);
     const prevOverflow = document.body.style.overflow;
@@ -43,7 +43,23 @@ export function ImageViewer({ src, index, total }: ImageViewerProps) {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [zoomed]);
+  }, [onClose]);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Full screen house photo"
+      onClick={onClose}
+      className="fixed inset-0 z-[9999] flex cursor-zoom-out items-center justify-center bg-black/90 p-4"
+    >
+      <img src={src} alt={alt} className="max-h-full max-w-full rounded-lg object-contain shadow-2xl" />
+    </div>
+  );
+}
+
+export function ImageViewer({ src, index, total }: ImageViewerProps) {
+  const [zoomed, setZoomed] = useState(false);
 
   return (
     <>
@@ -77,19 +93,7 @@ export function ImageViewer({ src, index, total }: ImageViewerProps) {
       </div>
 
       {zoomed && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Full screen house photo"
-          onClick={() => setZoomed(false)}
-          className="fixed inset-0 z-[9999] flex cursor-zoom-out items-center justify-center bg-black/90 p-4"
-        >
-          <img
-            src={src}
-            alt={`House photo ${index} of ${total}`}
-            className="max-h-full max-w-full rounded-lg object-contain shadow-2xl"
-          />
-        </div>
+        <Lightbox src={src} alt={`House photo ${index} of ${total}`} onClose={() => setZoomed(false)} />
       )}
     </>
   );

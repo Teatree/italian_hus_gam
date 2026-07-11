@@ -1,9 +1,18 @@
-import type { Guess } from '../types';
+import type { Guess, Verdict } from '../types';
 import { DEFAULT_SHARE_FLAG } from '../admin';
 
 const WRONG = '🟥';
 const WIN = '🟩';
 const UNUSED = '⬜';
+
+// The price-verdict line: pure opinion, never a euro amount. The verdict itself is wrapped
+// in ||…|| (Discord/Telegram spoiler markup) so it doesn't act as a hint for whoever the
+// message is shared with — they tap to reveal it after playing.
+const VERDICT_LINES: Record<Verdict, string> = {
+  steal: '🧾 My verdict: ||STEAL 🤑||',
+  fair: '🧾 My verdict: ||Fair price 🤝||',
+  ripoff: '🧾 My verdict: ||RIP-OFF 🚨||',
+};
 
 // Build the emoji grid: one cell per try, separated by spaces. Wrong guesses are red, the
 // winning guess is green, and any unused tries are white. A loss is all red (no green).
@@ -30,6 +39,7 @@ export function buildShareText(
   url: string,
   closestPercentOff: number,
   flag: string = DEFAULT_SHARE_FLAG,
+  verdict?: Verdict | null,
 ): string {
   const won = guesses.some((g) => g.direction === 'correct');
   let result: string;
@@ -38,9 +48,10 @@ export function buildShareText(
   } else if (closestPercentOff === 0) {
     result = '🎯 RIGHT ON THE MONEY! (0% off)';
   } else {
-    result = `🎯 ${closestPercentOff}% off`;
+    result = `🎯 I was ${closestPercentOff}% off`;
   }
-  return `${title} ${flag}\n${flag} ${buildEmojiGrid(guesses, maxTries)}\n${result}\n${url}`;
+  const verdictLine = verdict ? `\n${VERDICT_LINES[verdict]}` : '';
+  return `${title} ${flag}\n${flag} ${buildEmojiGrid(guesses, maxTries)}\n${result}${verdictLine}\n${url}`;
 }
 
 // Copy text to the clipboard, with a fallback for browsers without the async API.
