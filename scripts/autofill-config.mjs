@@ -16,12 +16,19 @@
 //   Located in <area>           ·  <N> m² of living space  ·  <rooms> rooms <baths> baths
 //   Built in <year>             ·  <N> floors              ·  Land plot of <N> m²
 //   Private Garden (if present) ·  Swimming Pool (if present)
+// plus one *measured* fact (computed, not scraped): free-flow car time to the nearest big
+// city, e.g. "1h 20m to Venice by Car" — skipped when the property is already in one.
+//
+// Fact order is randomized: slot 0 is always the location; the other 5 slots go to the
+// priority facts (living space, built-in year, drive time) whenever available plus a random
+// draw of the rest, shuffled. Losers of the draw are logged so you can swap them in by hand.
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname, resolve, basename, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
 import { findDuplicateUrl } from './duplicate-url-check.mjs';
+import { driveTimeToNearestCity, formatDriveTime } from './drive-time.mjs';
 
 // Prefix for the location fact. Your configs use both "Located in" and "Located near";
 // "in" is the more common, so it's the default — change here if you prefer "near".
@@ -30,6 +37,10 @@ const LOCATION_PREFIX = 'Located in';
 // Every property needs 6 facts; anything missing/unfound is written as this so you can spot
 // (and search for) the gaps before publishing.
 const PLACEHOLDER = '<INSERT HINT HERE>';
+
+// Under this many minutes' drive to the nearest big city the property counts as being *in*
+// that city, and the drive-time fact is never added.
+const IN_CITY_MINUTES = 20;
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PROFILE_DIR = join(ROOT, 'scripts', '.pw-chrome-profile');
@@ -54,31 +65,44 @@ function pick(lines, re) {
   return null;
 }
 
-function buildFacts(info) {
-  const facts = [];
-  const push = (v) => facts.push(v ?? ''); // '' is a gap; filled with PLACEHOLDER below
+// Split the found facts into `priority` (guaranteed a slot) and `optional` (enter a random
+// draw for whatever slots remain). The location fact is handled separately — always slot 0.
+function buildCandidates(info, driveTimeFact) {
+  const priority = [];
+  const optional = [];
 
-  // 1. Location — almost always present (the line under the title).
-  push(info.location ? `${LOCATION_PREFIX} ${info.location}` : null);
+  if (info.livingM2) priority.push(`${info.livingM2} m² of living space`);
+  if (info.builtYear) priority.push(`Built in ${info.builtYear}`);
+  if (driveTimeFact) priority.push(driveTimeFact);
 
-  // 2. Living space.
-  push(info.livingM2 ? `${info.livingM2} m² of living space` : null);
+  if (info.rooms && info.baths) optional.push(`${info.rooms} rooms ${info.baths} baths`);
+  else if (info.rooms) optional.push(`${info.rooms} rooms`);
+  if (info.floors) optional.push(`${info.floors} floors`);
+  if (info.plotM2) optional.push(`Land plot of ${info.plotM2} m²`);
+  if (info.garden) optional.push('Private Garden');
+  if (info.pool) optional.push('Swimming Pool');
 
-  // 3. Rooms / baths.
-  if (info.rooms && info.baths) facts.push(`${info.rooms} rooms ${info.baths} baths`);
-  else if (info.rooms) facts.push(`${info.rooms} rooms`);
-  else push(null);
+  return { priority, optional };
+}
 
-  // 4. Built in.
-  push(info.builtYear ? `Built in ${info.builtYear}` : null);
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
-  // The rest only appear when the listing actually has them.
-  if (info.floors) facts.push(`${info.floors} floors`);
-  if (info.plotM2) facts.push(`Land plot of ${info.plotM2} m²`);
-  if (info.garden) facts.push('Private Garden');
-  if (info.pool) facts.push('Swimming Pool');
-
-  return facts;
+// Assemble the final 6: location first, then priorities + a random draw of optionals in
+// random order, padded with the placeholder. Also returns the optionals that lost the draw.
+function assembleFacts(info, { priority, optional }) {
+  const location = info.location ? `${LOCATION_PREFIX} ${info.location}` : PLACEHOLDER;
+  const drawn = shuffle(optional).slice(0, Math.max(0, 5 - priority.length));
+  const facts = [location, ...shuffle([...priority, ...drawn])];
+  while (facts.length < 6) facts.push(PLACEHOLDER);
+  const dropped = optional.filter((f) => !drawn.includes(f));
+  return { facts: facts.slice(0, 6), dropped };
 }
 
 // Serialize config the way the existing files are written: 2-space indent, coordinates inline.
@@ -188,12 +212,27 @@ async function main() {
 
   const soldPrice = info.priceText ? parseInt(info.priceText.replace(/[^\d]/g, ''), 10) || null : null;
 
-  // Fill any gaps with the placeholder and ensure there are always exactly 6 facts:
-  // cap at 6 (keeping the priority order), padding with the placeholder if fewer were found.
-  const allFacts = buildFacts(info).map((f) => f || PLACEHOLDER);
-  const facts = allFacts.slice(0, 6);
-  while (facts.length < 6) facts.push(PLACEHOLDER);
-  const dropped = allFacts.slice(6).filter((f) => f !== PLACEHOLDER);
+  // The measured fact: drive time to the nearest big city. [0, 0] is the "never filled"
+  // default written by earlier runs, not a real location.
+  const at = coords ?? cfg.coordinates;
+  let driveTimeFact = null;
+  let driveTimeNote;
+  if (!at || (at[0] === 0 && at[1] === 0)) {
+    driveTimeNote = 'skipped — no coordinates';
+  } else {
+    try {
+      const { city, minutes } = await driveTimeToNearestCity(at);
+      if (minutes < IN_CITY_MINUTES) {
+        driveTimeNote = `skipped — property is in/near ${city} (~${Math.round(minutes)}m by car)`;
+      } else {
+        driveTimeFact = formatDriveTime(minutes, city);
+      }
+    } catch (e) {
+      driveTimeNote = `skipped — ${e.message}`;
+    }
+  }
+
+  const { facts, dropped } = assembleFacts(info, buildCandidates(info, driveTimeFact));
 
   // Rebuild in the canonical field order, preserving everything we didn't scrape.
   const out = {};
@@ -215,10 +254,11 @@ async function main() {
   console.log('  filled:');
   console.log(`    ${mark(coords)} coordinates  ${coords ? coords.join(', ') : '(not found — kept existing)'}`);
   console.log(`    ${mark(soldPrice)} soldPrice    ${soldPrice ?? '(not found — kept existing)'}`);
-  console.log('  facts (draft — replace any ' + PLACEHOLDER + ' and tweak to taste):');
+  console.log(`    ${mark(driveTimeFact)} drive time   ${driveTimeFact ?? `(${driveTimeNote})`}`);
+  console.log('  facts (draft, randomly ordered — replace any ' + PLACEHOLDER + ' and tweak to taste):');
   facts.forEach((f, i) => console.log(`    [${i}] ${f}`));
   if (dropped.length) {
-    console.log(`  also found but omitted to keep 6 (swap in if you want): ${dropped.join(' · ')}`);
+    console.log(`  also found but lost the random draw (swap in if you want): ${dropped.join(' · ')}`);
   }
   console.log(`\nWrote ${slug}/config.json. Review the facts, then you're done.`);
 }
