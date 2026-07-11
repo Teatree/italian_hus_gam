@@ -1,0 +1,26 @@
+{
+  "coordinates": [36.5040268, -4.688449],
+  "mapZoom": 12,
+  "soldPrice": 389000,
+  "propertyUrl": "https://www.idealista.com/inmueble/111712729/",
+  "prop_pictures": {
+    "1": 22,
+    "2": 11,
+    "3": 3,
+    "4": 19,
+    "5": 13,
+    "6": 21
+  },
+  "titleIcon": "spain_icon.png",
+  "titleIconUrl": "https://www.youtube.com/shorts/fQymIAjg4EY",
+  "shareFlag": "🇪🇸",
+  "facts": [
+    "Located in La Cala de Mijas, Mijas",
+    "136 m² of living space",
+    "40m to Málaga by Car",
+    "Ground Floor Apartment",
+    "Built in 2005 (most likely)",
+    "Air Conditioning"
+  ],
+  "priceVerdict": true
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [40.9141774, 8.2001384],
+  "mapZoom": 12,
+  "soldPrice": 399000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35859634/",
+  "prop_pictures": {
+    "1": 7,
+    "2": 12,
+    "3": 16,
+    "4": 24,
+    "5": 32,
+    "6": 35
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Stintino",
+    "50m to Sassari by Car",
+    "Swimming Pool",
+    "160 m² of living space",
+    "2 floors",
+    "Built in 2000"
+  ],
+  "priceVerdict": false
+}

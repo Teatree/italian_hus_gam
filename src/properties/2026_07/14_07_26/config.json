@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.5390799, 9.1850975],
+  "mapZoom": 12,
+  "soldPrice": 540000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35886659/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 6,
+    "3": 4,
+    "4": 11,
+    "5": 12,
+    "6": 17
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Bresso",
+	"Built in 1970 (according to cadastral records)",
+    "5 rooms 3 baths",
+    "235 m² of living space",
+    "2 floors",
+    "Private Garden... of sorts"
+  ],
+  "priceVerdict": false
+}
