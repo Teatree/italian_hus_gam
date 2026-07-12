@@ -1,0 +1,26 @@
+{
+  "coordinates": [41.0267977, 9.5556668],
+  "mapZoom": 12,
+  "soldPrice": 4650000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/28339405/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 6,
+    "3": 15,
+    "4": 21,
+    "5": 28,
+    "6": 35
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Porto Rotondo, Olbia",
+    "350 m² of living space",
+    "10 rooms 6 baths",
+    "2 floors",
+    "1h 50m to Sassari by Car",
+    "Sea Views"
+  ],
+  "priceVerdict": false
+}
