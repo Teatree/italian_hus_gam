@@ -14,6 +14,13 @@ const ANALYTICS_URL =
 
 type SheetName = 'Sessions' | 'Guesses' | 'Results';
 
+// 'dev' when the game runs on localhost (npm run dev / npm run preview), 'prod' otherwise.
+// Attached to every event so test rows can be filtered out in the sheet instead of polluting
+// real-player counts. (The old heuristic — non-empty ip = localhost — breaks if geo ever
+// starts working on the HTTPS site.)
+const ENV: 'dev' | 'prod' =
+  location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? 'dev' : 'prod';
+
 export function randomId(prefix: string): string {
   return prefix + Math.random().toString(36).slice(2, 9);
 }
@@ -47,13 +54,14 @@ export function loadGeo(): Promise<Geo> {
   return geoPromise;
 }
 
-// Fire-and-forget one event. `sheet` picks the tab; sessionId + ip + country are attached
-// automatically. Swallows every error so analytics can never interrupt the game.
+// Fire-and-forget one event. `sheet` picks the tab; sessionId + env + ip + country are
+// attached automatically. Swallows every error so analytics can never interrupt the game.
 export function track(sheet: SheetName, data: Record<string, unknown>): void {
   if (!ANALYTICS_URL) return;
   const payload = JSON.stringify({
     sheet,
     sessionId,
+    env: ENV,
     ip: geo.ip,
     country: geo.country,
     ...data,
