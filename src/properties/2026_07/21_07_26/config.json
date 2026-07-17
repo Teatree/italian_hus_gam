@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.3455081, 11.9639425],
+  "mapZoom": 12,
+  "soldPrice": 400000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35066805/",
+  "prop_pictures": {
+    "1": 29,
+    "2": 1,
+    "3": 16,
+    "4": 18,
+    "5": 25,
+    "6": 36
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Legnaro",
+    "This one is a bit different",
+    "Land plot of 600 m²",
+    "Built in 2026",
+    "169 m² of living space",
+    "1 floors"
+  ],
+  "priceVerdict": false
+}

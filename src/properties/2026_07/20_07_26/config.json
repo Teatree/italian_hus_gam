@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.2082268, 12.1494907],
+  "mapZoom": 12,
+  "soldPrice": 125000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36206669/",
+  "prop_pictures": {
+    "1": 3,
+    "2": 13,
+    "3": 16,
+    "4": 9,
+    "5": 22,
+    "6": 11
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Piovese, Padua",
+    "5 rooms 1 baths",
+    "160 m² of living space",
+    "45m to Padua by Car",
+    "Private Garden",
+    "2 floors"
+  ],
+  "priceVerdict": false
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.2720989, 11.7198919],
+  "mapZoom": 12,
+  "soldPrice": 1200000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35825391/",
+  "prop_pictures": {
+    "1": 31,
+    "2": 2,
+    "3": 6,
+    "4": 9,
+    "5": 11,
+    "6": 13
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Arquà Petrarca",
+    "11 rooms 3 baths",
+    "30m to Padua by Car",
+    "Private Garden",
+    "Built in 2011",
+    "270 m² of living space"
+  ],
+  "priceVerdict": false
+}

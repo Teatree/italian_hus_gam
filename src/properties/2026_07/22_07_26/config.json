@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.4185282, 12.033391],
+  "mapZoom": 12,
+  "soldPrice": 890000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/26404616/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 5,
+    "3": 8,
+    "4": 14,
+    "5": 17,
+    "6": 19
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Fiesso d'Artico",
+    "400 m² of living space",
+    "Built in 1980",
+    "Land plot of 2,400 m² !!!",
+    "Private Garden",
+    "3 floors"
+  ],
+  "priceVerdict": false
+}

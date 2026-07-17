@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.3296092, 11.7138731],
+  "mapZoom": 12,
+  "soldPrice": 465000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35102231/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 22,
+    "3": 25,
+    "4": 33,
+    "5": 32,
+    "6": 8
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Torreglia",
+    "230 m² of living space",
+    "Built in 2020",
+    "Land plot of 10,000 m²",
+    "5 rooms 2 baths",
+    "25m to Padua by Car"
+  ],
+  "priceVerdict": false
+}
