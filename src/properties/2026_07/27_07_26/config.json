@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.4777853, 11.9012665],
+  "mapZoom": 12,
+  "soldPrice": 157000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/31274312/",
+  "prop_pictures": {
+    "1": 5,
+    "2": 11,
+    "3": 16,
+    "4": 19,
+    "5": 20,
+    "6": 23
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Lugo",
+    "Built in 1960",
+    "2 floors",
+    "40m to Ravenna by Car",
+    "277 m² of living space",
+    "5 rooms 2 baths"
+  ],
+  "priceVerdict": true
+}

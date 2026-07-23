@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.7459838, 11.9408344],
+  "mapZoom": 12,
+  "soldPrice": 139000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36311779/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 8,
+    "3": 15,
+    "4": 20,
+    "5": 28,
+    "6": 26
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Ostellato",
+    "2 floors",
+    "Built in 1970",
+    "230 m² of living space",
+    "30m to Ferrara by Car",
+    "7 rooms 2 baths"
+  ],
+  "priceVerdict": true
+}

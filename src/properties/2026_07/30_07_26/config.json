@@ -1,0 +1,26 @@
+{
+  "coordinates": [43.1806278, 12.9214058],
+  "mapZoom": 12,
+  "soldPrice": 85000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35222825/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 3,
+    "3": 4,
+    "4": 8,
+    "5": 11,
+    "6": 14
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Alte Valli del Potenza e dell'Esino, Macerata",
+    "1h 15m to Perugia by Car",
+    "122 m² of living space",
+    "1 floors",
+    "5 rooms 1 baths",
+    "You'll never guess!"
+  ],
+  "priceVerdict": true
+}

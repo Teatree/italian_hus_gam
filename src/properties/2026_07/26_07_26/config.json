@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.2687645, 11.9370116],
+  "mapZoom": 12,
+  "soldPrice": 260000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36024146/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 7,
+    "3": 10,
+    "4": 14,
+    "5": 16,
+    "6": 18
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Bovolenta",
+    "Built in 2000",
+    "7 rooms 2 baths",
+    "1 floors",
+    "210 m² of living space",
+    "25m to Padua by Car"
+  ],
+  "priceVerdict": true
+}

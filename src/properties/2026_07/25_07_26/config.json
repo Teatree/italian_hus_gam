@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.4497061, 9.2053519],
+  "mapZoom": 12,
+  "soldPrice": 1180000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36233655/",
+  "prop_pictures": {
+    "1": 27,
+    "2": 5,
+    "3": 12,
+    "4": 20,
+    "5": 23,
+    "6": 24
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Porta Romana, Milan",
+    "It's a Duplex",
+    "117 m² of living space",
+    "4 rooms 2 baths",
+    "Built ions ago",
+    "City Views"
+  ],
+  "priceVerdict": true
+}

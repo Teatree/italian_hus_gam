@@ -1,0 +1,26 @@
+{
+  "coordinates": [40.2224784, 18.0044963],
+  "mapZoom": 12,
+  "soldPrice": 790000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/29650392/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 9,
+    "3": 13,
+    "4": 15,
+    "5": 20,
+    "6": 21
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Sant'Isidoro - Torre Inserraglio - Villaggio Boncore, Nardò",
+    "5 rooms 3 baths",
+    "850 m² of living space",
+    "RED TRUCK!!!",
+    "35m to Lecce by Car",
+    "2 floors"
+  ],
+  "priceVerdict": true
+}

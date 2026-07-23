@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6402545, 13.8626583],
+  "mapZoom": 12,
+  "soldPrice": 595000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36159886/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 7,
+    "3": 9,
+    "4": 12,
+    "5": 21,
+    "6": 20
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Altipiano Est - Opicina, Trieste",
+    "150 m² of living space",
+    "5 rooms 4 baths",
+    "3 floors",
+    "Private Garden",
+    "The Floor Plan is dog shit though"
+  ],
+  "priceVerdict": true
+}

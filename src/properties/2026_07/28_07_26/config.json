@@ -1,0 +1,26 @@
+{
+  "coordinates": [38.123038, 13.3225842],
+  "mapZoom": 12,
+  "soldPrice": 785000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/30239158/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 8,
+    "3": 9,
+    "4": 12,
+    "5": 11,
+    "6": 15
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Uditore - Da Vinci, Palermo",
+    "Built in 1989",
+    "600 m² of living space",
+    "Land plot of 2,400 m²",
+    "3 floors",
+    "16 rooms 4 baths"
+  ],
+  "priceVerdict": true
+}
