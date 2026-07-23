@@ -4,9 +4,7 @@ import {
   APP_TITLE,
   MAX_TRIES,
   TOLERANCE,
-  TOLERANCE_CAP,
   FAR_THRESHOLD,
-  FAR_THRESHOLD_CAP,
   OVERRIDE_SLUG,
 } from './admin';
 import { track, loadGeo, randomId, isMobile } from './analytics';
@@ -216,6 +214,27 @@ function Game({ property, nextResetMs }: GameProps) {
   const isPlaying = status === 'playing';
   const isOver = !isPlaying; // 'won' or 'lost' — the game has finished
 
+  // ── End-game carousel ──────────────────────────────────────────────────────────────────
+  // Once the game is over the image section becomes a carousel: it keeps showing the image
+  // the player finished on, then auto-advances one image to the right every 5 seconds,
+  // wrapping 6 → 1. Re-arming the timeout on every displayed-image change means any manual
+  // navigation (arrows, swipe, try buttons) also resets a fresh 5-second window. While the
+  // zoom lightbox is open the cycle pauses entirely; closing it starts a fresh 5 seconds.
+  const [zoomOpen, setZoomOpen] = useState(false);
+  const totalImages = property.images.length;
+  useEffect(() => {
+    if (isPlaying || zoomOpen || totalImages < 2) return;
+    const id = window.setTimeout(() => {
+      setSelectedImage((displayedImageIndex + 1) % totalImages);
+    }, 5000);
+    return () => window.clearTimeout(id);
+  }, [isPlaying, zoomOpen, displayedImageIndex, totalImages]);
+
+  // Manual carousel step (±1 from the arrows or a swipe), wrapping in both directions.
+  function stepImage(delta: number) {
+    setSelectedImage((displayedImageIndex + delta + totalImages) % totalImages);
+  }
+
   // Facts stay visible the whole game: revealed one-per-wrong-guess while playing, then every
   // hint (revealed one-by-one) once it's over — the same on a loss as on a win.
   const factsToShow = isOver ? property.facts : property.facts.slice(0, revealed);
@@ -228,14 +247,7 @@ function Game({ property, nextResetMs }: GameProps) {
 
   function handleSubmit(value: number) {
     if (!isPlaying) return;
-    const direction = evaluateGuess(
-      value,
-      soldPrice,
-      TOLERANCE,
-      TOLERANCE_CAP,
-      FAR_THRESHOLD,
-      FAR_THRESHOLD_CAP,
-    );
+    const direction = evaluateGuess(value, soldPrice, TOLERANCE, FAR_THRESHOLD);
     const nextGuesses = [...guesses, { value, direction }];
 
     let nextStatus: GameStatus = 'playing';
@@ -350,6 +362,9 @@ function Game({ property, nextResetMs }: GameProps) {
             src={property.images[displayedImageIndex]}
             index={displayedImageIndex + 1}
             total={property.images.length}
+            carouselImages={isOver ? property.images : undefined}
+            onStep={isOver ? stepImage : undefined}
+            onZoomChange={setZoomOpen}
           />
         </div>
 

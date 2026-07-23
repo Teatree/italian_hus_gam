@@ -5,7 +5,8 @@ interface GuessListProps {
   guesses: Guess[];
 }
 
-// The arrow points toward the real price. A double arrow means more than 50% off.
+// The arrow points toward the real price. A double arrow means the guess is way off
+// (more than FAR_THRESHOLD of the price).
 //  up   = price is higher than your guess   |  down   = price is lower than your guess
 function arrow(direction: Guess['direction']): string {
   switch (direction) {

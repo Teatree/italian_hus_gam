@@ -34,15 +34,9 @@ export const MAX_TRIES = 6;
 // A guess within this fraction of the real price counts as correct (0.10 = ±10%).
 export const TOLERANCE = 0.1;
 
-// Upper bound (in €) on the win margin: even if TOLERANCE × price is larger than this,
-// the guess must still be within this many euros of the real price to count as correct.
-export const TOLERANCE_CAP = 200_000;
-
-// Single vs double arrow: a guess that misses by more than this much is "way off" and gets a
-// double arrow. Like the win margin, it's a fraction of the price (FAR_THRESHOLD) capped in
-// euros (FAR_THRESHOLD_CAP) so the signal stays meaningful for both cheap and pricey houses.
+// Single vs double arrow: a guess that misses by more than this fraction of the price is
+// "way off" and gets a double arrow.
 export const FAR_THRESHOLD = 0.3;
-export const FAR_THRESHOLD_CAP = 200_000;
 
 // Daily reset: the puzzle switches at this wall-clock hour in this time zone.
 // 'Europe/Kyiv' is Eastern European (EET/EEST) and is daylight-saving aware, so the

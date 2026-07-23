@@ -21,8 +21,8 @@ npm run preview  # serve the production build locally
 1. Enter a price and press **Submit**.
 2. A wrong guess reveals the next photo and a new fact, highlights the next try button, and
    adds the guess to the list with an arrow that points toward the real price:
-   - ⬆️ the price is **higher** than your guess (⬆️⬆️ if you're more than 50% under)
-   - ⬇️ the price is **lower** than your guess (⬇️⬇️ if you're more than 50% over)
+   - ⬆️ the price is **higher** than your guess (⬆️⬆️ if you're more than 30% under)
+   - ⬇️ the price is **lower** than your guess (⬇️⬇️ if you're more than 30% over)
 3. Guess within 10% to win (**Good Job!**). Run out of tries and you lose (**You Suck!**).
 4. The real sale price is revealed at the end, plus a **Share** button that copies an emoji
    grid + link to your clipboard.
@@ -41,6 +41,23 @@ date** in `DD_MM_YY` format (e.g. on 8 June 2026 it shows `08_06_26`). A folder 
 puzzle from 10:00 on its date until 10:00 the next day. If no folder matches the current day, a
 "check back soon" screen shows with a countdown. When the reset passes while someone is playing,
 the page auto-refreshes to load the new puzzle.
+
+### Testing a specific date
+
+To play a scheduled house today (e.g. to preview `27_07_26` before it goes live):
+
+1. Open `src/admin.ts`.
+2. Set `OVERRIDE_SLUG` to the property's folder name:
+   ```ts
+   export const OVERRIDE_SLUG: string | null = '27_07_26';
+   ```
+3. Run `npm run dev` and open http://localhost:5173 — that house now loads regardless of
+   the real date.
+4. To replay it from scratch, clear the saved progress: DevTools → **Application → Local
+   Storage → http://localhost:5173** → delete the `gth:v1:27_07_26` key (or run
+   `localStorage.clear()` in the console) and refresh.
+5. When you're done, set `OVERRIDE_SLUG` back to `null` — **don't commit the override**, or
+   the deployed site would be stuck on that one house.
 
 ### Adding a house (just create a folder)
 
