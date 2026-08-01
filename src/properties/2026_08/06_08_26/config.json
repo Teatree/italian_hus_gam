@@ -1,0 +1,26 @@
+{
+  "coordinates": [43.9072527, 10.5244289],
+  "mapZoom": 12,
+  "soldPrice": 940000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/27894593/",
+  "prop_pictures": {
+    "1": 3,
+    "2": 15,
+    "3": 22,
+    "4": 25,
+    "5": 34,
+    "6": 41
+  },
+  "titleIcon": "spain_icon.png",
+  "titleIconUrl": "https://www.youtube.com/shorts/fQymIAjg4EY",
+  "shareFlag": "🇪🇸",
+  "facts": [
+    "Located in Ponte a Moriano - Sesto di Moriano, Lucca",
+    "504 m² of living space",
+    "Private Garden",
+    "Built in 1990",
+    "Land plot of 14,700 m²",
+    "Swimming Pool"
+  ],
+  "priceVerdict": true
+}

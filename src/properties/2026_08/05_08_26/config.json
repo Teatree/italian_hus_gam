@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.9220594, 12.1879607],
+  "mapZoom": 12,
+  "soldPrice": 125000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36343359/",
+  "prop_pictures": {
+    "1": 38,
+    "2": 27,
+    "3": 35,
+    "4": 13,
+    "5": 14,
+    "6": 17
+  },
+  "titleIcon": "spain_icon.png",
+  "titleIconUrl": "https://www.youtube.com/shorts/fQymIAjg4EY",
+  "shareFlag": "🇪🇸",
+  "facts": [
+    "Located in Mesola",
+    "Land plot of 900 m²",
+    "1h 5m to Ferrara by Car",
+    "350 m² of living space",
+    "9 rooms 3 baths",
+    "Built in 1987"
+  ],
+  "priceVerdict": true
+}

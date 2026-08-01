@@ -1,0 +1,26 @@
+{
+  "coordinates": [41.1210873, 0.1350634],
+  "mapZoom": 12,
+  "soldPrice": 59999,
+  "propertyUrl": "https://www.idealista.com/en/inmueble/108351448/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 13,
+    "3": 5,
+    "4": 6,
+    "5": 3,
+    "6": 8
+  },
+  "titleIcon": "spain_icon.png",
+  "titleIconUrl": "https://www.youtube.com/shorts/fQymIAjg4EY",
+  "shareFlag": "🇪🇸",
+  "facts": [
+    "Located in Maella",
+    "Built in 1984",
+    "1h 30m to Lleida by Car",
+    "1 floors",
+    "52 m² of living space",
+    "In the middle of fkn nowhere"
+  ],
+  "priceVerdict": true
+}

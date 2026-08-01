@@ -1,0 +1,26 @@
+{
+  "coordinates": [43.5507823, 7.0057538],
+  "mapZoom": 12,
+  "soldPrice": 744000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35615449/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 3,
+    "3": 7,
+    "4": 9,
+    "5": 6,
+    "6": 8
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Cannes",
+    "3 rooms 2 baths",
+    "2h 50m to Genoa by Car",
+    "103 m² of living space",
+    "Close to the sea, I guess",
+    "Ran out of picks, sorry..."
+  ],
+  "priceVerdict": true
+}

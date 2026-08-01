@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.0118865, 8.1628062],
+  "mapZoom": 12,
+  "soldPrice": 790000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/32456621/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 8,
+    "3": 12,
+    "4": 16,
+    "5": 23,
+    "6": 11
+  },
+  "titleIcon": "spain_icon.png",
+  "titleIconUrl": "https://www.youtube.com/shorts/fQymIAjg4EY",
+  "shareFlag": "🇪🇸",
+  "facts": [
+    "Located in Collina Centrale, Alassio",
+    "1h 25m to Genoa by Car",
+    "100 m² of living space",
+    "1 floors",
+    "Built in 1990",
+    "4 rooms 1 baths"
+  ],
+  "priceVerdict": true
+}
