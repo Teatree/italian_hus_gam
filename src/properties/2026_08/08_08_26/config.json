@@ -1,0 +1,26 @@
+{
+  "coordinates": [39.0028952, 16.1788318],
+  "mapZoom": 12,
+  "soldPrice": 80000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35894951/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 5,
+    "3": 31,
+    "4": 7,
+    "5": 17,
+    "6": 13
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Falerna",
+    "30m to Lamezia Terme by Car",
+    "5 rooms 2 baths",
+    "217 m² of living space",
+    "It's old",
+    "Not bad though, I dono"
+  ],
+  "priceVerdict": true
+}

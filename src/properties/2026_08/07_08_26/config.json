@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.7443434, 7.3321364],
+  "mapZoom": 12,
+  "soldPrice": 730000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35406871/",
+  "prop_pictures": {
+    "1": 17,
+    "2": 2,
+    "3": 6,
+    "4": 4,
+    "5": 9,
+    "6": 13
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Zona Precollinare, Aosta",
+    "Built in 1983",
+    "3 floors",
+    "397 m² of living space",
+    "8 rooms 5 baths",
+    "1h 30m to Turin by Car"
+  ],
+  "priceVerdict": true
+}

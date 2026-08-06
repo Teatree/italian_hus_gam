@@ -1,0 +1,26 @@
+{
+  "coordinates": [39.6997146, 16.5038823],
+  "mapZoom": 12,
+  "soldPrice": 115000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/33477563/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 4,
+    "3": 6,
+    "4": 14,
+    "5": 22,
+    "6": 24
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Ricota Grande, Corigliano-Rossano",
+    "Fkn Window Bars",
+    "1h 55m to Lamezia Terme by Car",
+    "6 rooms 2 baths",
+    "150 m² of living space",
+    "Built in 1980"
+  ],
+  "priceVerdict": true
+}
