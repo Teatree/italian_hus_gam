@@ -16,8 +16,10 @@
 //   Located in <area>           ·  <N> m² of living space  ·  <rooms> rooms <baths> baths
 //   Built in <year>             ·  <N> floors              ·  Land plot of <N> m²
 //   Private Garden (if present) ·  Swimming Pool (if present)
-// plus one *measured* fact (computed, not scraped): free-flow car time to the nearest big
+// plus one *measured* fact (computed, not scraped): free-flow car time to the best nearby
 // city, e.g. "1h 20m to Venice by Car" — skipped when the property is already in one.
+// "Best" is not "closest": drive-time.mjs scores candidates on drive time against how
+// notable they are, so a provincial capital can beat a bigger town that happens to be nearer.
 //
 // Fact order is randomized: slot 0 is always the location; the other 5 slots go to the
 // priority facts (living space, built-in year, drive time) whenever available plus a random
@@ -221,11 +223,15 @@ async function main() {
     driveTimeNote = 'skipped — no coordinates';
   } else {
     try {
-      const { city, minutes } = await driveTimeToNearestCity(at);
+      const { city, minutes, km, runnerUp } = await driveTimeToNearestCity(at);
       if (minutes < IN_CITY_MINUTES) {
         driveTimeNote = `skipped — property is in/near ${city} (~${Math.round(minutes)}m by car)`;
       } else {
         driveTimeFact = formatDriveTime(minutes, city);
+        // The winner balances distance against how notable the place is, so it isn't always
+        // the closest — show what it beat in case you'd rather have the runner-up.
+        driveTimeNote = `${Math.round(km)} km by road`;
+        if (runnerUp) driveTimeNote += `; beat ${runnerUp.city} (${Math.round(runnerUp.minutes)}m)`;
       }
     } catch (e) {
       driveTimeNote = `skipped — ${e.message}`;
@@ -254,7 +260,9 @@ async function main() {
   console.log('  filled:');
   console.log(`    ${mark(coords)} coordinates  ${coords ? coords.join(', ') : '(not found — kept existing)'}`);
   console.log(`    ${mark(soldPrice)} soldPrice    ${soldPrice ?? '(not found — kept existing)'}`);
-  console.log(`    ${mark(driveTimeFact)} drive time   ${driveTimeFact ?? `(${driveTimeNote})`}`);
+  console.log(
+    `    ${mark(driveTimeFact)} drive time   ${driveTimeFact ? `${driveTimeFact}  (${driveTimeNote})` : `(${driveTimeNote})`}`,
+  );
   console.log('  facts (draft, randomly ordered — replace any ' + PLACEHOLDER + ' and tweak to taste):');
   facts.forEach((f, i) => console.log(`    [${i}] ${f}`));
   if (dropped.length) {
