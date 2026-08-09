@@ -112,10 +112,12 @@ house twice. It reads the listing and writes:
 - a **draft `facts` list** following the usual wording, filling what it finds and leaving blanks for the
   rest: `Located in …`, `N m² of living space`, `N rooms N baths`, `Built in N`, `N floors`,
   `Land plot of N m²`, and `Private Garden` / `Swimming Pool` if present — plus one **measured** fact:
-  the free-flow car time to the nearest big city (e.g. `1h 20m to Venice by Car`), computed from the
-  coordinates via the free OSRM routing server against the 70k+-population city list in
-  `scripts/big-cities.mjs`. If the property is already in/near a big city (under 20 minutes' drive)
-  this fact is never added.
+  the free-flow car time to the best nearby city (e.g. `1h 20m to Venice by Car`), computed from the
+  coordinates via the free OSRM routing server. If the property is already in/near that city (under
+  20 minutes' drive), or nothing is within 150 minutes by road, this fact is never added.
+
+  The city is **scored, not just the nearest one** — see
+  [How the drive-time city is chosen](#how-the-drive-time-city-is-chosen) below for the exact formula.
 
 It always writes exactly **6 facts**, in **randomized order**: the first is always the location fact; the
 other 5 slots go to the priority facts (living space, built-in year, drive time) whenever available plus
@@ -125,6 +127,98 @@ draw are printed in the console so you can swap them in. Everything else (`prope
 `prop_pictures`, the title-icon/flag fields) is preserved. Treat the facts as a **draft** — replace the
 placeholders and add your own flavour. Same visible-Chrome / one-time-slider flow as photo fetching below
 (idealista only).
+
+#### How the drive-time city is chosen
+
+All of this lives in `scripts/drive-time.mjs`; every constant below is a named export-adjacent
+`const` at the top of that file, so tuning means editing one number.
+
+The problem with picking the *nearest city above a population threshold*: for a property near
+Corigliano-Rossano it chose **Lamezia Terme** (70,501 people, 1h 55m away) over **Cosenza**
+(63,852, 66 min) purely because Cosenza fell 6,149 people under a 70,000 cut — even though Cosenza
+is the *provincial capital* and Lamezia Terme is not. Lowering the threshold alone doesn't fix that;
+it just lets villages win. So the threshold became a candidate **net**, and a score picks the winner.
+
+**Step 1 — candidate pool.** Every place in `scripts/big-cities.mjs`: GeoNames `cities15000` rows in
+Italy, Spain or Finland, feature class `P`, excluding `PPLX` and the hand-maintained
+`EXCLUDE_DISTRICTS` list, with **population ≥ 20,000**. Currently 896 places (IT 436, ES 403, FI 57).
+Each row carries `fcode` (administrative rank), `pop` and `coords`.
+
+**Step 2 — shortlist** (`shortlistCandidates`), the union of two sets, deduped by name:
+
+- the **nearest 8** by great-circle distance (`NEAREST_COUNT = 8`)
+- the **nearest 4** places ranked `PPLC`/`PPLA`/`PPLA2` within **150 km** by air
+  (`MAJOR_COUNT = 4`, `MAJOR_MAX_AIR_KM = 150`)
+
+The second set is not optional. Around Taormina the eight closest places are all small
+Catania-area towns, which crowded Messina out of the running entirely.
+
+**Step 3 — route.** All ~12 shortlisted places go into **one** OSRM `table` request
+(`sources=0&annotations=duration,distance`, car profile, free-flow). Nearest-by-air isn't
+nearest-by-road anyway, and one request costs the same with 5 destinations or 12.
+
+**Step 4 — filter.** Drop any candidate whose drive time isn't finite or exceeds
+**`MAX_DRIVE_MINUTES = 150`**. This is also the nonsense guard: OSRM will happily "drive" from
+Lampedusa to Gela in 2,761 minutes (46 hours) across open sea.
+
+**Step 5 — score.** Lowest wins; ties fall back to shortlist position (nearest by air first).
+
+```
+score = driveMinutes − prominenceBonus(city)
+
+prominenceBonus(city) = RANK_BONUS_MINUTES[city.fcode]
+                      + max(0, SIZE_BONUS_PER_DECADE × log10(city.pop / SIZE_BONUS_FLOOR_POP))
+```
+
+Both terms are in **minutes**, and the bonus reads as *"how much extra driving this place's standing
+is worth"*. `SIZE_BONUS_PER_DECADE = 15`, `SIZE_BONUS_FLOOR_POP = 20_000` — so ~10 min at 100k and
+~25 min at 1M, log-scaled so a metropolis earns a detour without population alone dominating the way
+the old rule did.
+
+| `fcode` | Meaning | `RANK_BONUS_MINUTES` |
+|---|---|---|
+| `PPLC` | National capital | **+90** |
+| `PPLA` | First-order (regional) capital | **+60** |
+| `PPLA2` | Second-order (provincial) capital | **+35** |
+| `PPLA3` / `PPLA4` | Third/fourth-order seat | **0** (the baseline) |
+| `PPL` / `PPLL` | No administrative role — a *frazione* or suburb | **−25** |
+
+The rank is a free, accurate stand-in for the amenities that make a place a good hint: in Italy a
+provincial capital is where the hospital, courts, station and usually a university are. No amenities
+dataset needed — GeoNames already ships the answer in a column we used to discard.
+
+The **`PPL` penalty is load-bearing**, not decoration. Without it, *Rossano Stazione* — a frazione of
+the property's own comune, 23,824 people, 26 min away — beat Cosenza by a single point.
+
+**Step 6 — reject or format.** If the winner is under `IN_CITY_MINUTES = 20` away
+(in `scripts/autofill-config.mjs`) the property counts as being *in* that city and **no drive fact is
+written at all**. Otherwise `formatDriveTime` rounds to the nearest 5 minutes: `1h 5m to Cosenza by Car`.
+
+**Worked example** — the property at `[39.6997146, 16.5038823]`:
+
+| City | `fcode` | Pop | Drive | Rank | Size | Bonus | **Score** |
+|---|---|---|---|---|---|---|---|
+| **Cosenza** | `PPLA2` | 63,852 | 66m | +35 | +7.6 | 42.6 | **23.4** ← winner |
+| Castrovillari | `PPLA3` | 20,334 | 45m | 0 | +0.1 | 0.1 | 44.7 |
+| Rossano Stazione | `PPL` | 23,824 | 26m | −25 | +1.1 | −23.9 | 49.4 |
+| Catanzaro | `PPLA` | 78,970 | 134m | +60 | +8.9 | 68.9 | 65.3 |
+| Lamezia Terme | `PPLA3` | 70,501 | 117m | 0 | +8.2 | 8.2 | 109.1 |
+
+(Drive times are rounded for display; scores are computed from the unrounded seconds OSRM returns,
+so the columns won't subtract to the last decimal.)
+
+Autofill prints the runner-up so you can see what the winner beat and override by hand:
+
+```
+✓ drive time   1h 5m to Cosenza by Car  (81 km by road; beat Castrovillari 45m)
+```
+
+Across the existing 68 properties this changes the chosen city for about 28 of them — mostly clear
+wins (Sassari 1h 49m → **Olbia 25m**, Genoa 2h 1m → **Imperia 45m**, Cagliari 1h 32m →
+**Carbonia 25m**). The judgement calls are all the regional-capital bonus pulling you further for a
+more recognisable name (Ferrara 30m → Bologna 1h 5m, Ravenna 40m → Bologna 1h); lower `PPLA` from
+60 to ~40 if you'd rather keep the closer, smaller city. Note that **existing `config.json` files are
+not rewritten** — this only affects new autofill runs.
 
 #### Pulling the photos automatically (idealista only)
 
