@@ -1,0 +1,26 @@
+{
+  "coordinates": [39.358631, 16.2448744],
+  "mapZoom": 12,
+  "soldPrice": 330000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34781942/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 2,
+    "3": 5,
+    "4": 9,
+    "5": 13,
+    "6": 16
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Quattomiglia, Rende",
+    "2 floors",
+    "Swimming Pool",
+    "Built in 2006",
+    "350 m² of living space",
+    "9 rooms 4 baths"
+  ],
+  "priceVerdict": true
+}

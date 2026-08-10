@@ -1,0 +1,26 @@
+{
+  "coordinates": [39.8362736, 15.8785682],
+  "mapZoom": 12,
+  "soldPrice": 170000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/33502012/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 41,
+    "3": 47,
+    "4": 52,
+    "5": 58,
+    "6": 61
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Papasidero",
+    "2h 10m to Potenza by Car",
+    "6 rooms 1 baths",
+    "Swimming Pool",
+    "2 floors",
+    "230 m² of living space"
+  ],
+  "priceVerdict": true
+}

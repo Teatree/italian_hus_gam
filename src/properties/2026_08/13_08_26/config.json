@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.701515, 11.3081791],
+  "mapZoom": 12,
+  "soldPrice": 640000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35403431/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 7,
+    "3": 9,
+    "4": 11,
+    "5": 15,
+    "6": 21
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Torrebelvicino",
+    "2 floors",
+    "45m to Vicenza by Car",
+    "35 rooms 8 baths",
+    "1,000 m² of living space",
+    "Swimming Pool"
+  ],
+  "priceVerdict": true
+}

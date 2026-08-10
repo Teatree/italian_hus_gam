@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6036985, 12.16736],
+  "mapZoom": 12,
+  "soldPrice": 485000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/27864154/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 5,
+    "3": 8,
+    "4": 12,
+    "5": 13,
+    "6": 17
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Zero Branco",
+    "Built in 2003",
+    "35m to Venice by Car",
+    "233 m² of living space",
+    "2 floors",
+    "Swimming Pool"
+  ],
+  "priceVerdict": true
+}
