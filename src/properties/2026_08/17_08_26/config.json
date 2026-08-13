@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.7556818, 10.8182086],
+  "mapZoom": 12,
+  "soldPrice": 1100000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/31687423/",
+  "prop_pictures": {
+    "1": 27,
+    "2": 7,
+    "3": 9,
+    "4": 13,
+    "5": 15,
+    "6": 20
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Malcesine",
+    "Private Garden",
+    "1h 5m to Trento by Car",
+    "125 m² of living space",
+    "Built in 1967",
+    "4 rooms 2 baths"
+  ],
+  "priceVerdict": true
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [46.7021047, 11.645311],
+  "mapZoom": 12,
+  "soldPrice": 950000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/28488357/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 4,
+    "3": 7,
+    "4": 9,
+    "5": 12,
+    "6": 10
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Valle Isarco-Eisacktal, Bolzano-Bozen",
+    "Land plot of 1,000 m²",
+    "6 rooms 2 baths",
+    "Built in 2018",
+    "190 m² of living space",
+    "40m to Bolzano by Car"
+  ],
+  "priceVerdict": true
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.5531057, 8.4823238],
+  "mapZoom": 12,
+  "soldPrice": 115000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/28544772/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 8,
+    "3": 11,
+    "4": 14,
+    "5": 22,
+    "6": 23
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Ponzone",
+    "5 rooms 1 baths",
+    "1 floors",
+    "90 m² of living space",
+    "Land plot of 400 m²",
+    "1h 10m to Genoa by Car"
+  ],
+  "priceVerdict": true
+}
