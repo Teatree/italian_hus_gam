@@ -1,0 +1,26 @@
+{
+  "coordinates": [43.7487846, 11.3227621],
+  "mapZoom": 12,
+  "soldPrice": 1250000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35880993/",
+  "prop_pictures": {
+    "1": 5,
+    "2": 8,
+    "3": 16,
+    "4": 21,
+    "5": 24,
+    "6": 12
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Centro, Bagno a Ripoli",
+    "Built in 1968",
+    "315 m² of living space",
+    "3 floors",
+    "6 rooms 3 baths",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

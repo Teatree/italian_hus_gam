@@ -1,0 +1,26 @@
+{
+  "coordinates": [41.1234785, 9.017188],
+  "mapZoom": 12,
+  "soldPrice": 1080000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36447516/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 17,
+    "3": 23,
+    "4": 39,
+    "5": 53,
+    "6": 81
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Aglientu",
+    "5 rooms 3 baths",
+    "Built in 1990",
+    "204 m² of living space",
+    "1h 40m to Sassari by Car",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

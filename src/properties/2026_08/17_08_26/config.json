@@ -1,26 +1,26 @@
 {
-  "coordinates": [45.7556818, 10.8182086],
+  "coordinates": [41.8331512, 12.2387802],
   "mapZoom": 12,
-  "soldPrice": 1100000,
-  "propertyUrl": "https://www.idealista.it/en/immobile/31687423/",
+  "soldPrice": 159000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/31804731/",
   "prop_pictures": {
-    "1": 27,
-    "2": 7,
-    "3": 9,
-    "4": 13,
-    "5": 15,
-    "6": 20
+    "1": 1,
+    "2": 13,
+    "3": 20,
+    "4": 37,
+    "5": 27,
+    "6": 28
   },
   "titleIcon": "italy_icon.png",
   "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
   "shareFlag": "🇮🇪",
   "facts": [
-    "Located in Malcesine",
-    "Private Garden",
-    "1h 5m to Trento by Car",
-    "125 m² of living space",
-    "Built in 1967",
-    "4 rooms 2 baths"
+    "Located in Le Vignole, Fiumicino",
+    "Built in 1930",
+    "Land plot of 80 m²",
+    "4 floors",
+    "85 m² of living space",
+    "45m to Rome by Car"
   ],
   "priceVerdict": true
 }
