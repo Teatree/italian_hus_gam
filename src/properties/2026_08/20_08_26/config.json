@@ -1,26 +1,26 @@
 {
-  "coordinates": [45.7556818, 10.8182086],
+  "coordinates": [45.7177956, 10.2844814],
   "mapZoom": 12,
-  "soldPrice": 1100000,
-  "propertyUrl": "https://www.idealista.it/en/immobile/31687423/",
+  "soldPrice": 160000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36142123/",
   "prop_pictures": {
-    "1": 27,
-    "2": 7,
-    "3": 9,
-    "4": 13,
-    "5": 15,
-    "6": 20
+    "1": 4,
+    "2": 17,
+    "3": 12,
+    "4": 15,
+    "5": 16,
+    "6": 14
   },
   "titleIcon": "italy_icon.png",
   "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
   "shareFlag": "🇮🇪",
   "facts": [
-    "Located in Malcesine",
+    "Located in Lodrino",
+	"142 m² of living space",
+    "Built in 1989",
     "Private Garden",
-    "1h 5m to Trento by Car",
-    "125 m² of living space",
-    "Built in 1967",
-    "4 rooms 2 baths"
+    "1 floors",
+    "45m to Brescia by Car"
   ],
   "priceVerdict": true
 }

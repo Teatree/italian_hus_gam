@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.2643736, 10.5689262],
+  "mapZoom": 12,
+  "soldPrice": 73000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/32589254/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 8,
+    "3": 10,
+    "4": 16,
+    "5": 18,
+    "6": 22
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Ceresara",
+    "Built in 1950",
+    "3 rooms 1 baths",
+    "100 m² of living space",
+    "3 floors",
+    "30m to Mantua by Car"
+  ],
+  "priceVerdict": true
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.973525, 8.7312],
+  "mapZoom": 12,
+  "soldPrice": 210000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36071035/",
+  "prop_pictures": {
+    "1": 24,
+    "2": 14,
+    "3": 19,
+    "4": 12,
+    "5": 20,
+    "6": 23
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Brezzo di Bedero",
+    "It's a hut or something",
+    "1 floors",
+    "Built in 1980",
+    "30m to Varese by Car",
+    "41 m² of living space"
+  ],
+  "priceVerdict": true
+}
