@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.50766, 10.741138],
+  "mapZoom": 12,
+  "soldPrice": 1190000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36081760/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 7,
+    "3": 12,
+    "4": 19,
+    "5": 21,
+    "6": 23
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Lazise",
+    "Built in 2010",
+    "Swimming Pool",
+    "2 floors",
+    "30m to Verona by Car",
+    "251 m² of living space"
+  ],
+  "priceVerdict": true
+}

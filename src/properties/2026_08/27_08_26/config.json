@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.5761873, 10.4044394],
+  "mapZoom": 12,
+  "soldPrice": 110000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36095422/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 3,
+    "3": 10,
+    "4": 12,
+    "5": 4,
+    "6": 11
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Canossa",
+    "35m to Reggio nell'Emilia by Car",
+    "7 rooms 3 baths",
+    "Land plot of 990 m²",
+    "Built in 1988",
+    "296 m² of living space"
+  ],
+  "priceVerdict": true
+}

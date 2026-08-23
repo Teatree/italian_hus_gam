@@ -1,0 +1,26 @@
+{
+  "coordinates": [43.8260855, 10.2926103],
+  "mapZoom": 12,
+  "soldPrice": 520000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34899701/",
+  "prop_pictures": {
+    "1": 8,
+    "2": 13,
+    "3": 16,
+    "4": 20,
+    "5": 22,
+    "6": 25
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Torre del Lago, Viareggio",
+    "Built in 1940",
+    "25m to Pisa by Car",
+    "Private Garden",
+    "4 rooms 2 baths",
+    "143 m² of living space"
+  ],
+  "priceVerdict": true
+}

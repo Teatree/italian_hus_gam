@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.9062428, 9.0276737],
+  "mapZoom": 12,
+  "soldPrice": 560000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/25752488/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 5,
+    "3": 9,
+    "4": 14,
+    "5": 17,
+    "6": 22
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Godiasco Salice Terme",
+    "Land plot of 1,000 m²",
+    "6 rooms 4 baths",
+    "350 m² of living space",
+    "50m to Alessandria by Car",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

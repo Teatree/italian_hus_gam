@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.9650703, 9.3241612],
+  "mapZoom": 12,
+  "soldPrice": 295000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/33356650/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 3,
+    "3": 8,
+    "4": 26,
+    "5": 32,
+    "6": 40
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Santa Maria della Versa",
+    "Land plot of 1,000 m²",
+    "220 m² of living space",
+    "Private Garden",
+    "1h 25m to Milan by Car",
+    "5 rooms 3 baths"
+  ],
+  "priceVerdict": true
+}
