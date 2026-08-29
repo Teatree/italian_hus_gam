@@ -46,4 +46,11 @@ export const RESET_TIME_ZONE = 'Europe/Kyiv';
 
 // Testing only: force a specific property regardless of the date (set to its slug, e.g.
 // '08_06_26' or 'villa-chianti'). Leave null for normal date-based scheduling.
-export const OVERRIDE_SLUG: string | null = null;
+const MANUAL_OVERRIDE_SLUG: string | null = null;
+
+// scripts/preview-shot.mjs boots a throw-away dev server with VITE_OVERRIDE_SLUG set so it can
+// screenshot a scheduled house before its date. That variable only ever exists in that script's
+// own process, so it can't leak a future puzzle into a real build. Editing MANUAL_OVERRIDE_SLUG
+// above still wins.
+export const OVERRIDE_SLUG: string | null =
+  MANUAL_OVERRIDE_SLUG ?? ((import.meta.env.VITE_OVERRIDE_SLUG as string | undefined) || null);

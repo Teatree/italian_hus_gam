@@ -1,0 +1,26 @@
+{
+  "coordinates": [41.8039972, -0.8121803],
+  "mapZoom": 12,
+  "soldPrice": 650000,
+  "propertyUrl": "https://www.idealista.com/en/inmueble/112374543/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 13,
+    "3": 30,
+    "4": 23,
+    "5": 16,
+    "6": 15
+  },
+  "titleIcon": "spain_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇪🇸",
+  "facts": [
+    "Located in Zuera",
+    "Land plot of 1,923 m²",
+    "3 floors",
+    "251 m² of living space",
+    "Looks like it was bnuilt in 2000",
+    "No swimming pool"
+  ],
+  "priceVerdict": true
+}

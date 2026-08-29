@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.9308679, 12.14311],
+  "mapZoom": 12,
+  "soldPrice": 445000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36141872/",
+  "prop_pictures": {
+    "1": 3,
+    "2": 5,
+    "3": 10,
+    "4": 18,
+    "5": 16,
+    "6": 29
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Follina",
+    "9 rooms 2 baths",
+    "206 m² of living space",
+    "Private Garden",
+    "Built in 1994",
+    "45m to Treviso by Car"
+  ],
+  "priceVerdict": true
+}

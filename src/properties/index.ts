@@ -18,8 +18,10 @@ const configModules = import.meta.glob('./**/config.json', { eager: true }) as R
   { default: PropertyData }
 >;
 
-// All images, eagerly loaded as resolved (hashed) URL strings.
-const imageModules = import.meta.glob('./**/*.{png,jpg,jpeg,webp,avif}', {
+// All photos, eagerly loaded as resolved (hashed) URL strings. Only `photo-*` files count as
+// gameplay images, so authoring leftovers in a property folder (e.g. the preview.webp written
+// by scripts/preview-shot.mjs) never sneak in as a 7th photo.
+const imageModules = import.meta.glob('./**/photo-*.{png,jpg,jpeg,webp,avif}', {
   eager: true,
   query: '?url',
   import: 'default',

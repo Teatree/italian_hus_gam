@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "images:webp": "node scripts/png-to-webp.mjs"
+    "images:webp": "node scripts/png-to-webp.mjs",
+    "preview:shot": "node scripts/preview-shot.mjs"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",

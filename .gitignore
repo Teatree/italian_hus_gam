@@ -9,3 +9,7 @@ npm-debug.log*
 # Chrome profile used by scripts/fetch-photos.mjs (keeps idealista cookies between runs)
 scripts/.pw-chrome-profile
 .playwright-mcp
+
+# Preview screenshots written by scripts/preview-shot.mjs (authoring aid, never shipped)
+src/properties/**/preview.webp
+src/properties/**/preview-mobile.webp

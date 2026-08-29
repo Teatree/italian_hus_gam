@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.1687808, 11.4497927],
+  "mapZoom": 12,
+  "soldPrice": 85000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35813265/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 4,
+    "3": 19,
+    "4": 25,
+    "5": 13,
+    "6": 30
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Merlara",
+    "8 rooms 2 baths",
+    "45m to Rovigo by Car",
+    "Land plot of 757 m²",
+    "184 m² of living space",
+    "Built in 1960"
+  ],
+  "priceVerdict": true
+}
