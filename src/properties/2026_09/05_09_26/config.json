@@ -1,0 +1,26 @@
+{
+  "coordinates": [40.2968561, 18.2315865],
+  "mapZoom": 12,
+  "soldPrice": 1700000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35867884/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 4,
+    "3": 5,
+    "4": 7,
+    "5": 11,
+    "6": 2
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Lizzanello",
+    "Swimming Pool",
+    "433 m² of living space",
+    "Land plot of 42,000 m²",
+    "Built in 1800",
+    "2 floors"
+  ],
+  "priceVerdict": true
+}
