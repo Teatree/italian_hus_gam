@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.8958284, 9.9790631],
+  "mapZoom": 12,
+  "soldPrice": 180000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35712364/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 11,
+    "3": 20,
+    "4": 23,
+    "5": 26,
+    "6": 28
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Rovetta",
+    "3 rooms 2 baths",
+    "45m to Bergamo by Car",
+    "54 m² of living space",
+    "2 floors",
+    "Built in 2002"
+  ],
+  "priceVerdict": true
+}

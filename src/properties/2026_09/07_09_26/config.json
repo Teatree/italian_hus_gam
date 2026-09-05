@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6733439, 12.2396156],
+  "mapZoom": 12,
+  "soldPrice": 295000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36358083/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 28,
+    "3": 12,
+    "4": 14,
+    "5": 17,
+    "6": 6
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Viale Luzzatti, Treviso",
+    "Built in 2023",
+    "3 rooms 2 baths",
+    "124 m² of living space",
+    "It's a Penthouse",
+    "Treviso 12% of the population are BMI>30"
+  ],
+  "priceVerdict": true
+}

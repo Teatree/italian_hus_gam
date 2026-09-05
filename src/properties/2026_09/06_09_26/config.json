@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.7394293, 12.428912],
+  "mapZoom": 12,
+  "soldPrice": 430000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/33844983/",
+  "prop_pictures": {
+    "1": 51,
+    "2": 2,
+    "3": 12,
+    "4": 23,
+    "5": 24,
+    "6": 30
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Ponte di Piave",
+    "Built in 1960",
+    "Land plot of 2,700 m²",
+    "484 m² of living space",
+    "50m to Venice by Car",
+    "3 floors"
+  ],
+  "priceVerdict": true
+}

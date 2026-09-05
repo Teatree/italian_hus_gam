@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.8348297, 12.0001912],
+  "mapZoom": 12,
+  "soldPrice": 650000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/28764058/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 11,
+    "3": 16,
+    "4": 19,
+    "5": 20,
+    "6": 23
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Cornuda",
+    "Built in 1988, and it's very visible",
+    "40m to Treviso by Car",
+    "15 rooms 3 baths",
+    "476 m² of living space",
+    "Them black ceilings, love it"
+  ],
+  "priceVerdict": true
+}

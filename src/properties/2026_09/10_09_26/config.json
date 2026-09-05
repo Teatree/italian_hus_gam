@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.3870582, 11.4921569],
+  "mapZoom": 12,
+  "soldPrice": 1477000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34636865/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 32,
+    "3": 9,
+    "4": 11,
+    "5": 19,
+    "6": 35
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Castel San Pietro Terme",
+    "Built in 1800",
+    "2 floors",
+    "13 rooms 6 baths",
+    "650 m² of living space",
+    "40m to Bologna by Car"
+  ],
+  "priceVerdict": true
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6929408, 12.0893618],
+  "mapZoom": 12,
+  "soldPrice": 349000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34028242/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 6,
+    "3": 31,
+    "4": 12,
+    "5": 21,
+    "6": 23
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Istrana",
+    "7 rooms 3 baths",
+    "Built in 1980",
+    "Private Garden",
+    "20m to Treviso by Car",
+    "250 m² of living space"
+  ],
+  "priceVerdict": true
+}
