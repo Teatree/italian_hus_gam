@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.29224, 9.4758784],
+  "mapZoom": 12,
+  "soldPrice": 430000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36180794/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 5,
+    "3": 6,
+    "4": 7,
+    "5": 31,
+    "6": 13
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Casarza Ligure",
+    "50m to Genoa by Car",
+    "250 m² of living space",
+    "5 rooms 2 baths",
+    "Built in 1990",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

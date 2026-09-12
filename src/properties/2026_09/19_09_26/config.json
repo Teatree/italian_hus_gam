@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.5182567, 8.6102088],
+  "mapZoom": 12,
+  "soldPrice": 145000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35707487/",
+  "prop_pictures": {
+    "1": 19,
+    "2": 4,
+    "3": 5,
+    "4": 13,
+    "5": 16,
+    "6": 9
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Tiglieto",
+    "1 floors",
+    "12 rooms 3 baths",
+    "55m to Genoa by Car",
+    "220 m² of living space",
+    "Looks Old"
+  ],
+  "priceVerdict": true
+}

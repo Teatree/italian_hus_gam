@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.9827131, 9.1692734],
+  "mapZoom": 12,
+  "soldPrice": 645000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34156014/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 9,
+    "3": 7,
+    "4": 13,
+    "5": 18,
+    "6": 22
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Calvignano",
+    "40m to Pavia by Car",
+    "2 floors",
+    "Private Garden",
+    "10 rooms 3 baths",
+    "350 m² of living space"
+  ],
+  "priceVerdict": true
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [42.8902293, 11.3931741],
+  "mapZoom": 12,
+  "soldPrice": 430000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36758133/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 9,
+    "3": 4,
+    "4": 16,
+    "5": 19,
+    "6": 21
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Cinigiano",
+    "429 m² of living space",
+    "40m to Grosseto by Car",
+    "Swimming Pool",
+    "2 floors",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

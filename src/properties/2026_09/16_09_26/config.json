@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.417734, 12.3692559],
+  "mapZoom": 12,
+  "soldPrice": 1280000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/32873514/",
+  "prop_pictures": {
+    "1": 22,
+    "2": 16,
+    "3": 18,
+    "4": 21,
+    "5": 26,
+    "6": 27
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Lido, Venice",
+    "500 m² of living space",
+    "Land plot of 271 m²",
+    "1h 40m to Venice by Car",
+    "10 rooms 3 baths",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

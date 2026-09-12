@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.3460138, 9.2418855],
+  "mapZoom": 12,
+  "soldPrice": 2150000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34007804/",
+  "prop_pictures": {
+    "1": 5,
+    "2": 7,
+    "3": 9,
+    "4": 1,
+    "5": 15,
+    "6": 2
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Parco Casale - Castello, Rapallo",
+    "Built in 2021",
+    "5 rooms 3 baths",
+    "Swimming Pool",
+    "30m to Genoa by Car",
+    "185 m² of living space"
+  ],
+  "priceVerdict": true
+}

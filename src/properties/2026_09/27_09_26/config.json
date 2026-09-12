@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.417425, 10.0749954],
+  "mapZoom": 12,
+  "soldPrice": 1490000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35949909/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 3,
+    "3": 18,
+    "4": 19,
+    "5": 21,
+    "6": 25
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Dello",
+    "Built in 1800",
+    "Private Garden",
+    "20 rooms 4 baths",
+    "1,815 m² of living space",
+    "25m to Brescia by Car"
+  ],
+  "priceVerdict": true
+}

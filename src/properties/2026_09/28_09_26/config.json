@@ -1,0 +1,26 @@
+{
+  "coordinates": [43.4714147, 11.2854624],
+  "mapZoom": 12,
+  "soldPrice": 1950000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36354448/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 7,
+    "3": 9,
+    "4": 23,
+    "5": 26,
+    "6": 30
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Centro, Castellina in Chianti",
+    "400 m² of living space",
+    "2 floors",
+    "11 rooms 6 baths",
+    "50m to Florence by Car",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

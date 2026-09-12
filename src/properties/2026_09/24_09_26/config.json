@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.0988584, 9.1644883],
+  "mapZoom": 12,
+  "soldPrice": 235000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/31668433/",
+  "prop_pictures": {
+    "1": 6,
+    "2": 37,
+    "3": 12,
+    "4": 14,
+    "5": 18,
+    "6": 29
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Verrua Po",
+    "Land plot of 2,000 m²",
+    "1h 5m to Milan by Car",
+    "250 m² of living space",
+    "5 rooms 3 baths",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

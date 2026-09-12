@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6037832, 13.7546899],
+  "mapZoom": 12,
+  "soldPrice": 680000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/33249047/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 2,
+    "3": 11,
+    "4": 16,
+    "5": 20,
+    "6": 6
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Muggia",
+    "Private Garden",
+    "25m to Trieste by Car",
+    "4 rooms 3 baths",
+    "180 m² of living space",
+    "2 floors"
+  ],
+  "priceVerdict": true
+}

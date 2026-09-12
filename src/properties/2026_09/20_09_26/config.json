@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.9244297, 8.5562115],
+  "mapZoom": 12,
+  "soldPrice": 920000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36546509/",
+  "prop_pictures": {
+    "1": 19,
+    "2": 4,
+    "3": 5,
+    "4": 13,
+    "5": 16,
+    "6": 9
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Pallanza, Verbania",
+    "270 m² of living space",
+    "2 floors",
+    "4 rooms 3 baths",
+    "Built in 1950",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

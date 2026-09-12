@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.0079817, 9.1919742],
+  "mapZoom": 12,
+  "soldPrice": 650000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34824189/",
+  "prop_pictures": {
+    "1": 7,
+    "2": 11,
+    "3": 14,
+    "4": 16,
+    "5": 24,
+    "6": 33
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Mornico Losana",
+    "2 floors",
+    "40m to Pavia by Car",
+    "15 rooms 5 baths",
+    "Private Garden",
+    "400 m² of living space"
+  ],
+  "priceVerdict": true
+}

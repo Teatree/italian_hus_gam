@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.5552741, 9.3838305],
+  "mapZoom": 12,
+  "soldPrice": 239000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36746351/",
+  "prop_pictures": {
+    "1": 23,
+    "2": 10,
+    "3": 13,
+    "4": 19,
+    "5": 22,
+    "6": 1
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Pessano con Bornago",
+    "Built in 1969",
+    "35m to Milan by Car",
+    "133 m² of living space",
+    "I thought this office was hilarious",
+	"4 rooms 2 baths"
+  ],
+  "priceVerdict": true
+}
