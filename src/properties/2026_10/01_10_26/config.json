@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.8402291, 12.3866979],
+  "mapZoom": 12,
+  "soldPrice": 245000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/24745770/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 4,
+    "3": 8,
+    "4": 11,
+    "5": 12,
+    "6": 17
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Area Conegliano, Treviso",
+    "2 floors",
+    "55m to Venice by Car",
+    "Built in 2000",
+    "8 rooms 3 baths",
+    "220 m² of living space"
+  ],
+  "priceVerdict": true
+}

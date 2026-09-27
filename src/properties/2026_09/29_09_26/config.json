@@ -1,0 +1,26 @@
+{
+  "coordinates": [36.8181714, 11.9850346],
+  "mapZoom": 12,
+  "soldPrice": 995000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/33867149/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 22,
+    "3": 27,
+    "4": 31,
+    "5": 36,
+    "6": 44
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Bugeber, Pantelleria",
+    "1 floors",
+    "150 m² of living space",
+    "6 rooms 3 baths",
+    "Romans didn't build this",
+    "Made of Stone, mostly"
+  ],
+  "priceVerdict": true
+}

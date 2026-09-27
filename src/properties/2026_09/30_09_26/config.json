@@ -1,0 +1,26 @@
+{
+  "coordinates": [43.2714728, 13.2964647],
+  "mapZoom": 12,
+  "soldPrice": 109000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/28472205/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 8,
+    "3": 10,
+    "4": 14,
+    "5": 16,
+    "6": 25
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Treia",
+    "90 m² of living space",
+    "1 floors",
+    "25m to Macerata by Car",
+    "Built in 2007",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

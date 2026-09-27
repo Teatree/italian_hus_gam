@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.7577804, 11.7557852],
+  "mapZoom": 12,
+  "soldPrice": 550000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34833772/",
+  "prop_pictures": {
+    "1": 5,
+    "2": 2,
+    "3": 10,
+    "4": 18,
+    "5": 25,
+    "6": 9
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Cassola",
+    "205 m² of living space",
+    "45m to Vicenza by Car",
+    "Private Garden",
+    "6 rooms 2 baths",
+    "3 floors"
+  ],
+  "priceVerdict": true
+}
