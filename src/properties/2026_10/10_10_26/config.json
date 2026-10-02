@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.1828347, 11.149814],
+  "mapZoom": 12,
+  "soldPrice": 149000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36864099/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 5,
+    "3": 6,
+    "4": 13,
+    "5": 10,
+    "6": 16
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Sanguinetto",
+    "2 floors",
+    "294 m² of living space",
+    "10 rooms 2 baths",
+    "Built in 1965",
+    "40m to Verona by Car"
+  ],
+  "priceVerdict": true
+}

@@ -13,6 +13,7 @@ import type { Guess, GameStatus, PropertyConfig, Verdict } from './types';
 import { evaluateGuess, percentOff, revealedCount } from './game/logic';
 import { getScheduleInfo } from './game/schedule';
 import { buildShareText, copyToClipboard } from './game/share';
+import { dayUrl, resolvePastDay } from './game/dayLink';
 import { loadGame, saveGame } from './game/storage';
 import { Header } from './components/Header';
 import { ImageViewer } from './components/ImageViewer';
@@ -24,22 +25,29 @@ import { NewGameTimer } from './components/NewGameTimer';
 import { MapView } from './components/MapView';
 import { Result } from './components/Result';
 import { VerdictPopup } from './components/VerdictPopup';
+import { PastDayBanner } from './components/PastDayBanner';
 
 // Resolves which property is active today and auto-refreshes the page at the daily reset.
 export default function App() {
   // Resolve the schedule once on mount; the page reloads at the reset boundary anyway.
   const [{ dateKey, nextResetMs }] = useState(() => getScheduleInfo());
+  // A shared link may pin an earlier day (?day=DD_MM_YY); null = today's puzzle.
+  const [pastDay] = useState(() => resolvePastDay(dateKey, (s) => s in properties));
 
   // When the daily reset passes while a player is here, reload so the new puzzle loads
-  // fresh (and we never run the previous day's game state against a new property).
+  // fresh (and we never run the previous day's game state against a new property). A pinned
+  // past day doesn't change at the reset, so there's nothing to reload for.
   useEffect(() => {
+    if (pastDay) return;
     const id = window.setInterval(() => {
       if (Date.now() >= nextResetMs) window.location.reload();
     }, 1000);
     return () => window.clearInterval(id);
-  }, [nextResetMs]);
+  }, [nextResetMs, pastDay]);
 
-  const slug = OVERRIDE_SLUG ?? dateKey;
+  const slug = OVERRIDE_SLUG ?? pastDay ?? dateKey;
+  // The past-day banner shows whenever the house on screen isn't today's scheduled one.
+  const isPastDay = !OVERRIDE_SLUG && pastDay !== null;
   const property = properties[slug] ?? null;
 
   // One Sessions row per page load: who showed up, from where, on what. Fires after the geo
@@ -73,7 +81,14 @@ export default function App() {
   }
 
   // `key` ensures a clean remount (fresh game state) if the active property changes.
-  return <Game key={property.slug} property={property} nextResetMs={nextResetMs} />;
+  return (
+    <Game
+      key={property.slug}
+      property={property}
+      nextResetMs={nextResetMs}
+      isPastDay={isPastDay}
+    />
+  );
 }
 
 // Shown when no property is scheduled for the current day.
@@ -92,9 +107,11 @@ function ComeBackScreen({ targetMs }: { targetMs: number }) {
 interface GameProps {
   property: PropertyConfig;
   nextResetMs: number;
+  // True when a shared link opened an earlier day's house rather than today's.
+  isPastDay: boolean;
 }
 
-function Game({ property, nextResetMs }: GameProps) {
+function Game({ property, nextResetMs, isPastDay }: GameProps) {
   const soldPrice = property.soldPrice;
 
   const [guesses, setGuesses] = useState<Guess[]>([]);
@@ -305,7 +322,7 @@ function Game({ property, nextResetMs }: GameProps) {
       APP_TITLE,
       guesses,
       MAX_TRIES,
-      window.location.href,
+      dayUrl(property.slug),
       closestPercentOff,
       property.shareFlag,
       v,
@@ -350,7 +367,10 @@ function Game({ property, nextResetMs }: GameProps) {
   }
 
   return (
-    <div className="mx-auto flex min-h-full max-w-5xl flex-col gap-4 px-4 pb-6 pt-2">
+    <div
+      className={`mx-auto flex min-h-full max-w-5xl flex-col gap-4 px-4 pb-6 ${isPastDay ? '' : 'pt-2'}`}
+    >
+      {isPastDay && <PastDayBanner dateKey={property.slug} />}
       <Header title={APP_TITLE} iconFile={property.titleIcon} iconHref={property.titleIconUrl} />
 
       {/* Image stays centered; the hints list sits to its right (stacks below on narrow screens). */}
@@ -384,7 +404,8 @@ function Game({ property, nextResetMs }: GameProps) {
           onSelect={(i) => setSelectedImage(i)}
         />
 
-        <NewGameTimer targetMs={nextResetMs} />
+        {/* The countdown is about today's puzzle, so it would only muddy a past day's page. */}
+        {!isPastDay && <NewGameTimer targetMs={nextResetMs} />}
 
         {isPlaying ? (
           <>

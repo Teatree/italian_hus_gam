@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6403085, 10.7318608],
+  "mapZoom": 12,
+  "soldPrice": 590000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36731828/",
+  "prop_pictures": {
+    "1": 9,
+    "2": 14,
+    "3": 1,
+    "4": 15,
+    "5": 20,
+    "6": 21
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in San Zeno di Montagna",
+    "Built in 1969",
+    "225 m² of living space",
+    "6 rooms 2 baths",
+    "45m to Verona by Car",
+    "2 floors"
+  ],
+  "priceVerdict": true
+}

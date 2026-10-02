@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6320312, 10.7243143],
+  "mapZoom": 12,
+  "soldPrice": 650000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36668722/",
+  "prop_pictures": {
+    "1": 22,
+    "2": 6,
+    "3": 13,
+    "4": 16,
+    "5": 5,
+    "6": 11
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in San Zeno di Montagna",
+    "Built in 1975",
+    "40m to Verona by Car",
+    "Private Garden",
+    "Land plot of 1,200 m²",
+    "220 m² of living space"
+  ],
+  "priceVerdict": true
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.1898607, 11.3114757],
+  "mapZoom": 12,
+  "soldPrice": 125000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36683455/",
+  "prop_pictures": {
+    "1": 10,
+    "2": 31,
+    "3": 34,
+    "4": 12,
+    "5": 16,
+    "6": 41
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Legnago",
+    "40m to Verona by Car",
+    "Built in 1980",
+    "1 floors",
+    "130 m² of living space",
+    "Land plot of 900 m²"
+  ],
+  "priceVerdict": true
+}

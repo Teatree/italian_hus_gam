@@ -84,3 +84,25 @@ export function getScheduleInfo(now: Date = new Date()): ScheduleInfo {
 
   return { dateKey, nextResetMs };
 }
+
+// A DD_MM_YY key as a sortable YYMMDD number, or null if it isn't a real calendar date.
+export function dateKeyOrder(key: string): number | null {
+  const m = /^(\d{2})_(\d{2})_(\d{2})$/.exec(key);
+  if (!m) return null;
+  const [day, month, yy] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const d = new Date(Date.UTC(2000 + yy, month - 1, day));
+  if (d.getUTCDate() !== day || d.getUTCMonth() !== month - 1) return null; // e.g. 31_02_26
+  return yy * 10_000 + month * 100 + day;
+}
+
+// A DD_MM_YY key as a human date, e.g. "Thursday, 1 October 2026".
+export function formatDateKey(key: string): string {
+  const [day, month, yy] = key.split('_').map(Number);
+  return new Date(Date.UTC(2000 + yy, month - 1, day)).toLocaleDateString('en-GB', {
+    timeZone: 'UTC',
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}

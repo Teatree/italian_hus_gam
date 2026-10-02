@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6403085, 10.7318608],
+  "mapZoom": 12,
+  "soldPrice": 590000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/33497281/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 29,
+    "3": 33,
+    "4": 51,
+    "5": 40,
+    "6": 82
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in San Zeno di Montagna",
+    "Built in 1969",
+    "225 m² of living space",
+    "6 rooms 2 baths",
+    "45m to Verona by Car",
+    "2 floors"
+  ],
+  "priceVerdict": true
+}
