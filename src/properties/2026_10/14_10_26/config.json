@@ -1,0 +1,26 @@
+{
+  "coordinates": [60.225859691653504, 24.725671182202277],
+  "mapZoom": 12,
+  "soldPrice": 428000,
+  "propertyUrl": "https://www.etuovi.com/kohde/20082425?haku=M2612274869",
+  "prop_pictures": {
+    "1": 23,
+    "2": 4,
+    "3": 2,
+    "4": 5,
+    "5": 8,
+    "6": 10
+  },
+  "titleIcon": "finland_icon.png",
+  "titleIconUrl": "https://www.youtube.com/watch?v=5EnFweY2qwM",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Viherlaakso, Espoo",
+    "2 floors",
+    "111 m² of living space",
+    "5 rooms 2 baths",
+    "Built in 1986",
+    "20m to Helsinki Center by Car"
+  ],
+  "priceVerdict": true
+}

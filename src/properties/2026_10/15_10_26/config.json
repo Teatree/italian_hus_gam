@@ -1,0 +1,26 @@
+{
+  "coordinates": [46.0167352, 12.3348392],
+  "mapZoom": 12,
+  "soldPrice": 305000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/37073459/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 8,
+    "3": 14,
+    "4": 19,
+    "5": 23,
+    "6": 30
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Fregona",
+    "1h 5m to Venice by Car",
+    "2 floors",
+    "5 rooms 2 baths",
+    "184 m² of living space",
+    "In the middle of nowhere"
+  ],
+  "priceVerdict": true
+}

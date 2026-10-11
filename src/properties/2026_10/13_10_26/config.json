@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.602759, 8.9330898],
+  "mapZoom": 12,
+  "soldPrice": 790000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35045674/",
+  "prop_pictures": {
+    "1": 3,
+    "2": 1,
+    "3": 8,
+    "4": 12,
+    "5": 14,
+    "6": 20
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Legnarello-Frati-Olmina, Legnano",
+    "Built in 2006",
+    "6 rooms 3 baths",
+    "261 m² of living space",
+    "It's basically Milan, but not really",
+    "Duplex apartment with a terrace"
+  ],
+  "priceVerdict": true
+}
