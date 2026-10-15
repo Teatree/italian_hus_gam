@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.3176564, 11.7363817],
+  "mapZoom": 12,
+  "soldPrice": 2870000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35853974/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 4,
+    "3": 11,
+    "4": 14,
+    "5": 13,
+    "6": 26
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Ponticelli - Tre Monti, Imola",
+    "440 m² of living space",
+    "50m to Bologna by Car",
+    "7 rooms 5 baths",
+    "3 floors",
+    "Built in 2025"
+  ],
+  "priceVerdict": true
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.4194266, 12.1937791],
+  "mapZoom": 12,
+  "soldPrice": 1450000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/32851036/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 9,
+    "3": 6,
+    "4": 10,
+    "5": 12,
+    "6": 15
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Centro Storico, Ravenna",
+    "Built in 1700, no shit",
+    "450 m² of living space",
+    "12 rooms 3 baths",
+    "Asbestos was already a thing back when this was built",
+    "perty"
+  ],
+  "priceVerdict": true
+}

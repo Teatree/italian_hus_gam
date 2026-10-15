@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.7781708, 11.5866573],
+  "mapZoom": 12,
+  "soldPrice": 88000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35414907/",
+  "prop_pictures": {
+    "1": 19,
+    "2": 5,
+    "3": 12,
+    "4": 15,
+    "5": 20,
+    "6": 1
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in San Martino, Ferrara",
+    "40m to Bologna by Car",
+    "2 rooms 1 baths",
+    "61 m² of living space",
+    "Built in 1970",
+    "Did you think that yellow patch on the floor of the shower was a stain?"
+  ],
+  "priceVerdict": true
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.3885797, 11.1920812],
+  "mapZoom": 12,
+  "soldPrice": 820000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35594392/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 7,
+    "3": 38,
+    "4": 26,
+    "5": 56,
+    "6": 66
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Sasso Marconi",
+    "3 floors",
+    "Land plot of 444 m²",
+    "310 m² of living space",
+    "Private Garden",
+    "35m to Bologna by Car"
+  ],
+  "priceVerdict": true
+}
