@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6888313, 10.6624366],
+  "mapZoom": 12,
+  "soldPrice": 595000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/30985536/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 5,
+    "3": 16,
+    "4": 24,
+    "5": 13,
+    "6": 19
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Gargnano",
+    "55m to Brescia by Car",
+    "2 floors",
+    "103 m² of living space",
+    "5 rooms 2 baths",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

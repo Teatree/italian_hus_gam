@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.5711672, 10.1778081],
+  "mapZoom": 12,
+  "soldPrice": 480000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/37002748/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 6,
+    "3": 11,
+    "4": 10,
+    "5": 12,
+    "6": 18
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Hinterland Bresciano, Brescia",
+    "Built in 1960",
+    "2 floors",
+    "10 rooms 3 baths",
+    "500 m² of living space",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

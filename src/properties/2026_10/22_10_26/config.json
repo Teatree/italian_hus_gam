@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.2679622, 10.1506893],
+  "mapZoom": 12,
+  "soldPrice": 69000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/37183988/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 3,
+    "3": 12,
+    "4": 20,
+    "5": 22,
+    "6": 26
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Alfianello",
+    "Built in 1950",
+    "25m to Cremona by Car",
+    "281 m² of living space",
+    "Private Garden",
+    "1 floors"
+  ],
+  "priceVerdict": true
+}

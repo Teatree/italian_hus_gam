@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.4519274, 12.4674962],
+  "mapZoom": 12,
+  "soldPrice": 260000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/30534943/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 7,
+    "3": 9,
+    "4": 10,
+    "5": 12,
+    "6": 6
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Cavallino-Treporti",
+    "Private Garden",
+    "78 m² of living space",
+    "1h 10m to Venice by Car",
+    "2 floors",
+    "Built in 2007"
+  ],
+  "priceVerdict": true
+}
