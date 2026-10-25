@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.68138, 12.73071],
+  "mapZoom": 12,
+  "soldPrice": 610000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36711823/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 3,
+    "3": 7,
+    "4": 11,
+    "5": 14,
+    "6": 17
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Torre di Mosto",
+    "55m to Venice by Car",
+    "Built in 2016",
+    "1 floors",
+    "190 m² of living space",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}
