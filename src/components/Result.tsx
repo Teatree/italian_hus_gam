@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { GameStatus } from '../types';
 import { formatEuro } from '../game/format';
+import { useHalloween } from '../theme/halloween';
 
 interface ResultProps {
   status: Exclude<GameStatus, 'playing'>;
@@ -21,6 +22,7 @@ export function Result({
 }: ResultProps) {
   const [copied, setCopied] = useState(false);
   const won = status === 'won';
+  const halloween = useHalloween();
 
   async function handleShare() {
     const ok = await onShare();
@@ -33,7 +35,7 @@ export function Result({
   return (
     <div className="space-y-3 text-center">
       <p
-        className={`text-3xl font-extrabold ${won ? 'text-green-400' : 'text-red-500'}`}
+        className={`${halloween ? 'font-spooky text-4xl tracking-wide' : 'text-3xl font-extrabold'} ${won ? 'text-green-400' : 'text-red-500'}`}
         data-testid="result-banner"
       >
         {won ? (exact ? 'RIGHT ON THE MONEY! 🎯' : 'Good Job!') : 'You Suck!'}
@@ -62,7 +64,7 @@ export function Result({
       </p>
       <button
         onClick={handleShare}
-        className="mx-auto block rounded-md bg-accent px-6 py-2.5 font-semibold text-white transition-colors hover:bg-green-500"
+        className="mx-auto block rounded-md bg-accent px-6 py-2.5 font-semibold text-white transition-colors hover:bg-accentHover"
       >
         {copied ? 'Copied' : 'Share'}
       </button>

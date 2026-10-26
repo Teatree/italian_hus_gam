@@ -26,6 +26,13 @@ import { MapView } from './components/MapView';
 import { Result } from './components/Result';
 import { VerdictPopup } from './components/VerdictPopup';
 import { PastDayBanner } from './components/PastDayBanner';
+import {
+  HalloweenDecor,
+  HalloweenProvider,
+  isHalloween,
+  useHalloween,
+  useHalloweenDocument,
+} from './theme/halloween';
 
 // Resolves which property is active today and auto-refreshes the page at the daily reset.
 export default function App() {
@@ -34,21 +41,25 @@ export default function App() {
   // A shared link may pin an earlier day (?day=DD_MM_YY); null = today's puzzle.
   const [pastDay] = useState(() => resolvePastDay(dateKey, (s) => s in properties));
 
-  // When the daily reset passes while a player is here, reload so the new puzzle loads
-  // fresh (and we never run the previous day's game state against a new property). A pinned
-  // past day doesn't change at the reset, so there's nothing to reload for.
-  useEffect(() => {
-    if (pastDay) return;
-    const id = window.setInterval(() => {
-      if (Date.now() >= nextResetMs) window.location.reload();
-    }, 1000);
-    return () => window.clearInterval(id);
-  }, [nextResetMs, pastDay]);
-
   const slug = OVERRIDE_SLUG ?? pastDay ?? dateKey;
   // The past-day banner shows whenever the house on screen isn't today's scheduled one.
   const isPastDay = !OVERRIDE_SLUG && pastDay !== null;
   const property = properties[slug] ?? null;
+  // Seasonal dress-up for this house (src/theme/halloween.tsx; window set in admin.ts).
+  const halloween = property !== null && isHalloween(property.slug, dateKey);
+  useHalloweenDocument(halloween);
+
+  // When the daily reset passes while a player is here, reload so the new puzzle loads
+  // fresh (and we never run the previous day's game state against a new property). A pinned
+  // past day doesn't change at the reset, so there's nothing to reload for — unless it's
+  // wearing the Halloween theme, which must still drop off at the 1 November reset.
+  useEffect(() => {
+    if (pastDay && !halloween) return;
+    const id = window.setInterval(() => {
+      if (Date.now() >= nextResetMs) window.location.reload();
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [nextResetMs, pastDay, halloween]);
 
   // One Sessions row per page load: who showed up, from where, on what. Fires after the geo
   // lookup so ip/country/city are populated. Runs even on the come-back screen (still a visit).
@@ -82,12 +93,15 @@ export default function App() {
 
   // `key` ensures a clean remount (fresh game state) if the active property changes.
   return (
-    <Game
-      key={property.slug}
-      property={property}
-      nextResetMs={nextResetMs}
-      isPastDay={isPastDay}
-    />
+    <HalloweenProvider value={halloween}>
+      {halloween && <HalloweenDecor />}
+      <Game
+        key={property.slug}
+        property={property}
+        nextResetMs={nextResetMs}
+        isPastDay={isPastDay}
+      />
+    </HalloweenProvider>
   );
 }
 
@@ -179,6 +193,7 @@ function Game({ property, nextResetMs, isPastDay }: GameProps) {
 
   // A guess that hit the price exactly (€0 / 0% off) — "right on the money".
   const isExact = guesses.some((g) => g.value === soldPrice);
+  const halloween = useHalloween();
 
   // When the player wins: a little confetti burst from both sides, then (after a 2s delay)
   // fade the unused try buttons to a slightly lighter blue. An exact guess gets an extra
@@ -189,19 +204,31 @@ function Game({ property, nextResetMs, isPastDay }: GameProps) {
       setLightenUnused(false);
       return;
     }
-    confetti({ particleCount: 70, angle: 60, spread: 55, startVelocity: 55, origin: { x: 0, y: 0.7 } });
-    confetti({ particleCount: 70, angle: 120, spread: 55, startVelocity: 55, origin: { x: 1, y: 0.7 } });
+    // Halloween swaps the paper confetti for candy and pumpkins — bigger, so fewer of them.
+    const treats = halloween
+      ? {
+          shapes: ['🍬', '🍭', '🎃'].map((text) => confetti.shapeFromText({ text, scalar: 2.2 })),
+          scalar: 2.2,
+          flat: true,
+        }
+      : null;
+    const count = (n: number) => (treats ? Math.round(n * 0.45) : n);
+    confetti({ particleCount: count(70), angle: 60, spread: 55, startVelocity: 55, origin: { x: 0, y: 0.7 }, ...treats });
+    confetti({ particleCount: count(70), angle: 120, spread: 55, startVelocity: 55, origin: { x: 1, y: 0.7 }, ...treats });
     if (isExact) {
-      confetti({ particleCount: 180, spread: 120, startVelocity: 45, origin: { x: 0.5, y: 0.6 }, scalar: 1.1 });
+      confetti({ particleCount: count(180), spread: 120, startVelocity: 45, origin: { x: 0.5, y: 0.6 }, scalar: 1.1, ...treats });
     }
     const id = window.setTimeout(() => setLightenUnused(true), 2000);
     return () => window.clearTimeout(id);
-  }, [status, isExact]);
+  }, [status, isExact, halloween]);
 
-  // When the player loses: a short rain of 👎 emoji that falls from the top under gravity.
+  // When the player loses: a short rain of 👎 emoji (👻🦇💀 at Halloween) that falls from the
+  // top under gravity.
   useEffect(() => {
     if (status !== 'lost') return;
-    const thumb = confetti.shapeFromText({ text: '👎', scalar: 2 });
+    const shapes = (halloween ? ['👻', '🦇', '💀'] : ['👎']).map((text) =>
+      confetti.shapeFromText({ text, scalar: 2 }),
+    );
     let frame = 0;
     const id = window.setInterval(() => {
       // Spawn a few each tick at random x just above the viewport, with no upward velocity, so
@@ -213,7 +240,7 @@ function Game({ property, nextResetMs, isPastDay }: GameProps) {
         gravity: 0.7,
         spread: 70,
         origin: { x: Math.random(), y: -0.1 },
-        shapes: [thumb],
+        shapes,
         scalar: 2,
         flat: true,
         disableForReducedMotion: true,
@@ -222,7 +249,7 @@ function Game({ property, nextResetMs, isPastDay }: GameProps) {
       if (frame >= 12) window.clearInterval(id);
     }, 150);
     return () => window.clearInterval(id);
-  }, [status]);
+  }, [status, halloween]);
 
   const wrongCount = guesses.filter((g) => g.direction !== 'correct').length;
   const revealed = revealedCount(wrongCount, MAX_TRIES); // facts/images shown
@@ -385,6 +412,8 @@ function Game({ property, nextResetMs, isPastDay }: GameProps) {
             carouselImages={isOver ? property.images : undefined}
             onStep={isOver ? stepImage : undefined}
             onZoomChange={setZoomOpen}
+            // Halloween: candle-flicker whenever a new photo is revealed during play.
+            flickerKey={halloween && isPlaying ? latestImageIndex : undefined}
           />
         </div>
 

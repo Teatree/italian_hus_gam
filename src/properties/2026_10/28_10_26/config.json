@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.5580462, 10.0734698],
+  "mapZoom": 12,
+  "soldPrice": 385000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35530128/",
+  "prop_pictures": {
+    "1": 7,
+    "2": 3,
+    "3": 8,
+    "4": 17,
+    "5": 18,
+    "6": 26
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Ospitaletto",
+    "Built in 1970",
+    "Private Garden",
+    "271 m² of living space",
+    "5 rooms 2 baths",
+    "2 floors"
+  ],
+  "priceVerdict": true
+}

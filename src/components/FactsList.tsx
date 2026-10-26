@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useHalloween } from '../theme/halloween';
 
 interface FactsListProps {
   facts: string[]; // facts to show; index == the try that revealed the fact
@@ -9,6 +10,7 @@ interface FactsListProps {
 }
 
 export function FactsList({ facts, highlightIndex, stagger = false }: FactsListProps) {
+  const halloween = useHalloween();
   const [shownCount, setShownCount] = useState(0);
   const shownRef = useRef(0);
   shownRef.current = shownCount;
@@ -48,7 +50,7 @@ export function FactsList({ facts, highlightIndex, stagger = false }: FactsListP
               isHighlighted ? 'border-sky-400 ring-1 ring-sky-400' : 'border-transparent'
             }`}
           >
-            <span aria-hidden="true">💡</span>
+            <span aria-hidden="true">{halloween ? '🕯️' : '💡'}</span>
             <span>{fact}</span>
           </li>
         );

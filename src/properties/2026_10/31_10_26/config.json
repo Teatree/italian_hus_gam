@@ -1,0 +1,26 @@
+{
+  "coordinates": [38.2464391, 15.2521923],
+  "mapZoom": 12,
+  "soldPrice": 300000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/33618284/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 2,
+    "3": 4,
+    "4": 12,
+    "5": 15,
+    "6": 18
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Capo - Zona Tono, Milazzo",
+    "2 rooms 1 baths",
+    "Private Garden",
+    "Built in 1950",
+    "40m to Messina by Car",
+    "127 m² of living space"
+  ],
+  "priceVerdict": true
+}

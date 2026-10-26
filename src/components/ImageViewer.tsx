@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Cobweb, useHalloween } from '../theme/halloween';
 
 interface ImageViewerProps {
   src: string;
@@ -12,7 +13,21 @@ interface ImageViewerProps {
   // Reports the zoom lightbox opening/closing, so the carousel auto-advance can pause
   // while the player is looking at a full-screen photo.
   onZoomChange?: (zoomed: boolean) => void;
+  // Halloween: each new value plays a quick candle-flicker over the photo (the game bumps it
+  // whenever a new photo is revealed). Undefined = never flicker.
+  flickerKey?: number;
 }
+
+// Candle-flicker: the photo gutters dark, sputters warm a couple of times, then steadies.
+const FLICKER_FRAMES: Keyframe[] = [
+  { filter: 'brightness(0.1)', offset: 0 },
+  { filter: 'brightness(0.85) sepia(0.5)', offset: 0.12 },
+  { filter: 'brightness(0.3) sepia(0.6)', offset: 0.22 },
+  { filter: 'brightness(1.1) sepia(0.35)', offset: 0.38 },
+  { filter: 'brightness(0.55) sepia(0.45)', offset: 0.5 },
+  { filter: 'brightness(1.05) sepia(0.2)', offset: 0.7 },
+  { filter: 'brightness(1) sepia(0)', offset: 1 },
+];
 
 // Chevron used by the carousel's prev/next buttons.
 function ChevronIcon({ className, flipped }: { className?: string; flipped?: boolean }) {
@@ -134,8 +149,17 @@ export function ImageViewer({
   carouselImages,
   onStep,
   onZoomChange,
+  flickerKey,
 }: ImageViewerProps) {
   const [zoomed, setZoomedState] = useState(false);
+  const halloween = useHalloween();
+  const photoRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (flickerKey === undefined) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    photoRef.current?.animate(FLICKER_FRAMES, { duration: 900, easing: 'steps(1, end)' });
+  }, [flickerKey]);
 
   function setZoomed(v: boolean) {
     setZoomedState(v);
@@ -179,6 +203,7 @@ export function ImageViewer({
         onTouchEnd={carousel ? handleTouchEnd : undefined}
       >
         <button
+          ref={photoRef}
           type="button"
           onClick={openZoom}
           aria-label="Expand image to full screen"
@@ -207,6 +232,8 @@ export function ImageViewer({
             />
           )}
         </button>
+
+        {halloween && <Cobweb className="absolute left-0 top-0 w-20 text-white/45 sm:w-24" />}
 
         <span className="pointer-events-none absolute right-2 top-2 rounded-md bg-black/60 px-2 py-1 text-xs font-medium text-white">
           {index} / {total}

@@ -1,4 +1,5 @@
 import { DEFAULT_TITLE_ICON, DEFAULT_TITLE_ICON_URL } from '../admin';
+import { useHalloween } from '../theme/halloween';
 
 interface HeaderProps {
   title: string;
@@ -11,9 +12,18 @@ interface HeaderProps {
 export function Header({ title, iconFile, iconHref }: HeaderProps) {
   const iconSrc = `${import.meta.env.BASE_URL}${iconFile ?? DEFAULT_TITLE_ICON}`;
   const href = iconHref ?? DEFAULT_TITLE_ICON_URL;
+  const halloween = useHalloween();
   return (
     <header className="-mb-2 flex items-center justify-center gap-2 text-center">
-      <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">{title}</h1>
+      <h1
+        className={
+          halloween
+            ? 'font-spooky text-3xl tracking-wide text-orange-400 sm:text-4xl'
+            : 'text-2xl font-bold tracking-tight text-white sm:text-3xl'
+        }
+      >
+        {title}
+      </h1>
       <a
         href={href}
         target="_blank"

@@ -28,6 +28,15 @@ export const DEFAULT_TITLE_ICON = 'italy_icon.png';
 export const DEFAULT_TITLE_ICON_URL = 'https://youtu.be/IGBEp1zTbUw';
 export const DEFAULT_SHARE_FLAG = '🇮🇪';
 
+// ── Halloween dress-up ──────────────────────────────────────────────────────────────────────
+// Houses dated HALLOWEEN_FIRST_DAY..HALLOWEEN_LAST_DAY (DD_MM_YY, inclusive) get the Halloween
+// theme (purple/orange palette, cobwebs, fog, spooky font, candy confetti, tombstone tries…).
+// Hard stop: once the live puzzle day is past HALLOWEEN_LAST_DAY (i.e. from the 10:00 reset on
+// 1 November) the theme is off everywhere — including past-day links to these houses and
+// OVERRIDE_SLUG previews — so it switches itself off with no code change. See src/theme/halloween.tsx.
+export const HALLOWEEN_FIRST_DAY = '27_10_26';
+export const HALLOWEEN_LAST_DAY = '31_10_26';
+
 // How many tries the player gets (matches the number of images & facts per property).
 export const MAX_TRIES = 6;
 

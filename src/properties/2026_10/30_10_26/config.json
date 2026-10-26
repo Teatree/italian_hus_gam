@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6907279, 10.6365608],
+  "mapZoom": 12,
+  "soldPrice": 980000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/31445659/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 2,
+    "3": 7,
+    "4": 10,
+    "5": 14,
+    "6": 21
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Gargnano",
+    "Built in 2006",
+    "270 m² of living space",
+    "Land plot of 829 m²",
+    "6 rooms 3 baths",
+    "1h 10m to Brescia by Car"
+  ],
+  "priceVerdict": true
+}

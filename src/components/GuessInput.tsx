@@ -32,7 +32,7 @@ export function GuessInput({ onSubmit, disabled }: GuessInputProps) {
       <button
         type="submit"
         disabled={disabled || parsePrice(text) === null}
-        className="flex h-8 w-full items-center justify-center rounded-md bg-accent font-semibold text-white transition-colors hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex h-8 w-full items-center justify-center rounded-md bg-accent font-semibold text-white transition-colors hover:bg-accentHover disabled:cursor-not-allowed disabled:opacity-50"
       >
         Submit
       </button>

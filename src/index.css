@@ -10,9 +10,18 @@ body,
   height: 100%;
 }
 
+/* Theme palette as bare RGB channels, consumed by the Tailwind colour tokens (tailwind.config.js). */
+:root {
+  --c-backdrop: 14 27 42; /* #0e1b2a */
+  --c-panel: 19 38 59; /* #13263b */
+  --c-panel-alt: 12 26 41; /* #0c1a29 */
+  --c-accent: 22 163 74; /* #16a34a green-600 */
+  --c-accent-hover: 34 197 94; /* #22c55e green-500 */
+}
+
 body {
   margin: 0;
-  background-color: #0e1b2a;
+  background-color: rgb(var(--c-backdrop));
   color: #e5edf5;
   font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
 }
@@ -49,4 +58,85 @@ body {
 
 .carousel-ui {
   animation: carousel-ui-in 0.8s ease-out 1;
+}
+
+/* ── Halloween (src/theme/halloween.tsx sets data-theme only inside the Halloween window) ── */
+
+/* Near-black purple backdrop, plum panels, pumpkin-orange buttons. */
+:root[data-theme='halloween'] {
+  --c-backdrop: 18 10 28; /* #120a1c */
+  --c-panel: 39 24 56; /* #271838 */
+  --c-panel-alt: 24 14 36; /* #180e24 */
+  --c-accent: 234 88 12; /* #ea580c orange-600 */
+  --c-accent-hover: 249 115 22; /* #f97316 orange-500 */
+}
+
+/* Night-time map: invert the OSM tiles to dark, drop their colour, then tint it purple. */
+:root[data-theme='halloween'] .leaflet-tile-pane {
+  filter: invert(1) grayscale(1) sepia(1) hue-rotate(225deg) saturate(1.8) brightness(0.75)
+    contrast(1.05);
+}
+
+/* The pumpkin marker is a divIcon; drop Leaflet's default white box and add a warm glow. */
+.pumpkin-pin {
+  background: none;
+  border: none;
+  filter: drop-shadow(0 0 6px rgb(251 146 60 / 0.75)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.6));
+}
+
+/* Fog bank along the bottom of the viewport: two tiled mist layers drifting at different
+   speeds, faded out toward the top. Each layer is one tile wider than the screen and slides
+   by exactly one tile, so the loop is seamless. */
+.halloween-fog {
+  -webkit-mask-image: linear-gradient(to top, #000 15%, transparent);
+  mask-image: linear-gradient(to top, #000 15%, transparent);
+}
+
+.fog-layer {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background-repeat: repeat-x;
+  background-position: left bottom;
+}
+
+.fog-back {
+  width: calc(100% + 640px);
+  background-image:
+    radial-gradient(ellipse 220px 70px at 160px 70%, rgb(216 200 255 / 0.22), transparent 70%),
+    radial-gradient(ellipse 260px 80px at 470px 80%, rgb(216 200 255 / 0.18), transparent 70%);
+  background-size: 640px 100%;
+  animation: fog-drift-back 70s linear infinite;
+}
+
+.fog-front {
+  width: calc(100% + 900px);
+  background-image:
+    radial-gradient(ellipse 300px 60px at 250px 88%, rgb(235 228 255 / 0.2), transparent 70%),
+    radial-gradient(ellipse 240px 55px at 700px 82%, rgb(235 228 255 / 0.16), transparent 70%);
+  background-size: 900px 100%;
+  animation: fog-drift-front 45s linear infinite;
+}
+
+@keyframes fog-drift-back {
+  from {
+    transform: translateX(-640px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fog-drift-front {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-900px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fog-layer {
+    animation: none;
+  }
 }

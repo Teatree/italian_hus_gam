@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.6514426, 10.6213381],
+  "mapZoom": 12,
+  "soldPrice": 1830000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36398227/",
+  "prop_pictures": {
+    "1": 15,
+    "2": 16,
+    "3": 19,
+    "4": 25,
+    "5": 28,
+    "6": 30
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Gaino - Pulciano, Toscolano-Maderno",
+    "466 m² of living space",
+    "2 floors",
+    "Built in 1970",
+    "Swimming Pool",
+    "50m to Brescia by Car"
+  ],
+  "priceVerdict": true
+}

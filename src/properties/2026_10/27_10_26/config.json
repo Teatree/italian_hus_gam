@@ -1,0 +1,26 @@
+{
+  "coordinates": [46.5358328, 11.2451352],
+  "mapZoom": 12,
+  "soldPrice": 5800000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35346195/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 5,
+    "3": 9,
+    "4": 22,
+    "5": 17,
+    "6": 20
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Terlano-Terlan",
+    "Built in 2012",
+    "400 m² of living space",
+    "5 floors",
+    "Private Garden",
+    "5 rooms 8 baths"
+  ],
+  "priceVerdict": true
+}
