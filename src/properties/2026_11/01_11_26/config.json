@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.056827, 9.942668],
+  "mapZoom": 12,
+  "soldPrice": 800000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/37274736/",
+  "prop_pictures": {
+    "1": 32,
+    "2": 3,
+    "3": 15,
+    "4": 20,
+    "5": 24,
+    "6": 29
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in La Serra-Tellaro, Lerici",
+    "4 rooms 2 baths",
+    "1 floors",
+    "110 m² of living space",
+    "Private Garden",
+    "20m to La Spezia by Car"
+  ],
+  "priceVerdict": true
+}
