@@ -1,0 +1,26 @@
+{
+  "coordinates": [41.6409037, 15.8715332],
+  "mapZoom": 12,
+  "soldPrice": 219000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35344696/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 4,
+    "3": 6,
+    "4": 10,
+    "5": 13,
+    "6": 8
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Monticchio - Scaloria - Villaggio Artigianale, Manfredonia",
+    "40m to Foggia by Car",
+    "272 m² of living space",
+    "Private Garden",
+    "5 rooms 2 baths",
+    "Land plot of 1,147 m²"
+  ],
+  "priceVerdict": true
+}
