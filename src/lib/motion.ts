@@ -76,6 +76,30 @@ export function useScrollLock(active: boolean): void {
   }, [active]);
 }
 
+// ── What opened a dialog ────────────────────────────────────────────────────────────────────
+// A dialog hands the focus back to whatever opened it. document.activeElement usually says
+// what that was, but Safari doesn't focus a button when it is clicked, so the last control
+// that was pressed is remembered as a fallback. Any key press clears it: from then on the
+// keyboard's own focus is the truth.
+let lastPressed: HTMLElement | null = null;
+if (typeof document !== 'undefined') {
+  document.addEventListener(
+    'pointerdown',
+    (e) => {
+      const target = e.target instanceof Element ? e.target : null;
+      lastPressed = target?.closest<HTMLElement>('button, a[href], input, textarea') ?? null;
+    },
+    true,
+  );
+  document.addEventListener('keydown', () => (lastPressed = null), true);
+}
+
+export function currentOpener(): HTMLElement | null {
+  const active = document.activeElement;
+  if (active instanceof HTMLElement && active !== document.body) return active;
+  return lastPressed;
+}
+
 // Keep Tab inside `box` (a dialog). Call from a keydown handler; returns true if it handled it.
 export function trapTab(e: KeyboardEvent, box: HTMLElement | null): boolean {
   if (e.key !== 'Tab' || !box) return false;

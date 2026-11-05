@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
-import { prefersReducedMotion, trapTab, useScrollLock } from '../lib/motion';
+import { currentOpener, prefersReducedMotion, trapTab, useScrollLock } from '../lib/motion';
 import { CluePill } from './CluePill';
 import { ChevronIcon, CloseIcon, HouseIcon } from './Icons';
 
@@ -48,7 +48,7 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
   useEffect(() => {
     if (open) {
       if (phase === 'closed' || phase === 'closing') {
-        if (phase === 'closed') opener.current = document.activeElement as HTMLElement | null;
+        if (phase === 'closed') opener.current = currentOpener();
         setPhase('entering');
       }
     } else if (phase === 'entering' || phase === 'open') {

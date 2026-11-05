@@ -1000,6 +1000,8 @@ a.chip:active {
 }
 .clues__dots {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
   display: flex;
   justify-content: flex-end;
   gap: 5px;
@@ -1532,6 +1534,10 @@ a.chip:active {
   transition: transform 360ms var(--ease-sheet);
   box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
 }
+/* The sheet itself can hold the focus (the verdict sheet opens that way); it needs no ring. */
+.sheet:focus {
+  outline: none;
+}
 .sheet.is-shown {
   transform: translateY(var(--drag, 0px));
 }
@@ -1967,6 +1973,48 @@ a.chip:active {
   }
   .pastday__btn {
     padding: 0 12px;
+  }
+  /* The rules reminder stays on one line, so the helper is the same height in every state
+     and nothing below the field moves when it changes. */
+  .helper {
+    font-size: 12px;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ---------------- Narrower than any phone (heavy zoom, split screens) ----------------
+   Not a designed size: just make sure nothing overlaps or runs off the side. */
+@media (max-width: 300px) {
+  :root {
+    --circle: min(40px, calc((100vw - 52px) / 6));
+  }
+  .title {
+    white-space: normal;
+    font-size: 22px;
+    line-height: 1.1;
+  }
+  .try__label {
+    font-size: 11px;
+  }
+  .helper {
+    flex-wrap: wrap;
+    letter-spacing: 0;
+  }
+}
+
+/* ---------------- Short viewports (a phone on its side) ----------------
+   Keep room above the zoomed photo for the clue pill, and for the dots below it. */
+@media (max-height: 480px) {
+  .zoom {
+    padding-top: 30px;
+  }
+  .zoom__stage {
+    max-height: calc(100vh - 30px - 76px);
+    max-height: calc(100dvh - 30px - 76px);
+  }
+  .zoom__foot {
+    margin-top: 12px;
+    gap: 8px;
   }
 }
 

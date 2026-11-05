@@ -22,6 +22,10 @@ interface PhotoProps {
   frameRef: RefObject<HTMLDivElement>;
 }
 
+// What the spare layer holds until it is first used: a 1×1 transparent GIF, so there is never
+// an <img> without a source in the page (the preview script waits for every image to load).
+const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+
 // Resolves once `img` can be painted in one go, so a crossfade never shows a half-loaded
 // photo. Rejects if the photo fails to load (the caller then shows the fallback).
 function ready(img: HTMLImageElement): Promise<void> {
@@ -183,6 +187,7 @@ export function Photo({
         <img
           ref={layerB}
           className="photo__img"
+          src={BLANK}
           alt=""
           aria-hidden="true"
           draggable={false}

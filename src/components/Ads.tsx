@@ -19,7 +19,7 @@ export function AdSlot() {
 // it through the `has-anchor` class on the app root.
 export function AnchorAd() {
   return (
-    <aside className="anchor-ad" aria-label="Advertisement">
+    <aside className="anchor-ad" aria-label="Sticky advertisement">
       <div className="anchor-ad__slot">Ad · 320 × 50 sticky anchor</div>
     </aside>
   );

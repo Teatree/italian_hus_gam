@@ -101,6 +101,7 @@ export function VerdictSheet({ open, image, soldPrice, place, onVote, onSkip, on
       }}
       labelledBy={titleId}
       locked={picked !== null}
+      initialFocus="sheet"
     >
       <div className="verdict__head">
         <img className="verdict__thumb" src={image} alt="" />

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { prefersReducedMotion, trapTab, useScrollLock } from '../lib/motion';
+import { currentOpener, prefersReducedMotion, trapTab, useScrollLock } from '../lib/motion';
 
 interface SheetProps {
   open: boolean;
@@ -13,6 +13,9 @@ interface SheetProps {
   labelledBy: string;
   // While true, dismiss gestures are ignored (the verdict sheet, between a vote and its close).
   locked?: boolean;
+  // Where the focus lands on open: the sheet's first control (default), or the sheet itself.
+  // The verdict sheet uses 'sheet' so that no answer looks pre-selected by a focus ring.
+  initialFocus?: 'first-control' | 'sheet';
   children: ReactNode;
 }
 
@@ -26,7 +29,15 @@ const DRAG_VELOCITY = 0.6; // px per ms
 // modal dialog — focus moves into it and is trapped there, Escape closes it, the page behind
 // can't scroll, and focus goes back to whatever opened it. Rendered in a portal on <body>, so
 // it sits above the map and the anchor ad whatever the page is doing.
-export function Sheet({ open, onDismiss, onClosed, labelledBy, locked = false, children }: SheetProps) {
+export function Sheet({
+  open,
+  onDismiss,
+  onClosed,
+  labelledBy,
+  locked = false,
+  initialFocus = 'first-control',
+  children,
+}: SheetProps) {
   const [phase, setPhase] = useState<Phase>('closed');
   const sheetRef = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLElement | null>(null);
@@ -38,7 +49,7 @@ export function Sheet({ open, onDismiss, onClosed, labelledBy, locked = false, c
   useEffect(() => {
     if (open) {
       if (phase === 'closed' || phase === 'closing') {
-        if (phase === 'closed') opener.current = document.activeElement as HTMLElement | null;
+        if (phase === 'closed') opener.current = currentOpener();
         setPhase('entering');
       }
     } else if (phase === 'entering' || phase === 'open') {
@@ -65,17 +76,21 @@ export function Sheet({ open, onDismiss, onClosed, labelledBy, locked = false, c
     }
   }, [phase]);
 
-  // Focus: into the sheet's first control on open, back to the opener once closed.
+  // Focus: into the sheet on open (its first control, or the sheet itself), back to the opener
+  // once closed.
   useEffect(() => {
     if (phase === 'open') {
       const id = window.setTimeout(() => {
-        sheetRef.current
-          ?.querySelector<HTMLElement>('button:not([disabled]), textarea')
-          ?.focus({ preventScroll: true });
+        const sheet = sheetRef.current;
+        const first =
+          initialFocus === 'first-control'
+            ? sheet?.querySelector<HTMLElement>('button:not([disabled]), textarea')
+            : null;
+        (first ?? sheet)?.focus({ preventScroll: true });
       }, 50);
       return () => window.clearTimeout(id);
     }
-  }, [phase]);
+  }, [phase, initialFocus]);
 
   const wasMounted = useRef(false);
   useEffect(() => {
@@ -155,6 +170,7 @@ export function Sheet({ open, onDismiss, onClosed, labelledBy, locked = false, c
         role="dialog"
         aria-modal="true"
         aria-labelledby={labelledBy}
+        tabIndex={-1}
       >
         <div
           className="sheet__grab"
