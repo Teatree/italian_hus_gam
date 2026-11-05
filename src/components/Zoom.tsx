@@ -24,6 +24,8 @@ type Phase = 'closed' | 'entering' | 'open' | 'closing';
 
 const FLIP_MS = 320;
 const SWIPE_PX = 50;
+// "Not clipped", written as an inset() so it can animate to and from the frame's clip.
+const UNCLIPPED = 'inset(0px 0px 0px 0px round 0px)';
 
 // The full-screen photo. Opening is a FLIP: the enlarged image starts exactly over the photo
 // on the page and animates to its place while the backdrop fades to near-black; closing runs
@@ -56,12 +58,46 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // Where the on-page photo is, expressed as a transform of the zoom image (origin 0 0).
-  function flipFrom(): string | null {
-    const from = originRef.current?.getBoundingClientRect();
-    const to = stageRef.current?.getBoundingClientRect();
-    if (!from || !to || !to.width || !to.height) return null;
-    return `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})`;
+  // Where the on-page photo is, expressed as a transform (origin 0 0) and a clip of the zoom
+  // image, so the enlarged photo starts exactly over the one on the page — for any photo shape.
+  // The page crops the photo to its 4:3 frame (cover) while the zoom shows all of it (contain),
+  // so a plain move-and-scale only lines up for 4:3 photos. Instead the image is scaled until
+  // its picture matches the page's cropped picture, and clipped to the frame's rounded rect;
+  // both then animate away together.
+  function flipFrom(): { transform: string; clip: string } | null {
+    const frame = originRef.current;
+    const stage = stageRef.current;
+    if (!frame || !stage) return null;
+    const f = frame.getBoundingClientRect();
+    const s = stage.getBoundingClientRect();
+    if (!s.width || !s.height || !f.width || !f.height) return null;
+    // The photo's real shape, from the page's own copy (already loaded). Unknown → assume 4:3.
+    const pageImg = frame.querySelector<HTMLImageElement>('.photo__img.is-front');
+    const nw = pageImg?.naturalWidth || 4;
+    const nh = pageImg?.naturalHeight || 3;
+
+    // The picture as the zoom draws it: contained in the stage.
+    const contain = Math.min(s.width / nw, s.height / nh);
+    const boxX = (s.width - nw * contain) / 2;
+    const boxY = (s.height - nh * contain) / 2;
+    // The picture as the page draws it: covering the frame, overflowing it on one axis.
+    const cover = Math.max(f.width / nw, f.height / nh);
+    const coverX = f.left + (f.width - nw * cover) / 2;
+    const coverY = f.top + (f.height - nh * cover) / 2;
+
+    const scale = cover / contain;
+    const tx = coverX - s.left - boxX * scale;
+    const ty = coverY - s.top - boxY * scale;
+    // The frame's rect, in the image element's own (untransformed) coordinates.
+    const left = (f.left - s.left - tx) / scale;
+    const top = (f.top - s.top - ty) / scale;
+    const right = s.width - left - f.width / scale;
+    const bottom = s.height - top - f.height / scale;
+    const radius = (parseFloat(getComputedStyle(frame).borderTopLeftRadius) || 0) / scale;
+    return {
+      transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
+      clip: `inset(${top}px ${right}px ${bottom}px ${left}px round ${radius}px)`,
+    };
   }
 
   // The contained image usually doesn't fill the 4:3 stage (portrait or panorama photos).
@@ -87,7 +123,10 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
     lastIndex.current = index;
     setFailed(false);
     const start = prefersReducedMotion() ? null : flipFrom();
-    if (start) img.style.transform = start;
+    if (start) {
+      img.style.transform = start.transform;
+      img.style.clipPath = start.clip;
+    }
 
     let second = 0;
     const first = requestAnimationFrame(() => {
@@ -95,6 +134,7 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
         if (start) {
           img.classList.add('is-flip');
           img.style.transform = '';
+          img.style.clipPath = UNCLIPPED;
         }
         setPhase('open');
       });
@@ -111,7 +151,10 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
   // Closing: shrink back into the page photo while everything else fades, then unmount.
   useEffect(() => {
     if (phase === 'open') {
-      const id = window.setTimeout(() => imgRef.current?.classList.remove('is-flip'), FLIP_MS + 40);
+      const id = window.setTimeout(() => {
+        imgRef.current?.classList.remove('is-flip');
+        imgRef.current?.style.removeProperty('clip-path');
+      }, FLIP_MS + 40);
       return () => window.clearTimeout(id);
     }
     if (phase !== 'closing') return;
@@ -120,8 +163,11 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
     const back = reduced ? null : flipFrom();
     if (img && back) {
       img.classList.remove('is-swipe-out', 'is-swipe-pre', 'is-swipe-in');
+      img.style.clipPath = UNCLIPPED; // a like-for-like start value, so the clip can animate
+      void img.offsetWidth;
       img.classList.add('is-flip');
-      img.style.transform = back;
+      img.style.transform = back.transform;
+      img.style.clipPath = back.clip;
     }
     const id = window.setTimeout(() => setPhase('closed'), reduced ? 200 : FLIP_MS);
     return () => window.clearTimeout(id);

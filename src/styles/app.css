@@ -300,10 +300,13 @@ a.chip:active {
   object-fit: cover;
   cursor: zoom-in;
   opacity: 0;
+  /* Only the photo on show takes taps; the faded-out layer underneath it never does. */
+  pointer-events: none;
   transition: opacity var(--fade, 400ms) var(--ease-in-out);
 }
 .photo__img.is-front {
   opacity: 1;
+  pointer-events: auto;
 }
 .photo__img.is-entering {
   transform: scale(1.02);
@@ -1257,6 +1260,13 @@ a.chip:active {
 .map figcaption a {
   color: inherit;
   text-decoration: none;
+  /* A 44px-tall tap target around a one-line link, without changing the caption's height:
+     it reaches up over the gap (and the last few px of the map) and down into the gap below. */
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  padding: 16px 0 11px;
+  margin: -16px 0 -11px;
 }
 .map figcaption a:hover {
   text-decoration: underline;
@@ -1341,10 +1351,11 @@ a.chip:active {
 .footer a {
   color: var(--accent);
   text-decoration: underline;
-  /* 44px tap target without changing the line's height */
+  /* A 44px-tall tap target without changing the line's height (mostly downward, into the
+     footer's own bottom padding, so it never meets the map credit's target above). */
   display: inline-block;
-  padding: 12px 0;
-  margin: -12px 0;
+  padding: 9px 0 18px;
+  margin: -9px 0 -18px;
 }
 
 /* ---------------- No casa today ---------------- */
@@ -1736,7 +1747,9 @@ a.chip:active {
   transform-origin: 0 0;
 }
 .zoom__img.is-flip {
-  transition: transform 320ms var(--ease-out);
+  transition:
+    transform 320ms var(--ease-out),
+    clip-path 320ms var(--ease-out);
   will-change: transform;
 }
 /* Stepping to another photo inside the zoom: the old one fades and slides out, the new one

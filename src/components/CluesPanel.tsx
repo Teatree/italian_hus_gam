@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { prefersReducedMotion } from '../lib/motion';
 import { ChevronIcon, ClueIcon, LockIcon } from './Icons';
 
@@ -39,33 +39,25 @@ export function CluesPanel({
   onSelect,
 }: CluesPanelProps) {
   const panelId = useId();
-  // How many tiles are open right now. It follows `revealed`, except at the end of a live
-  // game, where it steps up one tile every CASCADE_MS.
+  // How many tiles are open right now. It follows `revealed` in the same render — except at
+  // the end of a live game, where the first remaining tile opens at once and the rest follow
+  // one every CASCADE_MS (the effect below steps the count up until it catches up).
   const [openCount, setOpenCount] = useState(revealed);
+  const [seenRevealed, setSeenRevealed] = useState(revealed);
+  if (revealed !== seenRevealed) {
+    // Adjusting state while rendering: React re-renders straight away, before anything paints.
+    setSeenRevealed(revealed);
+    const stagger = cascade && revealed > openCount + 1 && !prefersReducedMotion();
+    setOpenCount(stagger ? openCount + 1 : revealed);
+  }
+  useEffect(() => {
+    if (openCount >= revealed) return;
+    const id = window.setTimeout(() => setOpenCount((c) => Math.min(c + 1, revealed)), CASCADE_MS);
+    return () => window.clearTimeout(id);
+  }, [openCount, revealed]);
   // The first tile that was opened after this page load. Tiles (and dots) from here on animate
   // in; anything already open when the game was restored just appears.
   const [liveFrom] = useState(revealed);
-  const countRef = useRef(openCount);
-  countRef.current = openCount;
-
-  useEffect(() => {
-    const from = countRef.current;
-    if (revealed <= from) {
-      if (revealed < from) setOpenCount(revealed);
-      return;
-    }
-    if (!cascade || prefersReducedMotion()) {
-      setOpenCount(revealed);
-      return;
-    }
-    const timers: number[] = [];
-    for (let target = from + 1; target <= revealed; target++) {
-      const delay = (target - from - 1) * CASCADE_MS;
-      if (delay === 0) setOpenCount(target);
-      else timers.push(window.setTimeout(() => setOpenCount(target), delay));
-    }
-    return () => timers.forEach((t) => window.clearTimeout(t));
-  }, [revealed, cascade]);
 
   return (
     <section className={`clues${open ? ' is-open' : ''}`}>
