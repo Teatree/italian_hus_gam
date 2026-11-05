@@ -1,54 +1,9 @@
-import { createContext, useContext, useLayoutEffect } from 'react';
-import { HALLOWEEN_FIRST_DAY, HALLOWEEN_LAST_DAY } from '../admin';
-import { dateKeyOrder } from '../game/schedule';
-
 // ─────────────────────────────────────────────────────────────────────────────
-//  HALLOWEEN DRESS-UP
-//  Seasonal theme for the houses dated HALLOWEEN_FIRST_DAY..HALLOWEEN_LAST_DAY (admin.ts).
-//  Two halves:
-//   • CSS — <html data-theme="halloween"> swaps the palette variables (index.css), darkens the
-//     map tiles, and drives the fog/flicker keyframes.
-//   • React — useHalloween() lets components swap content (candle hints, tombstone tries,
-//     pumpkin pin, Creepster font, candy confetti, ghost rain, cobwebs).
-//  Nothing here does anything outside the window, so the code can stay in after Halloween.
+//  HALLOWEEN — the pieces only this season uses
+//  The palette is the [data-season="halloween"] block in src/styles/tokens.css; when and how
+//  the season switches on is in src/theme/season.tsx. This file holds its decorations:
+//  cobwebs, the fog bank, the candle-flicker and the pumpkin map pin.
 // ─────────────────────────────────────────────────────────────────────────────
-
-// True when `slug` is a Halloween house AND the live puzzle day (`todayKey`) hasn't passed the
-// last Halloween day yet. The second check is the hard stop: from the 1 November reset the
-// theme is gone even on a past-day link to a Halloween house, whatever else is configured.
-export function isHalloween(slug: string, todayKey: string): boolean {
-  const day = dateKeyOrder(slug);
-  const today = dateKeyOrder(todayKey);
-  const first = dateKeyOrder(HALLOWEEN_FIRST_DAY);
-  const last = dateKeyOrder(HALLOWEEN_LAST_DAY);
-  if (day === null || today === null || first === null || last === null) return false;
-  return day >= first && day <= last && today <= last;
-}
-
-const HalloweenContext = createContext(false);
-export const HalloweenProvider = HalloweenContext.Provider;
-export const useHalloween = () => useContext(HalloweenContext);
-
-const FONT_HREF = 'https://fonts.googleapis.com/css2?family=Creepster&display=swap';
-
-// Flags <html> for the CSS half of the theme and pulls in the Creepster font — only while
-// active, so ordinary days never download it.
-export function useHalloweenDocument(active: boolean) {
-  useLayoutEffect(() => {
-    if (!active) return;
-    const root = document.documentElement;
-    root.dataset.theme = 'halloween';
-    if (!document.querySelector(`link[href="${FONT_HREF}"]`)) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = FONT_HREF;
-      document.head.appendChild(link);
-    }
-    return () => {
-      delete root.dataset.theme;
-    };
-  }, [active]);
-}
 
 // ── Cobweb ──────────────────────────────────────────────────────────────────────────────────
 // A corner web anchored at the SVG's top-left: spokes fanning across the quarter circle, joined
@@ -74,15 +29,10 @@ function buildWebPath(): string {
 
 const WEB_PATH = buildWebPath();
 
-// `flip` mirrors it horizontally for a top-right corner.
-export function Cobweb({ className, flip }: { className?: string; flip?: boolean }) {
+// Drawn for a top-left corner; the CSS mirrors it for a top-right one.
+function Cobweb({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 100 100"
-      aria-hidden="true"
-      className={`pointer-events-none ${className ?? ''}`}
-      style={flip ? { transform: 'scaleX(-1)' } : undefined}
-    >
+    <svg viewBox="0 0 100 100" aria-hidden="true" className={`cobweb ${className ?? ''}`}>
       <path
         d={WEB_PATH}
         fill="none"
@@ -95,19 +45,54 @@ export function Cobweb({ className, flip }: { className?: string; flip?: boolean
   );
 }
 
-// Page-level decoration: cobwebs in the page's top corners (they scroll away with the header)
-// and a slow fog bank pinned along the bottom of the viewport. Everything is pointer-events-none
-// so it never blocks a click; z-[1020] floats it over Leaflet's panes (~1000) while staying under
-// the past-day banner (1050), the verdict popup (1100) and the zoom lightbox.
+// Page-level layers: cobwebs in the corners just under the awning (they scroll away with the
+// header) and a slow fog bank pinned along the bottom of the viewport. Both sit behind the
+// game column and ignore the pointer, so they can never cover or block anything.
 export function HalloweenDecor() {
   return (
-    <div aria-hidden="true">
-      <Cobweb className="absolute left-0 top-0 z-[1020] w-24 text-white/30 sm:w-44" />
-      <Cobweb className="absolute right-0 top-0 z-[1020] w-24 text-white/30 sm:w-44" flip />
-      <div className="halloween-fog pointer-events-none fixed inset-x-0 bottom-0 z-[1020] h-36 overflow-hidden sm:h-44">
+    <>
+      <div className="season-decor" aria-hidden="true">
+        <Cobweb className="cobweb--l" />
+        <Cobweb className="cobweb--r" />
+      </div>
+      <div className="season-fog" aria-hidden="true">
         <div className="fog-layer fog-back" />
         <div className="fog-layer fog-front" />
       </div>
-    </div>
+    </>
   );
 }
+
+// A smaller web inside the photo frame (top-right: the clue pill owns the top-left corner).
+export function HalloweenPhotoDecor() {
+  return <Cobweb />;
+}
+
+// Candle-flicker: the photo gutters dark, sputters warm a couple of times, then steadies.
+export const CANDLE_FLICKER: { frames: Keyframe[]; duration: number } = {
+  duration: 900,
+  frames: [
+    { filter: 'brightness(0.1)', offset: 0 },
+    { filter: 'brightness(0.85) sepia(0.5)', offset: 0.12 },
+    { filter: 'brightness(0.3) sepia(0.6)', offset: 0.22 },
+    { filter: 'brightness(1.1) sepia(0.35)', offset: 0.38 },
+    { filter: 'brightness(0.55) sepia(0.45)', offset: 0.5 },
+    { filter: 'brightness(1.05) sepia(0.2)', offset: 0.7 },
+    { filter: 'brightness(1) sepia(0)', offset: 1 },
+  ],
+};
+
+// Map pin: a jack-o'-lantern sitting on the property's location.
+export const PUMPKIN_PIN = {
+  size: [40, 40] as [number, number],
+  anchor: [20, 38] as [number, number],
+  html: `<svg viewBox="0 0 64 64" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M31 16 Q31 7 38 4" stroke="#4d7c0f" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="20" cy="38" rx="15" ry="21" fill="#c2410c"/>
+  <ellipse cx="44" cy="38" rx="15" ry="21" fill="#c2410c"/>
+  <ellipse cx="32" cy="38" rx="15" ry="23" fill="#f97316"/>
+  <polygon points="19,34 28,34 23.5,26" fill="#fde047"/>
+  <polygon points="36,34 45,34 40.5,26" fill="#fde047"/>
+  <path d="M18 42 L23 46 L27 43 L32 47 L37 43 L41 46 L46 42 Q44 53 32 54 Q20 53 18 42 Z" fill="#fde047"/>
+</svg>`,
+};

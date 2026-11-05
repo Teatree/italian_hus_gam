@@ -1,4 +1,5 @@
 import type { PropertyConfig, PropertyData } from '../types';
+import { dateKeyOrder } from '../game/schedule';
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  AUTO-DISCOVERY
@@ -56,3 +57,18 @@ function buildRegistry(): Record<string, PropertyConfig> {
 }
 
 export const properties: Record<string, PropertyConfig> = buildRegistry();
+
+// Every scheduled house (a slug that is a real DD_MM_YY date), oldest first.
+const scheduled = Object.keys(properties)
+  .map((slug) => ({ slug, order: dateKeyOrder(slug) }))
+  .filter((p): p is { slug: string; order: number } => p.order !== null)
+  .sort((a, b) => a.order - b.order)
+  .map((p) => p.slug);
+
+// "Casa Nº 147": a house's position among all scheduled houses, counted from the first one.
+// Derived purely from the folder names, so adding a house needs no numbering by hand. A house
+// that isn't on the schedule (a demo slug reached through OVERRIDE_SLUG) has no number.
+export function houseNumber(slug: string): number | null {
+  const i = scheduled.indexOf(slug);
+  return i === -1 ? null : i + 1;
+}

@@ -1,40 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
-import confetti from 'canvas-confetti';
-import {
-  APP_TITLE,
-  MAX_TRIES,
-  TOLERANCE,
-  FAR_THRESHOLD,
-  OVERRIDE_SLUG,
-} from './admin';
-import { track, loadGeo, randomId, isMobile } from './analytics';
-import { properties } from './properties';
-import type { Guess, GameStatus, PropertyConfig, Verdict } from './types';
-import { evaluateGuess, percentOff, revealedCount } from './game/logic';
-import { getScheduleInfo } from './game/schedule';
-import { buildShareText, copyToClipboard } from './game/share';
-import { dayUrl, resolvePastDay } from './game/dayLink';
-import { loadGame, saveGame } from './game/storage';
-import { Header } from './components/Header';
-import { ImageViewer } from './components/ImageViewer';
-import { FactsList } from './components/FactsList';
-import { TriesRow } from './components/TriesRow';
-import { GuessInput } from './components/GuessInput';
-import { GuessList } from './components/GuessList';
-import { NewGameTimer } from './components/NewGameTimer';
-import { MapView } from './components/MapView';
-import { Result } from './components/Result';
-import { VerdictPopup } from './components/VerdictPopup';
+import { useEffect, useState } from 'react';
+import { ADS_ENABLED, DEFAULT_TITLE_ICON_URL, OVERRIDE_SLUG } from './admin';
+import { track, loadGeo, isMobile } from './analytics';
+import { houseNumber, properties } from './properties';
+import { formatDateKeyShort, getScheduleInfo, previousDateKey } from './game/schedule';
+import { resolvePastDay } from './game/dayLink';
+import { useBooting } from './lib/motion';
+import { countryOf } from './theme/country';
+import { SeasonProvider, activeSeason, useSeasonAssets } from './theme/season';
+import { useTheme } from './theme/theme';
+import { Game } from './Game';
+import { AnchorAd } from './components/Ads';
+import { Countdown } from './components/Countdown';
+import { Awning, Header } from './components/Header';
+import { NoCasa } from './components/NoCasa';
 import { PastDayBanner } from './components/PastDayBanner';
-import {
-  HalloweenDecor,
-  HalloweenProvider,
-  isHalloween,
-  useHalloween,
-  useHalloweenDocument,
-} from './theme/halloween';
+import { HelpSheet } from './components/Sheets';
 
-// Resolves which property is active today and auto-refreshes the page at the daily reset.
+// The page shell: works out which house is active today, dresses the page for it (theme,
+// country, season), and frames either the game or the "no casa today" card. It also reloads
+// the page at the daily reset.
 export default function App() {
   // Resolve the schedule once on mount; the page reloads at the reset boundary anyway.
   const [{ dateKey, nextResetMs }] = useState(() => getScheduleInfo());
@@ -45,28 +29,43 @@ export default function App() {
   // The past-day banner shows whenever the house on screen isn't today's scheduled one.
   const isPastDay = !OVERRIDE_SLUG && pastDay !== null;
   const property = properties[slug] ?? null;
-  // Seasonal dress-up for this house (src/theme/halloween.tsx; window set in admin.ts).
-  const halloween = property !== null && isHalloween(property.slug, dateKey);
-  useHalloweenDocument(halloween);
+
+  // How the page is dressed. All three come from data the house already has: its date decides
+  // the season, its title icon / share flag decide the country (src/theme/*).
+  const season = property !== null ? activeSeason(property.slug, dateKey) : null;
+  const country = countryOf(property);
+  const { mode, toggle } = useTheme(country, season?.key ?? null);
+  useSeasonAssets(season);
+
+  // Nothing animates on first paint: the root wears `no-anim` for the first two frames.
+  const booting = useBooting();
+  const [helpOpen, setHelpOpen] = useState(false);
 
   // When the daily reset passes while a player is here, reload so the new puzzle loads
   // fresh (and we never run the previous day's game state against a new property). A pinned
   // past day doesn't change at the reset, so there's nothing to reload for — unless it's
-  // wearing the Halloween theme, which must still drop off at the 1 November reset.
+  // wearing a season, which must still drop off at the reset after its last day.
   useEffect(() => {
-    if (pastDay && !halloween) return;
-    const id = window.setInterval(() => {
+    if (pastDay && !season) return;
+    const check = () => {
       if (Date.now() >= nextResetMs) window.location.reload();
-    }, 1000);
-    return () => window.clearInterval(id);
-  }, [nextResetMs, pastDay, halloween]);
+    };
+    const id = window.setInterval(check, 1000);
+    // A tab that slept through the reset reloads as soon as it is looked at again.
+    document.addEventListener('visibilitychange', check);
+    return () => {
+      window.clearInterval(id);
+      document.removeEventListener('visibilitychange', check);
+    };
+  }, [nextResetMs, pastDay, season]);
 
   // One Sessions row per page load: who showed up, from where, on what. Fires after the geo
-  // lookup so ip/country/city are populated. Runs even on the come-back screen (still a visit).
+  // lookup so ip/country/city are populated. Runs even on the "no casa" screen (still a visit).
   useEffect(() => {
     const seenKey = 'gth:analytics:seen';
-    const isReturning = localStorage.getItem(seenKey) === '1';
+    let isReturning = false;
     try {
+      isReturning = localStorage.getItem(seenKey) === '1';
       localStorage.setItem(seenKey, '1');
     } catch {
       // ignore storage failures (private mode, etc.)
@@ -87,388 +86,60 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!property) {
-    return <ComeBackScreen targetMs={nextResetMs} />;
-  }
-
-  // `key` ensures a clean remount (fresh game state) if the active property changes.
-  return (
-    <HalloweenProvider value={halloween}>
-      {halloween && <HalloweenDecor />}
-      <Game
-        key={property.slug}
-        property={property}
-        nextResetMs={nextResetMs}
-        isPastDay={isPastDay}
-      />
-    </HalloweenProvider>
-  );
-}
-
-// Shown when no property is scheduled for the current day.
-function ComeBackScreen({ targetMs }: { targetMs: number }) {
-  return (
-    <div className="mx-auto flex min-h-full max-w-5xl flex-col gap-6 px-4 pb-6 pt-2">
-      <Header title={APP_TITLE} />
-      <div className="mx-auto max-w-md space-y-4 pt-10 text-center">
-        <p className="text-xl font-semibold text-white">No puzzle today — check back soon!</p>
-        <NewGameTimer targetMs={targetMs} />
-      </div>
-    </div>
-  );
-}
-
-interface GameProps {
-  property: PropertyConfig;
-  nextResetMs: number;
-  // True when a shared link opened an earlier day's house rather than today's.
-  isPastDay: boolean;
-}
-
-function Game({ property, nextResetMs, isPastDay }: GameProps) {
-  const soldPrice = property.soldPrice;
-
-  const [guesses, setGuesses] = useState<Guess[]>([]);
-  const [status, setStatus] = useState<GameStatus>('playing');
-  // Which try's image the player is viewing; null = follow the latest revealed image.
-  const [selectedImage, setSelectedImage] = useState<number | null>(null);
-  // The player's price verdict for this house. Only an actual vote is persisted (with the
-  // saved game); skipping the popup isn't remembered, so it re-appears on every Share until
-  // they vote. Only asked when the property opts in via `priceVerdict`.
-  const [verdict, setVerdict] = useState<Verdict | null>(null);
-  const [verdictOpen, setVerdictOpen] = useState(false);
-  // Resolves the Result button's in-flight onShare() promise once the popup detour finishes,
-  // so its "Copied" feedback appears when the text actually lands on the clipboard.
-  const shareResolveRef = useRef<((ok: boolean) => void) | null>(null);
-
-  // ── Analytics state (per attempt) ──────────────────────────────────────────────────────
-  // One id per puzzle attempt; pairs the Guesses rows with their Results row. Because <Game>
-  // is keyed by slug it remounts per puzzle, so this re-inits naturally each new puzzle.
-  const [gameId] = useState(() => randomId('g_'));
-  const gameStartRef = useRef<number>(Date.now()); // for totalTimeMs
-  const lastGuessRef = useRef<number>(Date.now()); // for per-try timeOnTryMs
-  // The finished-game row is held here and flushed once — on share, page-hide, or unmount —
-  // so we can record whether the player shared without emitting two rows per game.
-  const pendingResultRef = useRef<Record<string, unknown> | null>(null);
-  const resultSentRef = useRef(false);
-
-  function flushResult() {
-    if (resultSentRef.current || !pendingResultRef.current) return;
-    resultSentRef.current = true;
-    track('Results', pendingResultRef.current);
-  }
-
-  // Flush the pending Results row when the player leaves (covers close, reload, navigate) or
-  // when this game unmounts (e.g. the puzzle rolls over). keepalive on the POST lets it land.
-  useEffect(() => {
-    const onHide = () => {
-      if (document.visibilityState === 'hidden') flushResult();
-    };
-    window.addEventListener('pagehide', flushResult);
-    document.addEventListener('visibilitychange', onHide);
-    return () => {
-      window.removeEventListener('pagehide', flushResult);
-      document.removeEventListener('visibilitychange', onHide);
-      flushResult();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Restore saved progress for the active house on mount (keyed per slug).
-  useEffect(() => {
-    const saved = loadGame(property.slug);
-    if (saved) {
-      setGuesses(saved.guesses);
-      setStatus(saved.status);
-      // Older saves may hold a legacy 'skipped' marker — treat anything but a real vote as none.
-      const v = saved.verdict;
-      setVerdict(v === 'steal' || v === 'fair' || v === 'ripoff' ? v : null);
-    } else {
-      setGuesses([]);
-      setStatus('playing');
-      setVerdict(null);
-    }
-    setSelectedImage(null);
-  }, [property.slug]);
-
-  // A guess that hit the price exactly (€0 / 0% off) — "right on the money".
-  const isExact = guesses.some((g) => g.value === soldPrice);
-  const halloween = useHalloween();
-
-  // When the player wins: a little confetti burst from both sides, then (after a 2s delay)
-  // fade the unused try buttons to a slightly lighter blue. An exact guess gets an extra
-  // celebratory burst from the center.
-  const [lightenUnused, setLightenUnused] = useState(false);
-  useEffect(() => {
-    if (status !== 'won') {
-      setLightenUnused(false);
-      return;
-    }
-    // Halloween swaps the paper confetti for candy and pumpkins — bigger, so fewer of them.
-    const treats = halloween
-      ? {
-          shapes: ['🍬', '🍭', '🎃'].map((text) => confetti.shapeFromText({ text, scalar: 2.2 })),
-          scalar: 2.2,
-          flat: true,
-        }
-      : null;
-    const count = (n: number) => (treats ? Math.round(n * 0.45) : n);
-    confetti({ particleCount: count(70), angle: 60, spread: 55, startVelocity: 55, origin: { x: 0, y: 0.7 }, ...treats });
-    confetti({ particleCount: count(70), angle: 120, spread: 55, startVelocity: 55, origin: { x: 1, y: 0.7 }, ...treats });
-    if (isExact) {
-      confetti({ particleCount: count(180), spread: 120, startVelocity: 45, origin: { x: 0.5, y: 0.6 }, scalar: 1.1, ...treats });
-    }
-    const id = window.setTimeout(() => setLightenUnused(true), 2000);
-    return () => window.clearTimeout(id);
-  }, [status, isExact, halloween]);
-
-  // When the player loses: a short rain of 👎 emoji (👻🦇💀 at Halloween) that falls from the
-  // top under gravity.
-  useEffect(() => {
-    if (status !== 'lost') return;
-    const shapes = (halloween ? ['👻', '🦇', '💀'] : ['👎']).map((text) =>
-      confetti.shapeFromText({ text, scalar: 2 }),
-    );
-    let frame = 0;
-    const id = window.setInterval(() => {
-      // Spawn a few each tick at random x just above the viewport, with no upward velocity, so
-      // gravity carries them straight down like falling rain.
-      confetti({
-        particleCount: 4,
-        startVelocity: 0,
-        ticks: 220,
-        gravity: 0.7,
-        spread: 70,
-        origin: { x: Math.random(), y: -0.1 },
-        shapes,
-        scalar: 2,
-        flat: true,
-        disableForReducedMotion: true,
-      });
-      frame += 1;
-      if (frame >= 12) window.clearInterval(id);
-    }, 150);
-    return () => window.clearInterval(id);
-  }, [status, halloween]);
-
-  const wrongCount = guesses.filter((g) => g.direction !== 'correct').length;
-  const revealed = revealedCount(wrongCount, MAX_TRIES); // facts/images shown
-  const latestImageIndex = Math.min(wrongCount, property.images.length - 1);
-  const displayedImageIndex = selectedImage ?? latestImageIndex;
-  const isPlaying = status === 'playing';
-  const isOver = !isPlaying; // 'won' or 'lost' — the game has finished
-
-  // ── End-game carousel ──────────────────────────────────────────────────────────────────
-  // Once the game is over the image section becomes a carousel: it keeps showing the image
-  // the player finished on, then auto-advances one image to the right every 5 seconds,
-  // wrapping 6 → 1. Re-arming the timeout on every displayed-image change means any manual
-  // navigation (arrows, swipe, try buttons) also resets a fresh 5-second window. While the
-  // zoom lightbox is open the cycle pauses entirely; closing it starts a fresh 5 seconds.
-  const [zoomOpen, setZoomOpen] = useState(false);
-  const totalImages = property.images.length;
-  useEffect(() => {
-    if (isPlaying || zoomOpen || totalImages < 2) return;
-    const id = window.setTimeout(() => {
-      setSelectedImage((displayedImageIndex + 1) % totalImages);
-    }, 5000);
-    return () => window.clearTimeout(id);
-  }, [isPlaying, zoomOpen, displayedImageIndex, totalImages]);
-
-  // Manual carousel step (±1 from the arrows or a swipe), wrapping in both directions.
-  function stepImage(delta: number) {
-    setSelectedImage((displayedImageIndex + delta + totalImages) % totalImages);
-  }
-
-  // Facts stay visible the whole game: revealed one-per-wrong-guess while playing, then every
-  // hint (revealed one-by-one) once it's over — the same on a loss as on a win.
-  const factsToShow = isOver ? property.facts : property.facts.slice(0, revealed);
-  // Once the game is over the player can browse all of the tries' images.
-  const triesRevealedUpTo = isPlaying ? latestImageIndex : property.images.length - 1;
-
-  const closestPercentOff = guesses.length
-    ? Math.min(...guesses.map((g) => percentOff(g.value, soldPrice)))
-    : 0;
-
-  function handleSubmit(value: number) {
-    if (!isPlaying) return;
-    const direction = evaluateGuess(value, soldPrice, TOLERANCE, FAR_THRESHOLD);
-    const nextGuesses = [...guesses, { value, direction }];
-
-    let nextStatus: GameStatus = 'playing';
-    if (direction === 'correct') nextStatus = 'won';
-    else if (nextGuesses.length >= MAX_TRIES) nextStatus = 'lost';
-
-    setGuesses(nextGuesses);
-    setStatus(nextStatus);
-    setSelectedImage(null); // jump back to the latest image after guessing
-    saveGame({ slug: property.slug, guesses: nextGuesses, status: nextStatus });
-
-    // ── Analytics ──────────────────────────────────────────────────────────────────────
-    const now = Date.now();
-    const timeOnTryMs = now - lastGuessRef.current;
-    lastGuessRef.current = now;
-
-    track('Guesses', {
-      gameId,
-      puzzleDate: property.slug,
-      tryNumber: nextGuesses.length,
-      guessValue: value,
-      direction,
-      percentOff: percentOff(value, soldPrice),
-      euroOff: Math.abs(value - soldPrice),
-      timeOnTryMs,
-      soldPrice,
-      // 'playing' = still in the game after this guess; 'won'/'lost' = this guess ended it.
-      win_status: nextStatus,
-    });
-
-    if (nextStatus !== 'playing') {
-      pendingResultRef.current = {
-        gameId,
-        puzzleDate: property.slug,
-        outcome: nextStatus,
-        triesUsed: nextGuesses.length,
-        exact: nextGuesses.some((g) => g.value === soldPrice),
-        closestPercentOff: Math.min(...nextGuesses.map((g) => percentOff(g.value, soldPrice))),
-        closestEuroOff: Math.min(...nextGuesses.map((g) => Math.abs(g.value - soldPrice))),
-        totalTimeMs: now - gameStartRef.current,
-        shared: false,
-        verdict: '',
-      };
-    }
-  }
-
-  // Mark the Results row shared (with the verdict, if any), flush it, and copy the share text.
-  async function completeShare(v: Verdict | null): Promise<boolean> {
-    if (pendingResultRef.current) {
-      pendingResultRef.current.shared = true;
-      if (v) pendingResultRef.current.verdict = v;
-    }
-    flushResult();
-    const text = buildShareText(
-      APP_TITLE,
-      guesses,
-      MAX_TRIES,
-      dayUrl(property.slug),
-      closestPercentOff,
-      property.shareFlag,
-      v,
-    );
-    return copyToClipboard(text);
-  }
-
-  // Close the popup and finish the share that opened it (the copy runs inside the closing
-  // click's user gesture, so clipboard access still works).
-  function finishShareFromPopup(v: Verdict | null) {
-    setVerdictOpen(false);
-    void completeShare(v).then((ok) => {
-      shareResolveRef.current?.(ok);
-      shareResolveRef.current = null;
-    });
-  }
-
-  // A vote: remember it forever for this house, share with the verdict line.
-  function handleVote(v: Verdict) {
-    setVerdict(v);
-    saveGame({ slug: property.slug, guesses, status, verdict: v });
-    finishShareFromPopup(v);
-  }
-
-  // A skip or click-away: share without a verdict line. Deliberately not persisted — the
-  // popup comes back on every Share until the player votes.
-  function handleSkip() {
-    finishShareFromPopup(null);
-  }
-
-  async function handleShare(): Promise<boolean> {
-    // Un-voted share on a verdict-enabled house: detour through the popup. The returned
-    // promise resolves after the player votes/skips there, so the Share button's "Copied"
-    // feedback waits for the actual copy.
-    if (property.priceVerdict && !verdict) {
-      setVerdictOpen(true);
-      return new Promise((resolve) => {
-        shareResolveRef.current = resolve;
-      });
-    }
-    return completeShare(verdict);
-  }
+  // The "bonus link" behind the flag chip and in the footer. A config can blank it ("").
+  const bonusUrl = property?.titleIconUrl ?? DEFAULT_TITLE_ICON_URL;
+  // "Play yesterday's casa" on the empty-day card, only if yesterday had a house.
+  const yesterday = previousDateKey(dateKey);
+  const yesterdaySlug = yesterday !== null && yesterday in properties ? yesterday : null;
 
   return (
-    <div
-      className={`mx-auto flex min-h-full max-w-5xl flex-col gap-4 px-4 pb-6 ${isPastDay ? '' : 'pt-2'}`}
-    >
-      {isPastDay && <PastDayBanner dateKey={property.slug} />}
-      <Header title={APP_TITLE} iconFile={property.titleIcon} iconHref={property.titleIconUrl} />
+    <SeasonProvider value={season}>
+      <div className={`app${booting ? ' no-anim' : ''}${ADS_ENABLED ? ' has-anchor' : ''}`}>
+        {isPastDay && property && <PastDayBanner dateKey={property.slug} />}
+        <Awning />
+        {season?.Decor && <season.Decor />}
 
-      {/* Image stays centered; the hints list sits to its right (stacks below on narrow screens). */}
-      <div className="flex flex-col items-center gap-4 lg:flex-row lg:items-start lg:justify-center">
-        <div className="hidden lg:block lg:w-56 lg:shrink-0" aria-hidden="true" />
-
-        <div className="w-full max-w-md lg:shrink-0">
-          <ImageViewer
-            src={property.images[displayedImageIndex]}
-            index={displayedImageIndex + 1}
-            total={property.images.length}
-            carouselImages={isOver ? property.images : undefined}
-            onStep={isOver ? stepImage : undefined}
-            onZoomChange={setZoomOpen}
-            // Halloween: candle-flicker whenever a new photo is revealed during play.
-            flickerKey={halloween && isPlaying ? latestImageIndex : undefined}
+        <div className="column">
+          <Header
+            country={country}
+            houseNumber={property ? houseNumber(property.slug) : null}
+            bonusUrl={bonusUrl}
+            theme={mode}
+            onToggleTheme={season ? undefined : toggle}
+            onHelp={() => setHelpOpen(true)}
+            meta={
+              // The countdown is about today's puzzle; a past day's page shows its date instead.
+              isPastDay && property ? (
+                formatDateKeyShort(property.slug)
+              ) : (
+                <>
+                  <span className="meta__label">New casa in </span>
+                  <Countdown targetMs={nextResetMs} />
+                </>
+              )
+            }
           />
+
+          {property ? (
+            // `key` ensures a clean remount (fresh game state) if the active property changes.
+            <Game
+              key={property.slug}
+              property={property}
+              country={country}
+              nextResetMs={nextResetMs}
+              isPastDay={isPastDay}
+              bonusUrl={bonusUrl}
+              paused={helpOpen}
+            />
+          ) : (
+            <NoCasa targetMs={nextResetMs} yesterday={yesterdaySlug} />
+          )}
         </div>
 
-        <div className="w-full max-w-md lg:w-56 lg:max-w-none lg:shrink-0">
-          <FactsList facts={factsToShow} highlightIndex={selectedImage} stagger={isOver} />
-        </div>
+        {ADS_ENABLED && <AnchorAd />}
       </div>
 
-      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
-        <TriesRow
-          guesses={guesses}
-          maxTries={MAX_TRIES}
-          isPlaying={isPlaying}
-          revealedUpTo={triesRevealedUpTo}
-          selectedIndex={displayedImageIndex}
-          lightenUnused={lightenUnused}
-          onSelect={(i) => setSelectedImage(i)}
-        />
-
-        {/* The countdown is about today's puzzle, so it would only muddy a past day's page. */}
-        {!isPastDay && <NewGameTimer targetMs={nextResetMs} />}
-
-        {isPlaying ? (
-          <>
-            <GuessInput onSubmit={handleSubmit} disabled={!isPlaying} />
-
-            <GuessList guesses={guesses} />
-          </>
-        ) : (
-          <Result
-            status={status}
-            soldPrice={soldPrice}
-            percentOff={closestPercentOff}
-            exact={isExact}
-            propertyUrl={property.propertyUrl}
-            onShare={handleShare}
-          />
-        )}
-
-        <MapView
-          lat={property.coordinates[0]}
-          lng={property.coordinates[1]}
-          zoom={property.mapZoom ?? 12}
-        />
-      </div>
-
-      {verdictOpen && (
-        <VerdictPopup
-          soldPrice={soldPrice}
-          image={property.images[0]}
-          propertyUrl={property.propertyUrl}
-          onVote={handleVote}
-          onSkip={handleSkip}
-        />
-      )}
-    </div>
+      <HelpSheet open={helpOpen} onClose={() => setHelpOpen(false)} />
+    </SeasonProvider>
   );
 }

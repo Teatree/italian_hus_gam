@@ -95,14 +95,23 @@ export function dateKeyOrder(key: string): number | null {
   return yy * 10_000 + month * 100 + day;
 }
 
-// A DD_MM_YY key as a human date, e.g. "Thursday, 1 October 2026".
-export function formatDateKey(key: string): string {
+// A DD_MM_YY key as a short human date, e.g. "Sat 31 Oct" (the past-day banner and meta row).
+export function formatDateKeyShort(key: string): string {
   const [day, month, yy] = key.split('_').map(Number);
-  return new Date(Date.UTC(2000 + yy, month - 1, day)).toLocaleDateString('en-GB', {
+  const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone: 'UTC',
-    weekday: 'long',
+    weekday: 'short',
     day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
+    month: 'short',
+  }).formatToParts(new Date(Date.UTC(2000 + yy, month - 1, day)));
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+  return `${get('weekday')} ${get('day')} ${get('month')}`;
+}
+
+// The DD_MM_YY key of the calendar day before `key`, or null if `key` isn't a date.
+export function previousDateKey(key: string): string | null {
+  if (dateKeyOrder(key) === null) return null;
+  const [day, month, yy] = key.split('_').map(Number);
+  const d = new Date(Date.UTC(2000 + yy, month - 1, day) - DAY_MS);
+  return `${pad(d.getUTCDate())}_${pad(d.getUTCMonth() + 1)}_${pad(d.getUTCFullYear() % 100)}`;
 }

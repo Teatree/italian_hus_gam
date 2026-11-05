@@ -1,0 +1,164 @@
+/* ==========================================================================
+   Guess My Casa — design tokens (source of truth)
+   Apply on the root element:  <html data-theme="dark|light" data-country="it|es|pt|fr|gr" [data-season="halloween"]>
+   Every colour in the UI comes from these variables. Never hard-code a hex in a component.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/fraunces.woff2') format('woff2-variations'), url('/fonts/fraunces.woff2') format('woff2');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('/fonts/manrope.woff2') format('woff2-variations'), url('/fonts/manrope.woff2') format('woff2');
+  font-weight: 200 800; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('/fonts/manrope-ext.woff2') format('woff2-variations'), url('/fonts/manrope-ext.woff2') format('woff2');
+  font-weight: 200 800; font-style: normal; font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  /* ---- Type ---- */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;   /* title, section titles, result title */
+  --font-ui: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* ---- Geometry ---- */
+  --column-max: 440px;          /* single column on every screen size */
+  --gutter: 16px;               /* page side padding */
+  --gap: 16px;                  /* vertical rhythm between main blocks */
+  --radius-photo: 20px;
+  --radius-card: 22px;
+  --radius-tile: 14px;
+  --radius-sheet: 26px;
+  --radius-pill: 999px;
+  --tap: 44px;                  /* minimum touch target */
+  --control-h: 60px;            /* price field */
+  --control-inner-h: 48px;      /* Guess button inside the field */
+  --circle: clamp(40px, 11.8vw, 46px);   /* try circles; 40px on 320px-wide phones */
+  --awning-stripe: 26px;        /* one stripe; the pattern repeats every 52px */
+  --awning-h: 24px;
+  --scallop-h: 13px;
+  --anchor-h: 66px;             /* sticky 320x50 ad + 8px padding top/bottom */
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);       /* default for anything entering */
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);        /* anything leaving */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);    /* crossfades, colour changes */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* small pops (arrows, dots, chosen verdict) */
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);     /* bottom sheets (iOS-like) */
+  --dur-xs: 120ms;
+  --dur-s: 200ms;
+  --dur-m: 320ms;
+  --dur-l: 600ms;
+  --dur-xl: 900ms;
+
+  /* ---- Layers (Leaflet uses up to 1000, everything that must cover the map is above it) ---- */
+  --z-sticky: 1050;    /* past-day banner */
+  --z-anchor: 1100;    /* sticky anchor ad */
+  --z-fx: 1150;        /* confetti / rain, pointer-events: none */
+  --z-scrim: 1200;
+  --z-sheet: 1210;
+  --z-zoom: 1220;
+  --z-toast: 1300;
+
+  /* ---- Country (default Italy) ---- */
+  --accent-d: #E8875A; --accent-l: #B44E28;
+  --shutter: #3F6B4E;
+  --flag: linear-gradient(90deg, #009246 0 33.34%, #F4F5F0 33.34% 66.67%, #CE2B37 66.67%);
+}
+
+/* ---- Countries: accent for dark + light, shutter colour, flag ---- */
+[data-country="it"] { --accent-d: #E8875A; --accent-l: #B44E28; --shutter: #3F6B4E; --flag: linear-gradient(90deg, #009246 0 33.34%, #F4F5F0 33.34% 66.67%, #CE2B37 66.67%); }
+[data-country="es"] { --accent-d: #EE8A5E; --accent-l: #A8321C; --shutter: #7C5130; --flag: linear-gradient(180deg, #AA151B 0 25%, #F1BF00 25% 75%, #AA151B 75%); }
+[data-country="pt"] { --accent-d: #78A6E6; --accent-l: #1F5AA6; --shutter: #2D5C8A; --flag: linear-gradient(90deg, #046A38 0 40%, #DA291C 40%); }
+[data-country="fr"] { --accent-d: #AC9BE0; --accent-l: #62509E; --shutter: #5F7F86; --flag: linear-gradient(90deg, #0055A4 0 33.34%, #F4F5F0 33.34% 66.67%, #EF4135 66.67%); }
+[data-country="gr"] { --accent-d: #6AAEE0; --accent-l: #17649F; --shutter: #1F5FA0; --flag: linear-gradient(180deg, #0D5EAF 0 20%, #F4F5F0 20% 40%, #0D5EAF 40% 60%, #F4F5F0 60% 80%, #0D5EAF 80%); }
+[data-country="fi"] { --accent-d: #86B4EC; --accent-l: #1D4F91; --shutter: #7A5A3E; --flag: linear-gradient(90deg, transparent 0 30%, #002F6C 30% 46%, transparent 46%), linear-gradient(180deg, #F4F5F0 0 38%, #002F6C 38% 62%, #F4F5F0 62%); }
+
+/* ---- Dark (DEFAULT) ---- */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121A26;
+  --surface: #1B2433;
+  --raised: #232E40;
+  --line: #2E3A50;
+  --text: #F1E9DC;
+  --muted: #A9B1BE;
+  --dim: #8B95A6;
+  --stripe: #E9DFCC;           /* the light awning stripe */
+  --accent: var(--accent-d);
+  --on-accent: #1A120C;        /* text on accent buttons */
+  --accent-glow: color-mix(in srgb, var(--accent) 45%, transparent);
+  --accent-halo: color-mix(in srgb, var(--accent) 18%, transparent);
+  --miss: #F07083;
+  --miss-bg: rgba(240, 112, 131, 0.14);
+  --ok: #6FD39A;
+  --on-ok: #0E2A1A;
+  --lock-ring: #4A5770;
+  --photo-shadow: 0 0 0 1px #2E3A50;
+  --map-filter: invert(0.92) hue-rotate(180deg) saturate(0.55) brightness(0.92);
+  --anchor-bg: #0D131C;
+  --scrim: rgba(0, 0, 0, 0.55);
+  --overlay-ink: rgba(8, 8, 8, 0.64);   /* hint strip + photo buttons, same in both themes */
+  --theme-color: #121A26;
+}
+
+/* ---- Light ---- */
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #FAF3E6;
+  --surface: #FFFDF8;
+  --raised: #F0E4CF;
+  --line: #E3D3B9;
+  --text: #3A2A20;
+  --muted: #6E5A49;
+  --dim: #7A6553;
+  --stripe: #FFFDF8;
+  --accent: var(--accent-l);
+  --on-accent: #FFFDF8;
+  --accent-glow: color-mix(in srgb, var(--accent) 30%, transparent);
+  --accent-halo: color-mix(in srgb, var(--accent) 14%, transparent);
+  --miss: #A8243A;
+  --miss-bg: #F7DCE0;
+  --ok: #2E7D4F;
+  --on-ok: #FFFFFF;
+  --lock-ring: #C2AE90;
+  --photo-shadow: 0 10px 28px rgba(58, 42, 32, 0.14);
+  --map-filter: none;
+  --anchor-bg: #FFFDF8;
+  --scrim: rgba(30, 20, 12, 0.45);
+  --overlay-ink: rgba(8, 8, 8, 0.64);
+  --theme-color: #FAF3E6;
+}
+
+/* ---- Seasonal override example: Halloween (dark only; the theme toggle is hidden while a season is active) ---- */
+[data-season="halloween"] {
+  color-scheme: dark;
+  --bg: #120A1C;
+  --surface: #1E1230;
+  --raised: #2A1A40;
+  --line: #3A2752;
+  --text: #F3E9FF;
+  --muted: #BBA8D1;
+  --dim: #9C88B4;
+  --stripe: #17101F;
+  --accent: #F97316;
+  --on-accent: #1A0E05;
+  --accent-glow: rgba(249, 115, 22, 0.5);
+  --accent-halo: rgba(249, 115, 22, 0.18);
+  --shutter: #3B2A1E;
+  --miss: #FF6B8B;
+  --miss-bg: rgba(255, 107, 139, 0.14);
+  --ok: #A3E635;
+  --on-ok: #16210A;
+  --lock-ring: #5A4478;
+  --photo-shadow: 0 0 0 1px #3A2752;
+  --map-filter: invert(0.9) hue-rotate(215deg) saturate(0.7) brightness(0.85);
+  --anchor-bg: #0C0612;
+  --theme-color: #120A1C;
+}
