@@ -56,7 +56,7 @@ export type GameStatus = 'playing' | 'won' | 'lost';
 
 // The player's opinion of the sold price, asked (when the property opts in via
 // `priceVerdict`) every time they press Share until they actually vote. Only a real
-// vote is saved; skipping/dismissing the popup is not remembered.
+// vote is saved; skipping/dismissing the verdict sheet is not remembered.
 export type Verdict = 'steal' | 'fair' | 'ripoff';
 
 export interface SavedGame {

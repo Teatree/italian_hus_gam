@@ -6,7 +6,7 @@
 //  RESET_TIME_ZONE. The property shown is the one whose folder/slug name matches the
 //  current puzzle date in DD_MM_YY format (e.g. on 8 June 2026 it shows "08_06_26").
 //  So to schedule a house for a given day, just create a folder named with that date.
-//  If no property matches the current day, a "check back soon" screen shows.
+//  If no property matches the current day, the "No casa today" card shows.
 //
 //  ADDING A PROPERTY (no code changes needed):
 //    1. Create src/properties/<YYYY_MM>/<DD_MM_YY>/  (the month folder is just for tidiness;

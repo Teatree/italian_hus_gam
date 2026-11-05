@@ -1,11 +1,14 @@
-# Guess The House 🇮🇹
+# Guess My Casa 🇮🇹
 
 A daily-puzzle-style game (inspired by [guessthe.house](https://guessthe.house)) for Italian
-houses. Players see a house's photos plus progressively revealed facts and a rough-area map,
-and try to guess its sale price within **10%** in up to **6 tries**.
+houses. Players see a house's photos plus progressively revealed clues and a rough-area map,
+and try to guess its asking price within **10%** in up to **6 tries**.
 
 Built with **Vite + React + TypeScript**, **Leaflet/OpenStreetMap** for the map, and
 **Tailwind CSS**. It's a fully static site — no backend.
+
+(The game was called *Guess The House* until the November 2026 redesign. `REDESIGN-NOTES.md`
+records what changed, what deliberately didn't, and how it was checked.)
 
 ## Develop
 
@@ -18,20 +21,33 @@ npm run preview  # serve the production build locally
 
 ## How to play
 
-1. Enter a price and press **Submit**.
-2. A wrong guess reveals the next photo and a new fact, highlights the next try button, and
-   adds the guess to the list with an arrow that points toward the real price:
-   - ⬆️ the price is **higher** than your guess (⬆️⬆️ if you're more than 30% under)
-   - ⬇️ the price is **lower** than your guess (⬇️⬇️ if you're more than 30% over)
-3. Guess within 10% to win (**Good Job!**). Run out of tries and you lose (**You Suck!**).
-4. The real sale price is revealed at the end, plus a **Share** button that copies an emoji
-   grid + link to your clipboard.
+1. Type a price into the field and press **Guess** (or Enter).
+2. A wrong guess reveals the next photo and its clue, and turns that try's circle red with an
+   arrow pointing toward the real price; the guessed value sits under the circle (`650k`, `1.5M`):
+   - ↑ the price is **higher** than your guess (↑↑ if you're more than 30% under)
+   - ↓ the price is **lower** than your guess (↓↓ if you're more than 30% over)
+3. Guess within 10% to win (**Good job!**, or **Right on the money!** for the exact price).
+   Run out of tries and you lose (**You suck!**).
+4. The result card then shows the asking price, with a **Share result** button that copies an
+   emoji grid + link to your clipboard.
 
-You can click any **revealed** try button to look back at that try's photo; upcoming
-(grayed-out) tries are locked.
+The clue for the photo on screen sits in the pill above the photo; every unlocked clue is in the
+collapsible **Clues** panel (locked ones are behind closed shutters). Tap a circle that has been
+reached, or an unlocked clue, to look back at that try's photo; tries not reached yet are locked.
+The **?** button explains the rules, and the sun/moon button switches between dark (the default)
+and light.
+
+Two slips cost no try: a price below €10,000 (`MIN_GUESS`: "Enter the full price, e.g. 450,000")
+and a price already guessed ("You already tried €650,000").
 
 Progress is saved in the browser (`localStorage`) **per house**, so returning players resume
-where they left off, and switching the active house starts a fresh game.
+where they left off, and switching the active house starts a fresh game. The keys:
+
+| Key | Holds |
+|---|---|
+| `gth:v1:<slug>` | one house's game: `{ slug, guesses: [{ value, direction }], status, verdict? }` |
+| `gth:analytics:seen` | `'1'` once the visitor has been seen (the `isReturning` analytics flag) |
+| `gmc-theme` | `'dark'` or `'light'`: the player's theme choice (missing or anything else = dark) |
 
 ## Daily rotation & scheduling
 
@@ -39,8 +55,9 @@ The puzzle rotates automatically every day at **10:00 Eastern European time** (`
 daylight-saving aware). The property shown is the one whose **folder name matches the current
 date** in `DD_MM_YY` format (e.g. on 8 June 2026 it shows `08_06_26`). A folder is the active
 puzzle from 10:00 on its date until 10:00 the next day. If no folder matches the current day, a
-"check back soon" screen shows with a countdown. When the reset passes while someone is playing,
-the page auto-refreshes to load the new puzzle.
+"No casa today" card shows with a countdown (and a "Play yesterday's casa" button when yesterday
+had a house). When the reset passes while someone is playing, the page auto-refreshes to load
+the new puzzle.
 
 ### Testing a specific date
 
@@ -246,31 +263,118 @@ PNGs so the conversion stays a separate step.
 To covertly swap in a house from another country, set these **optional** per-date fields (each
 falls back to the Italy default if omitted):
 
-- `titleIcon` — filename of the icon shown next to the title. Drop the image in **`public/`**
-  (e.g. `public/finland_icon.png`) and reference it by filename. Defaults to `italy_icon.png`.
-- `titleIconUrl` — where that icon links. Defaults to the bundled bonus video.
+- `titleIcon` — names the house's **country** as `<country>_icon.png` (see the table below). It
+  drives the flag chip, the accent colour, the shutters and the win confetti. Defaults to
+  `italy_icon.png`. (The image itself is no longer drawn: the flag chip replaced the title icon.)
+- `titleIconUrl` — the "bonus link" behind the flag chip and in the footer. Defaults to the
+  bundled bonus video; set it to `""` for a house with no bonus link.
 - `shareFlag` — the flag emoji used in the share text (both flag spots). Pass any single unicode
-  emoji, e.g. `"🇫🇮"`. Defaults to `"🇮🇪"`.
+  emoji, e.g. `"🇫🇮"`. Defaults to `"🇮🇪"`. It never changes how the page looks, except as the
+  fallback below.
 
 These defaults live in `src/admin.ts` (`DEFAULT_TITLE_ICON` / `DEFAULT_TITLE_ICON_URL` /
 `DEFAULT_SHARE_FLAG`).
 
-### The price-verdict popup (optional, per property)
+#### Which country a house gets (`src/theme/country.ts`)
 
-Set `"priceVerdict": true` in a property's `config.json` and pressing Share on that house asks
-*"What do you think of the price for this property?"* (the link goes to the listing) — 🤑 Steal /
-🤝 Fair / 🚨 Rip-off — under the property's first photo, which zooms full-screen on click just
-like on the game page (closing the zoom returns to the popup). A vote is appended to the share
-text as a `🧾 My verdict: ||…||` line (an opinion only — never the euro amount — and the verdict
-sits inside `||…||` Discord/Telegram spoiler marks so it doesn't hint at the price), remembered forever
-for that house, and recorded in the `verdict` column of the analytics `Results` row (the Google
-Apps Script needs that column added on the sheet side). The "skip →" link or clicking away
-still copies the share text, just without a verdict — and isn't remembered, so the question
-returns on every Share until the player votes. Omit the flag and nothing changes.
+The rule, in order: the `titleIcon` filename; else the `shareFlag`; else Italy. An unknown value
+falls back to Italy (with one console warning in development).
+
+| `titleIcon` | or `shareFlag` | `data-country` | Flag chip | Accent, dark / light | Shutters |
+|---|---|---|---|---|---|
+| `italy_icon.png` (default) | 🇮🇹 | `it` | Casa Nº *n* · Italia | `#E8875A` / `#B44E28` | `#3F6B4E` |
+| `spain_icon.png` | 🇪🇸 | `es` | Casa Nº *n* · España | `#EE8A5E` / `#A8321C` | `#7C5130` |
+| `portugal_icon.png` | 🇵🇹 | `pt` | Casa Nº *n* · Portugal | `#78A6E6` / `#1F5AA6` | `#2D5C8A` |
+| `france_icon.png` | 🇫🇷 | `fr` | Maison Nº *n* · France | `#AC9BE0` / `#62509E` | `#5F7F86` |
+| `greece_icon.png` | 🇬🇷 | `gr` | Spíti Nº *n* · Hellas | `#6AAEE0` / `#17649F` | `#1F5FA0` |
+| `finland_icon.png` | 🇫🇮 | `fi` | Talo Nº *n* · Suomi | `#86B4EC` / `#1D4F91` | `#7A5A3E` |
+
+`🇮🇪` (the default joke flag) maps to nothing on purpose, so those houses stay Italian.
+
+**The house number** *n* is the house's position among all scheduled houses, oldest first:
+
+```
+n = 1 + (number of folders named as a real DD_MM_YY date that are earlier than this one)
+```
+
+So the first house (`03_06_26`) is Nº 1 and `01_11_26` is Nº 147. Skipped days don't count.
+Adding a house on an earlier, previously empty date moves every later number up by one. A folder
+whose name isn't a date has no number and its chip reads "Casa · Italia".
+
+To add a country: one `[data-country="xx"]` line in `src/styles/tokens.css` (dark accent ≥ 4.5:1
+on `#121A26`; light accent ≥ 4.5:1 on `#FAF3E6` and under `#FFFDF8` text), one entry in `COUNTRY`
+and one in each lookup table in `src/theme/country.ts`.
+
+### The price-verdict sheet (optional, per property)
+
+Set `"priceVerdict": true` in a property's `config.json` and pressing Share on that house first
+opens a bottom sheet: a thumbnail of the first photo, the price and the place, the question
+*"Steal, fair or rip-off?"*, and three tiles — **Steal** / **Fair** / **Rip-off**. A vote is
+appended to the share text as a `🧾 My verdict: ||…||` line (an opinion only — never the euro
+amount — and the verdict sits inside `||…||` Discord/Telegram spoiler marks so it doesn't hint at
+the price), remembered forever for that house, and recorded in the `verdict` column of the
+analytics `Results` row (the Google Apps Script needs that column added on the sheet side).
+"Skip and copy result", a tap outside the sheet, Escape or dragging it down still copies the
+share text, just without a verdict — and isn't remembered, so the question returns on every Share
+until the player votes. Omit the flag and nothing changes.
+
+The place under the price is read from the first fact (`"Located in Lerici"` → `Lerici`,
+`"Located near Rome"` → `Near Rome`); a config can set an explicit `"place"` instead. If the
+first fact isn't a location and there is no `place`, the line is left out.
+
+If the browser refuses to copy (no clipboard access), a "Copy your result" sheet opens with the
+text selected instead of failing silently.
+
+### Look and theming
+
+Every colour, size, layer and easing is a CSS variable in **`src/styles/tokens.css`** (the single
+source of truth); the components in `src/styles/app.css` only ever use those variables, and
+Tailwind's theme (`tailwind.config.js`) maps onto them. Three attributes on `<html>` pick the
+values:
+
+| Attribute | Values | Set by |
+|---|---|---|
+| `data-theme` | `dark` (default for everyone) · `light` | the sun/moon button; saved as `gmc-theme`; an inline script in `index.html` applies it before the CSS, so there is no flash |
+| `data-country` | `it` · `es` · `pt` · `fr` · `gr` · `fi` | the house's config (table above) |
+| `data-season` | `halloween` | the house's date (below) |
+
+Fonts are self-hosted in `public/fonts/` (Fraunces for headings, Manrope for everything else).
+
+**Seasons** (`src/theme/season.tsx`) are a token block (`[data-season="…"]` in `tokens.css`) plus
+optional extras listed as data in `SEASONS`: a title font, a glyph that replaces the clue
+magnifier, confetti and loss-rain glyphs, a photo flicker, a map pin and decoration layers. While
+a season is active the page is dark-only and the theme toggle is hidden. Halloween is the only
+season so far. A house wears a season when **both** hold:
+
+```
+firstDay <= house date <= lastDay      (HALLOWEEN_FIRST_DAY = 27_10_26, HALLOWEEN_LAST_DAY = 31_10_26)
+live puzzle day <= lastDay             (so it is gone everywhere from the 1 November 10:00 reset)
+```
+
+**Motion** values live next to what they move: CSS transitions and keyframes in `app.css`, the
+end-of-game sequence at the top of `src/Game.tsx`. The ones a human tends to tune:
+
+| Constant | Value | What |
+|---|---|---|
+| `FORM_LEAVE_MS` | 180 ms | price field fades out before the result card rises |
+| `UNUSED_FADE_MS` | 2000 ms | after a win, unused tries go quiet |
+| `AUTOPLAY_START_MS` | 4000 ms | after the game ends, the photo carousel starts |
+| `AUTOPLAY_EVERY_MS` | 5000 ms | one photo per step; any manual navigation restarts the window |
+| `COPIED_MS` | 2500 ms | "Copied!" and the toast |
+| `CASCADE_MS` (`CluesPanel.tsx`) | 450 ms | gap between the remaining clues opening at game end |
+| `VOTE_HOLD_MS` (`Sheets.tsx`) | 500 ms | chosen verdict tile is shown before the sheet closes |
+
+Everything honours the OS "reduce motion" setting: no confetti, rain, count-up, slides or
+carousel autoplay; colour and opacity changes stay.
 
 ### Other admin settings (`src/admin.ts`)
 
-- `APP_TITLE`, `MAX_TRIES`, `TOLERANCE`
+- `APP_TITLE`, `MAX_TRIES`, `TOLERANCE`, `FAR_THRESHOLD`
+- `MIN_GUESS` — a guess below this (€10,000) is treated as a typo and costs no try. It is a fixed
+  floor, never derived from the price. Lower it before scheduling a house under about €11,000.
+- `ADS_ENABLED` — the two reserved ad slots (300×250 under the map, 320×50 pinned to the bottom).
+  They are placeholders with no ad tag behind them, so this is `false`: nothing renders and no
+  space is reserved. `VITE_ADS_ENABLED=1 npm run dev` shows them for a layout check.
 - `RESET_HOUR` / `RESET_TIME_ZONE` — the daily reset time/zone
 - `OVERRIDE_SLUG` — force a specific property regardless of date (testing only); leave `null`
   for normal date-based scheduling

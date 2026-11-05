@@ -31,7 +31,7 @@ import sharp from 'sharp';
 const run = promisify(execFile);
 
 const QUALITY = 80;
-const MAX_WIDTH = 1280; // covers the zoom/lightbox view; inline is only ~448px
+const MAX_WIDTH = 1280; // covers the full-screen zoom (up to 900px wide); inline is only ~400px
 
 // ── Animated-webp (video) settings ──────────────────────────────────────────────────────
 // Every frame is a full image, so these trade smoothness and size far more aggressively
