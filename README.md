@@ -374,7 +374,9 @@ carousel autoplay; colour and opacity changes stay.
   floor, never derived from the price. Lower it before scheduling a house under about €11,000.
 - `ADS_ENABLED` — the two reserved ad slots (300×250 under the map, 320×50 pinned to the bottom).
   They are placeholders with no ad tag behind them, so this is `false`: nothing renders and no
-  space is reserved. `VITE_ADS_ENABLED=1 npm run dev` shows them for a layout check.
+  space is reserved. To see them for a layout check, set `MANUAL_ADS_ENABLED = true` in
+  `src/admin.ts` (don't commit it), or set the environment variable `VITE_ADS_ENABLED=1` for one
+  run (PowerShell: `$env:VITE_ADS_ENABLED='1'; npm run dev`).
 - `RESET_HOUR` / `RESET_TIME_ZONE` — the daily reset time/zone
 - `OVERRIDE_SLUG` — force a specific property regardless of date (testing only); leave `null`
   for normal date-based scheduling

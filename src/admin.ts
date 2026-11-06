@@ -60,7 +60,8 @@ export const MIN_GUESS = 10_000;
 // Two reserved slots: a 300×250 box under the map and a 320×50 anchor bar pinned to the bottom
 // of the screen. They are placeholders — no ad tag is wired up yet — so this stays false until
 // real tags exist: with it off neither slot renders and no bottom padding is reserved.
-// (VITE_ADS_ENABLED=1 turns them on for a local run, to check the layout with the space taken.)
+// To check the layout with the space taken: flip MANUAL_ADS_ENABLED for a local run (don't
+// commit it), or set the environment variable VITE_ADS_ENABLED=1.
 const MANUAL_ADS_ENABLED = false;
 export const ADS_ENABLED: boolean =
   MANUAL_ADS_ENABLED || (import.meta.env.VITE_ADS_ENABLED as string | undefined) === '1';

@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm install
 npm run dev          # Vite dev server at http://localhost:5173
-                     # VITE_ADS_ENABLED=1 npm run dev shows the two reserved ad slots (off by default)
+                     # (env VITE_ADS_ENABLED=1 shows the two reserved ad slots, which are off by default)
 npm run build        # tsc --noEmit type-check, then vite build -> ./dist
 npm run preview      # serve the production ./dist build locally
 npm run images:webp  # convert property photo-*.png -> .webp and photo-*.mp4 -> animated .webp, in place
