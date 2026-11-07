@@ -16,10 +16,12 @@ export interface PropertyData {
   // scripts/fetch-photos.mjs (the run-fetch.bat) at authoring time; ignored by the app.
   prop_pictures?: Record<string, number>;
   // ── Per-date theming (for covertly swapping in a non-Italian property) ──────────────────
-  // Filename (in public/) of the icon shown next to the title, e.g. 'finland_icon.png'.
-  // Defaults to DEFAULT_TITLE_ICON ('italy_icon.png') when omitted.
+  // Names the house's country as '<country>_icon.png', e.g. 'finland_icon.png'. It drives the
+  // flag chip ("Talo Nº 12 · Suomi"), the accent colour, the shutters and the confetti — see
+  // src/theme/country.ts. Defaults to DEFAULT_TITLE_ICON ('italy_icon.png') when omitted.
   titleIcon?: string;
-  // Link the title icon points to. Defaults to DEFAULT_TITLE_ICON_URL when omitted.
+  // The "bonus link" behind the flag chip and the footer. Defaults to DEFAULT_TITLE_ICON_URL
+  // when omitted; set it to "" for a house with no bonus link.
   titleIconUrl?: string;
   // The flag emoji used in the share text (single unicode emoji, e.g. '🇫🇮').
   // Defaults to DEFAULT_SHARE_FLAG ('🇮🇪') when omitted.
@@ -27,6 +29,9 @@ export interface PropertyData {
   // Opt-in: after pressing Share, ask the player whether the sold price was a steal / fair /
   // rip-off before the text is copied. The vote joins the share text and analytics.
   priceVerdict?: boolean;
+  // Optional place name shown on the verdict sheet under the price. When omitted it is read
+  // from the first fact ("Located in Lerici" → "Lerici"), so no existing config needs it.
+  place?: string;
 }
 
 // A fully resolved property: the config.json data plus the slug (folder name) and the
@@ -51,7 +56,7 @@ export type GameStatus = 'playing' | 'won' | 'lost';
 
 // The player's opinion of the sold price, asked (when the property opts in via
 // `priceVerdict`) every time they press Share until they actually vote. Only a real
-// vote is saved; skipping/dismissing the popup is not remembered.
+// vote is saved; skipping/dismissing the verdict sheet is not remembered.
 export type Verdict = 'steal' | 'fair' | 'ripoff';
 
 export interface SavedGame {

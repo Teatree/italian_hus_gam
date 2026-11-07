@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.9621489, 8.6882175],
+  "mapZoom": 12,
+  "soldPrice": 265000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35887185/",
+  "prop_pictures": {
+    "1": 3,
+    "2": 5,
+    "3": 6,
+    "4": 10,
+    "5": 12,
+    "6": 8
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Porto Valtravaglia",
+    "2 floors",
+    "104 m² of living space",
+    "3 rooms 2 baths",
+    "A view to 'Kill for'",
+    "40m to Varese by Car"
+  ],
+  "priceVerdict": true
+}

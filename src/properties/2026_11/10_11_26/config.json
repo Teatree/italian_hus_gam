@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.9764511, 9.1996647],
+  "mapZoom": 12,
+  "soldPrice": 670000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/28651481/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 7,
+    "3": 15,
+    "4": 25,
+    "5": 30,
+    "6": 24
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Tremezzina",
+    "3 rooms 1 baths",
+    "40m to Como by Car",
+    "Swimming Pool",
+    "120 m² of living space",
+    "Lake Como init"
+  ],
+  "priceVerdict": true
+}

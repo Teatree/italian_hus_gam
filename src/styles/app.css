@@ -1,0 +1,2210 @@
+/* ==========================================================================
+   Guess My Casa — component styles
+   Ported from the approved reference prototype. Every colour comes from a token in
+   tokens.css (the only raw values are the fixed inks used over photos and in the zoom,
+   which are the same in both themes by design). Motion values are the spec: see
+   REDESIGN-NOTES.md for where each one comes from.
+   ========================================================================== */
+
+html {
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  line-height: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+button:disabled {
+  cursor: default;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+[hidden] {
+  display: none !important;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Theme switch: colours cross-fade only while .theming is on <html> (added for 420ms by JS). */
+.theming,
+.theming *,
+.theming *::before,
+.theming *::after {
+  transition:
+    background-color 280ms var(--ease-in-out),
+    color 280ms var(--ease-in-out),
+    border-color 280ms var(--ease-in-out),
+    box-shadow 280ms var(--ease-in-out),
+    fill 280ms var(--ease-in-out),
+    stroke 280ms var(--ease-in-out) !important;
+}
+/* First paint and restored games: no transitions or animations at all. */
+.no-anim,
+.no-anim *,
+.no-anim *::before,
+.no-anim *::after {
+  transition: none !important;
+  animation: none !important;
+}
+
+.app {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+/* Room for the sticky anchor ad — only reserved while ads are switched on. */
+.app.has-anchor {
+  padding-bottom: calc(var(--anchor-h) + env(safe-area-inset-bottom));
+}
+
+/* ---------------- Past-day banner (sticky, edge to edge) ---------------- */
+.pastday {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 8px var(--gutter);
+  padding-top: calc(8px + env(safe-area-inset-top));
+  background: var(--accent);
+  color: var(--on-accent);
+  animation: slideDown var(--dur-m) var(--ease-out) both;
+}
+.pastday svg {
+  flex: none;
+}
+.pastday__text {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 800;
+}
+.pastday__btn {
+  flex: none;
+  height: var(--tap);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  background: var(--on-accent);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform var(--dur-xs) var(--ease-out);
+}
+.pastday__btn:active {
+  transform: scale(0.96);
+}
+
+/* ---------------- Awning (full-bleed, pure CSS, repeats at any width) ---------------- */
+.awning {
+  height: calc(var(--awning-h) + var(--scallop-h));
+}
+.awning__stripes {
+  height: var(--awning-h);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--accent) 0 var(--awning-stripe),
+    var(--stripe) var(--awning-stripe) calc(var(--awning-stripe) * 2)
+  );
+}
+.awning__scallops {
+  height: var(--scallop-h);
+  background:
+    radial-gradient(circle at 13px 0, var(--accent) 12.5px, transparent 13px) 0 0 / 52px 13px repeat-x,
+    radial-gradient(circle at 39px 0, var(--stripe) 12.5px, transparent 13px) 0 0 / 52px 13px repeat-x;
+}
+
+/* The column is its own stacking context: Leaflet's panes (z-index up to 1000) stay inside it,
+   and every overlay is rendered outside it, in a portal on <body>. */
+.column {
+  position: relative;
+  z-index: 1;
+  max-width: var(--column-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ---------------- Header ---------------- */
+.header {
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.header__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.title {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: 29px;
+  letter-spacing: -0.01em;
+  font-variation-settings: 'opsz' 72;
+  white-space: nowrap;
+}
+.icon-btn {
+  position: relative;
+  width: var(--tap);
+  height: var(--tap);
+  flex: none;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: var(--raised);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  transition: transform var(--dur-xs) var(--ease-out);
+}
+.icon-btn:active {
+  transform: scale(0.92);
+}
+.icon-btn--q {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+}
+.icon-btn svg {
+  grid-area: 1 / 1;
+  transition:
+    transform var(--dur-m) var(--ease-out),
+    opacity var(--dur-s) var(--ease-in-out);
+}
+[data-theme='dark'] .i-moon,
+[data-theme='light'] .i-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 32px;
+  padding: 6px 12px 6px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform var(--dur-xs) var(--ease-out);
+}
+/* The chip is 32px tall by design; this stretches its tap area to 44px without moving anything. */
+a.chip {
+  position: relative;
+}
+a.chip::after {
+  content: '';
+  position: absolute;
+  inset: -6px 0;
+}
+a.chip:active {
+  transform: scale(0.97);
+}
+.chip__text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.flag {
+  width: 20px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--flag);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+  flex: none;
+}
+.meta__right {
+  flex: none;
+  white-space: nowrap;
+}
+.meta__right b {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* ---------------- Game column ---------------- */
+.game {
+  padding-top: var(--gap);
+  /* Air under the map: half the map's height. */
+  padding-bottom: 117px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* Photo.
+   The figure is unclipped so the clue pill can sit above it and hang past its left edge.
+   The photo itself is shifted 6px right (and is 6px narrower); it keeps its 4:3 shape. */
+.photo {
+  position: relative;
+  margin: 30px 0 0 6px;
+}
+.photo__frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-photo);
+  overflow: hidden;
+  box-shadow: var(--photo-shadow);
+  background: var(--raised);
+}
+.photo__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  cursor: zoom-in;
+  opacity: 0;
+  /* Only the photo on show takes taps; the faded-out layer underneath it never does. */
+  pointer-events: none;
+  transition: opacity var(--fade, 400ms) var(--ease-in-out);
+}
+.photo__img.is-front {
+  opacity: 1;
+  pointer-events: auto;
+}
+.photo__img.is-entering {
+  transform: scale(1.02);
+  transition:
+    opacity var(--fade, 400ms) var(--ease-in-out),
+    transform 1200ms var(--ease-out);
+}
+.photo__img.is-front.is-entering {
+  transform: scale(1);
+}
+/* A photo that failed to load is never shown as a broken-image icon. */
+.photo__img.is-broken {
+  visibility: hidden;
+}
+.photo__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--dim);
+  cursor: zoom-in;
+}
+
+/* Clue pill: a proper UI element above the photo.
+   Its bottom ~12px overlaps the photo's top edge; it starts 12px left of the photo's left
+   edge. Same surface as the Clues drawer; a 3px ring in --bg separates it from the photo. */
+.clue-tag {
+  position: absolute;
+  top: -28px;
+  left: -12px;
+  z-index: 3;
+  max-width: min(300px, calc(100% - 12px));
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 8px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    0 8px 22px rgba(0, 0, 0, 0.38),
+    0 0 0 3px var(--bg);
+}
+[data-theme='light'] .clue-tag {
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    0 8px 22px rgba(58, 42, 32, 0.22),
+    0 0 0 3px var(--bg);
+}
+.clue-tag__text {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  transition:
+    opacity 140ms var(--ease-in),
+    transform 140ms var(--ease-in);
+}
+.clue-tag__text.is-out {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+/* A new clue after a wrong guess: the pill slides in from the left and the magnifier gives
+   a little "searching" wiggle. */
+.clue-tag.is-new {
+  animation: tagIn 520ms var(--ease-out) both;
+}
+.clue-tag.is-new .glass,
+.clue-tag.is-new .clue-glyph {
+  animation: glassWiggle 720ms var(--ease-in-out) 220ms both;
+}
+@keyframes tagIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes glassWiggle {
+  0%,
+  100% {
+    transform: rotate(0) scale(1);
+  }
+  25% {
+    transform: rotate(-16deg) scale(1.08);
+  }
+  55% {
+    transform: rotate(11deg) scale(1.04);
+  }
+  80% {
+    transform: rotate(-5deg);
+  }
+}
+
+/* The clue symbol: a drawn magnifying glass (clue pill, Clues bar, every unlocked tile). */
+.glass {
+  flex: none;
+  color: var(--accent);
+  transform-origin: 41% 41%;
+}
+/* Seasons can swap the magnifier for a glyph (the Halloween candle). */
+.clue-glyph {
+  flex: none;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+}
+
+.photo-btn {
+  position: absolute;
+  z-index: 2;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: var(--overlay-ink);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  transition:
+    opacity 800ms var(--ease-out),
+    transform var(--dur-xs) var(--ease-out);
+}
+.photo-btn:active {
+  transform: scale(0.92);
+}
+/* Small on purpose: the whole photo opens the zoom too, so this is only a signpost. */
+.photo__zoom {
+  right: 8px;
+  bottom: 8px;
+  width: 30px;
+  height: 30px;
+  cursor: zoom-in;
+}
+/* Only the zoom has arrows (see .zoom .photo__nav); the page photo is swiped, or steered
+   with the try circles and clue tiles. */
+.photo__nav {
+  top: calc(50% - 22px);
+  opacity: 0;
+  pointer-events: none;
+}
+.photo__nav--prev {
+  left: 10px;
+}
+.photo__nav--next {
+  right: 10px;
+}
+
+/* ---------------- Try circles ---------------- */
+.tries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 4px;
+}
+.try {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.try__circle {
+  position: relative;
+  width: var(--circle);
+  height: var(--circle);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 16px;
+  border: 1.5px dashed var(--lock-ring);
+  color: var(--dim);
+  background: transparent;
+  transition:
+    background-color 450ms var(--ease-in-out),
+    border-color 450ms var(--ease-in-out),
+    color 450ms var(--ease-in-out),
+    box-shadow 300ms var(--ease-out),
+    opacity 600ms var(--ease-in-out),
+    transform 200ms var(--ease-out);
+}
+.try__circle > * {
+  grid-area: 1 / 1;
+}
+.try__arrow,
+.try__check {
+  opacity: 0;
+  transform: scale(0.4);
+}
+.try__num {
+  transition: opacity 150ms var(--ease-in);
+}
+.try__label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dim);
+  white-space: nowrap;
+  min-height: 18px;
+  transition: color 300ms var(--ease-in-out);
+}
+.try:not(:disabled):active .try__circle {
+  transform: scale(0.93);
+}
+
+.try[data-state='now'] .try__circle {
+  border: none;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 18px;
+  box-shadow:
+    0 0 0 4px var(--accent-halo),
+    0 0 22px var(--accent-glow);
+}
+[data-theme='light'] .try[data-state='now'] .try__circle {
+  box-shadow: 0 6px 14px var(--accent-glow);
+}
+.try[data-state='now'] .try__label {
+  color: var(--accent);
+}
+.try[data-state='wrong'] .try__circle {
+  border: 2px solid var(--miss);
+  background: var(--miss-bg);
+  color: var(--miss);
+}
+.try[data-state='wrong'] .try__num,
+.try[data-state='right'] .try__num {
+  opacity: 0;
+}
+.try[data-state='wrong'] .try__arrow {
+  opacity: 1;
+  transform: none;
+}
+.try[data-state='wrong'] .try__label {
+  color: var(--text);
+}
+.try[data-state='right'] .try__circle {
+  border: 2px solid var(--ok);
+  background: var(--ok);
+  color: var(--on-ok);
+}
+.try[data-state='right'] .try__check {
+  opacity: 1;
+  transform: none;
+}
+.try[data-state='right'] .try__label {
+  color: var(--ok);
+  font-weight: 800;
+}
+.try[data-state='unused'] .try__circle {
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  opacity: 0.7;
+}
+.try.is-ringed .try__circle {
+  box-shadow:
+    0 0 0 3px var(--bg),
+    0 0 0 5px var(--text);
+}
+.try.is-ringed[data-state='now'] .try__circle {
+  box-shadow:
+    0 0 0 4px var(--accent-halo),
+    0 0 22px var(--accent-glow),
+    0 0 0 3px var(--bg),
+    0 0 0 5px var(--text);
+}
+
+/* A guess landing: the whole badge — already in its final colours, arrow or check inside —
+   drops from above and snaps into place, and the value appears under it as it hits. A way-off
+   guess (double arrow) is a slap: it comes from further, hits harder, rattles, throws off a
+   shockwave ring and jolts the whole row. */
+.try.pop .try__circle,
+.try.pop .try__num {
+  transition: none;
+}
+.try.pop .try__circle {
+  animation: slam 380ms linear both;
+}
+.try.pop .try__label {
+  animation: labelUp 260ms var(--ease-out) 170ms both;
+}
+.try.pop-far .try__circle {
+  animation: slap 640ms linear both;
+  z-index: 1;
+}
+.try.pop-far .try__circle::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 3px solid var(--miss);
+  pointer-events: none;
+  animation: shock 520ms var(--ease-out) 150ms both;
+}
+.try.pop-far .try__label {
+  animation: labelUp 260ms var(--ease-out) 190ms both;
+}
+.tries.is-slapped {
+  animation: jolt 380ms linear 150ms both;
+}
+.try.now-in .try__circle {
+  animation: nowIn 520ms var(--ease-spring) 250ms both;
+}
+.try.is-last[data-state='now'] .try__circle {
+  animation: breathe 2.2s var(--ease-in-out) 800ms infinite;
+}
+.try.is-last.now-in[data-state='now'] .try__circle {
+  animation:
+    nowIn 520ms var(--ease-spring) 250ms both,
+    breathe 2.2s var(--ease-in-out) 800ms infinite;
+}
+@keyframes slam {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px) scale(1.7);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.35);
+  }
+  42% {
+    opacity: 1;
+    transform: translateY(3px) scale(0.86);
+    animation-timing-function: var(--ease-out);
+  }
+  72% {
+    transform: translateY(-1px) scale(1.07);
+    animation-timing-function: var(--ease-in-out);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes slap {
+  0% {
+    opacity: 0;
+    transform: translateY(-52px) scale(2.7) rotate(-20deg);
+    animation-timing-function: cubic-bezier(0.7, 0, 0.95, 0.3);
+  }
+  24% {
+    opacity: 1;
+    transform: translateY(5px) scale(0.74) rotate(5deg);
+    animation-timing-function: var(--ease-out);
+  }
+  38% {
+    transform: translate(-6px, -2px) scale(1.18) rotate(-9deg);
+  }
+  52% {
+    transform: translate(6px, 0) scale(0.95) rotate(7deg);
+  }
+  66% {
+    transform: translate(-4px, 0) scale(1.04) rotate(-4deg);
+  }
+  82% {
+    transform: translate(2px, 0) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes shock {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+@keyframes jolt {
+  0%,
+  100% {
+    transform: none;
+  }
+  20% {
+    transform: translateY(4px);
+  }
+  45% {
+    transform: translateY(-2px);
+  }
+  70% {
+    transform: translateY(1px);
+  }
+}
+@keyframes labelUp {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes nowIn {
+  0% {
+    transform: scale(0.82);
+  }
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 4px var(--accent-halo),
+      0 0 18px var(--accent-glow);
+  }
+  50% {
+    box-shadow:
+      0 0 0 7px var(--accent-halo),
+      0 0 30px var(--accent-glow);
+  }
+}
+
+/* ---------------- Guess form ---------------- */
+.guess {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition:
+    opacity 180ms var(--ease-in),
+    transform 180ms var(--ease-in);
+}
+.guess.is-leaving {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+.field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--control-h);
+  padding: 0 6px 0 22px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1.5px var(--line);
+  transition: box-shadow var(--dur-s) var(--ease-out);
+}
+.field:focus-within,
+.field.has-value {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+.field.has-error {
+  box-shadow: inset 0 0 0 2px var(--miss);
+}
+.field.shake {
+  animation: shake 340ms var(--ease-out);
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: none;
+  }
+  20% {
+    transform: translateX(-7px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+.field__euro {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.field__input {
+  flex: 1;
+  min-width: 0;
+  padding: 1px 2px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.field__input::placeholder {
+  color: var(--dim);
+  font-weight: 600;
+  opacity: 1;
+}
+.field__btn {
+  flex: none;
+  height: var(--control-inner-h);
+  padding: 0 22px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 800;
+  font-size: 16px;
+  transition:
+    background-color var(--dur-s) var(--ease-in-out),
+    color var(--dur-s) var(--ease-in-out),
+    transform var(--dur-xs) var(--ease-out);
+}
+.field__btn:disabled {
+  background: var(--raised);
+  color: var(--dim);
+}
+.field__btn:not(:disabled):active {
+  transform: scale(0.95);
+}
+.helper {
+  margin: 0;
+  min-height: 18px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.helper svg {
+  flex: none;
+}
+.helper.is-error {
+  color: var(--miss);
+  font-weight: 700;
+  animation: fadeIn var(--dur-s) var(--ease-out);
+}
+.helper.is-last {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+/* ---------------- Result card ---------------- */
+.result {
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  padding: 18px 18px 14px;
+  box-shadow: inset 0 0 0 1px var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+.result.is-entering {
+  animation: rise 460ms var(--ease-out) both;
+}
+.result.is-entering .result__title {
+  animation: stamp 520ms var(--ease-spring) 120ms both;
+}
+.result.is-entering .result__share {
+  animation: rise 380ms var(--ease-out) 380ms both;
+}
+.result.is-loss.is-entering .result__title {
+  animation:
+    stamp 520ms var(--ease-spring) 120ms both,
+    wobble 520ms var(--ease-in-out) 640ms;
+}
+.result__title {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 31px;
+  font-variation-settings: 'opsz' 72;
+}
+.result.is-win .result__title {
+  color: var(--ok);
+}
+.result.is-exact .result__title {
+  color: var(--accent);
+}
+.result.is-loss .result__title {
+  color: var(--miss);
+}
+.result__label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.result__price {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.result__line {
+  font-size: 15px;
+  color: var(--muted);
+}
+.result__share {
+  margin-top: 14px;
+  width: 100%;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 17px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition:
+    background-color 250ms var(--ease-in-out),
+    color 250ms var(--ease-in-out),
+    transform var(--dur-xs) var(--ease-out);
+}
+.result__share:active {
+  transform: scale(0.97);
+}
+.result__share.is-copied {
+  background: var(--ok);
+  color: var(--on-ok);
+}
+.result__share .i-check {
+  display: none;
+}
+.result__share.is-copied .i-check {
+  display: block;
+  animation: pop 320ms var(--ease-spring) both;
+}
+.result__share.is-copied .i-share {
+  display: none;
+}
+.result__row {
+  margin-top: 6px;
+  width: 100%;
+  min-height: var(--tap);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--muted);
+}
+.result__row a {
+  height: var(--tap);
+  display: flex;
+  align-items: center;
+  color: var(--accent);
+  font-weight: 800;
+  text-decoration: none;
+}
+.result__row b {
+  color: var(--text);
+  font-weight: 700;
+}
+@keyframes rise {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes stamp {
+  0% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes wobble {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+  75% {
+    transform: rotate(-1.5deg);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* ---------------- Clues (collapsible) ---------------- */
+.clues {
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+  overflow: hidden;
+}
+.clues__bar {
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px 0 14px;
+  border: none;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+}
+.clues__title {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 650;
+}
+.clues__count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.clues__dots {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+.clues__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lock-ring);
+  transition: background-color 300ms var(--ease-in-out);
+}
+.clues__dot.is-on {
+  background: var(--accent);
+}
+.clues__dot.pop {
+  animation: dotPop 420ms var(--ease-spring);
+}
+@keyframes dotPop {
+  0% {
+    transform: scale(0.4);
+  }
+  60% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.clues__chev {
+  flex: none;
+  transition: transform var(--dur-m) var(--ease-out);
+}
+.clues.is-open .clues__chev {
+  transform: rotate(180deg);
+}
+.clues__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-m) var(--ease-out);
+}
+.clues.is-open .clues__panel {
+  grid-template-rows: 1fr;
+}
+.clues__inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.clues__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 10px 10px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity var(--dur-s) var(--ease-out),
+    transform var(--dur-m) var(--ease-out);
+}
+.clues.is-open .clues__grid {
+  opacity: 1;
+  transform: none;
+  transition-delay: 60ms;
+}
+
+.tile {
+  position: relative;
+  height: 78px;
+  border-radius: var(--radius-tile);
+  overflow: hidden;
+}
+.tile__content {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: var(--radius-tile);
+  background: var(--raised);
+  color: var(--text);
+  padding: 9px 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3px;
+  text-align: left;
+  opacity: 0;
+  transition:
+    opacity 300ms var(--ease-out) 260ms,
+    box-shadow var(--dur-s) var(--ease-out);
+}
+.tile.is-open .tile__content {
+  opacity: 1;
+}
+.tile.is-sel .tile__content {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+.tile__content:focus-visible {
+  outline-offset: -2px;
+}
+.tile__num {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+.tile__label {
+  flex: 1;
+}
+.tile__new {
+  display: none;
+}
+.tile.is-new .tile__new {
+  display: inline;
+}
+/* NEW fades in after the shutters have swung clear — only on a tile opened live. */
+.tile.is-new.is-fresh .tile__new {
+  animation: fadeIn 300ms var(--ease-out) 500ms both;
+}
+.tile__text {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.shutter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  perspective: 520px;
+  pointer-events: none;
+}
+.shutter__leaf {
+  flex: 1;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0 2px,
+      transparent 2px 8px,
+      rgba(0, 0, 0, 0.28) 8px 10px
+    ),
+    var(--shutter);
+  transition:
+    transform 640ms var(--ease-in-out),
+    opacity 200ms linear 480ms;
+  backface-visibility: hidden;
+}
+.shutter__leaf--l {
+  transform-origin: 0 50%;
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.35);
+}
+.shutter__leaf--r {
+  transform-origin: 100% 50%;
+  box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.35);
+}
+.shutter__lock {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: var(--radius-pill);
+  background: rgba(10, 10, 10, 0.6);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: opacity 150ms var(--ease-in);
+}
+.tile.is-open .shutter__lock {
+  opacity: 0;
+}
+.tile.is-open .shutter__leaf--l {
+  transform: rotateY(-112deg);
+  opacity: 0;
+}
+.tile.is-open .shutter__leaf--r {
+  transform: rotateY(112deg);
+  opacity: 0;
+}
+/* While the panel is collapsed a tile that unlocks just switches to open, with no animation,
+   so it is ready the next time the panel opens. */
+.clues:not(.is-open) .tile__content,
+.clues:not(.is-open) .shutter__leaf,
+.clues:not(.is-open) .shutter__lock {
+  transition: none;
+}
+
+/* ---------------- Map ---------------- */
+.map {
+  margin: 0;
+}
+.map__frame {
+  position: relative;
+  height: 234px;
+  border-radius: var(--radius-photo);
+  overflow: hidden;
+  background: var(--raised);
+  isolation: isolate;
+}
+.map__frame .leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: var(--raised);
+  font-family: var(--font-ui);
+  outline-offset: -2px;
+}
+/* The dark-mode filter goes on the tiles only — never on the pin or the controls. */
+.map__frame .leaflet-tile-pane {
+  filter: var(--map-filter);
+}
+.map__frame .leaflet-bar {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+.map__frame .leaflet-bar a,
+.map__frame .leaflet-bar a:hover,
+.map__frame .leaflet-bar a.leaflet-disabled {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  border: none;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 20px;
+  font-weight: 700;
+  text-indent: 0;
+}
+.map__frame .leaflet-bar a:first-child {
+  border-radius: 10px 10px 0 0;
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+.map__frame .leaflet-bar a:last-child {
+  border-radius: 0 0 10px 10px;
+}
+.map__frame .leaflet-bar a.leaflet-disabled {
+  color: var(--dim);
+}
+/* The pin is a divIcon: Leaflet's white box is dropped and the teardrop takes its colours
+   straight from the tokens, so it follows the theme and the country with no JS. */
+.gmc-pin {
+  background: none;
+  border: none;
+}
+.gmc-pin svg {
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
+}
+.gmc-pin__body {
+  fill: var(--accent);
+}
+.gmc-pin__dot {
+  fill: var(--bg);
+}
+.gmc-pin--season svg {
+  filter: drop-shadow(0 0 6px var(--accent-glow)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.6));
+}
+
+/* ---------------- Ads ---------------- */
+.ad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.ad__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--dim);
+}
+.ad__slot {
+  width: 300px;
+  max-width: 100%;
+  height: 250px;
+  border-radius: 14px;
+  background: var(--raised);
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 15px;
+}
+.anchor-ad {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-anchor);
+  height: calc(var(--anchor-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--anchor-bg);
+  box-shadow: 0 -1px 0 var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.anchor-ad__slot {
+  width: 320px;
+  max-width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  background: var(--raised);
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+}
+
+
+/* ---------------- No casa today ---------------- */
+.no-casa {
+  margin-top: 28px;
+  margin-bottom: 28px;
+  padding: 30px 22px 26px;
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.no-casa__shutters {
+  width: 150px;
+  height: 104px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  box-shadow: 0 0 0 6px var(--raised);
+}
+.no-casa__shutters span {
+  flex: 1;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0 2px,
+      transparent 2px 8px,
+      rgba(0, 0, 0, 0.28) 8px 10px
+    ),
+    var(--shutter);
+}
+.no-casa__shutters span:first-child {
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.35);
+}
+.no-casa h2 {
+  margin: 14px 0 0;
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: 28px;
+}
+.no-casa p {
+  margin: 0;
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.no-casa__clock {
+  margin-top: 6px;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.no-casa a {
+  margin-top: 8px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform var(--dur-xs) var(--ease-out);
+}
+.no-casa a:active {
+  transform: scale(0.97);
+}
+
+/* ---------------- FX layers ---------------- */
+.rain {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-fx);
+  pointer-events: none;
+  overflow: hidden;
+  color: var(--miss);
+}
+.rain > * {
+  position: absolute;
+  top: -48px;
+  line-height: 1;
+  animation: fall var(--d, 1.8s) cubic-bezier(0.45, 0, 0.9, 0.6) forwards;
+}
+@keyframes fall {
+  from {
+    transform: translateY(0) rotate(var(--r0, 0deg));
+    opacity: 0.95;
+  }
+  to {
+    transform: translateY(calc(100vh + 80px)) rotate(var(--r1, 30deg));
+    opacity: 0.8;
+  }
+}
+
+/* ---------------- Toast ---------------- */
+.toast {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 0;
+  right: 0;
+  z-index: var(--z-toast);
+  width: fit-content;
+  max-width: calc(100vw - 24px);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transform: translateY(-160%);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 260ms var(--ease-out),
+    opacity 200ms var(--ease-out);
+}
+.toast svg {
+  flex: none;
+}
+.toast.is-shown {
+  transform: none;
+  opacity: 1;
+}
+.toast.is-hiding {
+  transition:
+    transform 200ms var(--ease-in),
+    opacity 200ms var(--ease-in);
+}
+
+/* ---------------- Scrim + sheets ---------------- */
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scrim);
+  background: var(--scrim);
+  opacity: 0;
+  transition: opacity var(--dur-s) var(--ease-out);
+}
+.scrim.is-shown {
+  opacity: 1;
+}
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-sheet);
+  margin: 0 auto;
+  max-width: var(--column-max);
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--surface);
+  color: var(--text);
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  padding: 10px 20px calc(22px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transform: translateY(100%);
+  transition: transform 360ms var(--ease-sheet);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+}
+/* The sheet itself can hold the focus (the verdict sheet opens that way); it needs no ring. */
+.sheet:focus {
+  outline: none;
+}
+.sheet.is-shown {
+  transform: translateY(var(--drag, 0px));
+}
+.sheet.is-dragging {
+  transition: none;
+}
+.sheet.is-closing {
+  transition: transform 240ms var(--ease-in);
+}
+.sheet__handle {
+  align-self: center;
+  width: 40px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--line);
+  margin-bottom: 2px;
+}
+.sheet__grab {
+  flex: none;
+  margin: -10px -20px 0;
+  padding: 10px 20px 4px;
+  display: flex;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+}
+.sheet h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: 25px;
+  font-variation-settings: 'opsz' 72;
+}
+.sheet__sub {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.btn-primary {
+  flex: none;
+  height: 56px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 17px;
+  font-weight: 800;
+  transition: transform var(--dur-xs) var(--ease-out);
+}
+.btn-primary:active {
+  transform: scale(0.97);
+}
+.btn-text {
+  flex: none;
+  height: var(--tap);
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.rules {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.rules li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.rules__badge {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--raised);
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+.verdict__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.verdict__thumb {
+  width: 92px;
+  height: 69px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex: none;
+  background: var(--raised);
+}
+.verdict__facts {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.verdict__label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.verdict__price {
+  font-size: 28px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.verdict__place {
+  font-size: 13px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.verdict__opts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.verdict__opt {
+  height: 96px;
+  padding: 0;
+  border: none;
+  border-radius: 18px;
+  background: var(--raised);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  white-space: nowrap;
+  transition:
+    transform 300ms var(--ease-spring),
+    opacity 300ms var(--ease-out),
+    background-color 200ms var(--ease-in-out),
+    color 200ms var(--ease-in-out);
+}
+.verdict__opt:active {
+  transform: scale(0.96);
+}
+.verdict__opt.is-chosen {
+  background: var(--accent);
+  color: var(--on-accent);
+  transform: scale(1.06);
+}
+.verdict__opt.is-dimmed {
+  opacity: 0.35;
+}
+.copy-box {
+  width: 100%;
+  min-height: 132px;
+  border: none;
+  border-radius: 14px;
+  padding: 12px;
+  background: var(--raised);
+  color: var(--text);
+  font: 600 14px/1.5 var(--font-ui);
+  resize: none;
+}
+
+/* ---------------- Zoom ---------------- */
+.zoom {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-zoom);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.zoom__bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out);
+}
+.zoom.is-shown .zoom__bg {
+  opacity: 1;
+}
+.zoom__stage {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  aspect-ratio: 4 / 3;
+  max-height: 78vh;
+  touch-action: pan-y;
+}
+.zoom__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  transform-origin: 0 0;
+}
+.zoom__img.is-flip {
+  transition:
+    transform 320ms var(--ease-out),
+    clip-path 320ms var(--ease-out);
+  will-change: transform;
+}
+/* Stepping to another photo inside the zoom: the old one fades and slides out, the new one
+   fades in. --dir is -1 (next) or 1 (previous). */
+.zoom__img.is-swipe-out {
+  transition:
+    transform 200ms var(--ease-in),
+    opacity 200ms var(--ease-in);
+  opacity: 0;
+  transform: translateX(calc(var(--dir, -1) * 18px));
+}
+.zoom__img.is-swipe-pre {
+  opacity: 0;
+  transform: translateX(calc(var(--dir, -1) * -18px));
+}
+.zoom__img.is-swipe-in {
+  transition:
+    transform 200ms var(--ease-out),
+    opacity 200ms var(--ease-out);
+}
+.zoom__img.is-broken {
+  visibility: hidden;
+}
+/* In the zoom the pill also sits above the photo, with no left overhang, and it is anchored
+   to the rendered image box (--box-left / --box-top), not to the letterboxed stage. */
+.zoom .clue-tag {
+  top: calc(var(--box-top, 0px) - 28px);
+  left: calc(var(--box-left, 0px) + 12px);
+  max-width: min(300px, calc(100% - 24px - var(--box-left, 0px)));
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    0 8px 22px rgba(0, 0, 0, 0.5);
+  transition: opacity 200ms var(--ease-out);
+}
+.zoom .photo-btn {
+  transition:
+    opacity 200ms var(--ease-out),
+    transform var(--dur-xs) var(--ease-out);
+}
+/* The zoom's own arrows: big, solid white, always there — during play too. */
+.zoom .photo__nav {
+  width: 52px;
+  height: 52px;
+  top: calc(50% - 26px);
+  opacity: 1;
+  pointer-events: auto;
+  background: #ffffff;
+  color: #10141c;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
+}
+/* Nowhere to go that way yet: the next arrow turns into a quiet padlock (the photo after this
+   one is locked) and the previous arrow dims on the first photo. Both still take the tap,
+   which answers with the refusal. */
+.zoom .photo__nav.is-locked,
+.zoom .photo__nav.is-end {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  box-shadow: none;
+}
+/* Refused: the photo lunges toward the locked side and rattles back. --dir is -1 when the
+   player asked for the next photo, 1 for the previous one. */
+.zoom__img.is-refuse {
+  animation: refuse 460ms var(--ease-out);
+}
+@keyframes refuse {
+  0% {
+    transform: none;
+  }
+  18% {
+    transform: translateX(calc(var(--dir, -1) * 26px));
+  }
+  40% {
+    transform: translateX(calc(var(--dir, -1) * -14px));
+  }
+  60% {
+    transform: translateX(calc(var(--dir, -1) * 9px));
+  }
+  80% {
+    transform: translateX(calc(var(--dir, -1) * -4px));
+  }
+  100% {
+    transform: none;
+  }
+}
+.zoom__locked {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 14px;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.82);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  animation: lockedNote 1500ms linear both;
+}
+@keyframes lockedNote {
+  0% {
+    opacity: 0;
+  }
+  8%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.zoom:not(.is-shown) .clue-tag,
+.zoom:not(.is-shown) .zoom__close,
+.zoom:not(.is-shown) .zoom__foot,
+.zoom:not(.is-shown) .photo-btn {
+  opacity: 0;
+}
+.zoom__close {
+  position: absolute;
+  top: calc(12px + env(safe-area-inset-top));
+  right: calc(12px + env(safe-area-inset-right));
+  z-index: 3;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  transition: opacity 200ms var(--ease-out);
+}
+.zoom__foot {
+  position: relative;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: opacity 200ms var(--ease-out);
+}
+.zoom__dots {
+  display: flex;
+  gap: 8px;
+}
+.zoom__dot {
+  height: 8px;
+  width: 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.16);
+  transition:
+    width 300ms var(--ease-out),
+    background-color 300ms var(--ease-in-out);
+}
+.zoom__dot.is-on {
+  background: rgba(255, 255, 255, 0.45);
+}
+.zoom__dot.is-sel {
+  width: 22px;
+  background: #ffffff;
+}
+.zoom__cap {
+  margin: 0;
+  padding: 0 16px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+  text-align: center;
+}
+
+/* ---------------- Season: Halloween effect layers ----------------
+   The palette itself is the [data-season="halloween"] token block in tokens.css. These are
+   the decorations layered on top, all behind the column and never clickable. */
+[data-season='halloween'] .title {
+  font-family: 'Creepster', var(--font-display);
+  font-weight: 400;
+  font-size: 34px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.season-decor {
+  position: relative;
+  height: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.cobweb {
+  display: block;
+  pointer-events: none;
+  color: color-mix(in srgb, var(--text) 30%, transparent);
+}
+.season-decor .cobweb {
+  position: absolute;
+  top: 0;
+  width: 96px;
+}
+.season-decor .cobweb--l {
+  left: 0;
+}
+.season-decor .cobweb--r {
+  right: 0;
+  transform: scaleX(-1);
+}
+@media (min-width: 640px) {
+  .season-decor .cobweb {
+    width: 176px;
+  }
+}
+/* A smaller web in the photo's top-right corner (the clue pill owns the top-left). */
+.photo__frame .cobweb {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  width: 84px;
+  transform: scaleX(-1);
+  color: rgba(255, 255, 255, 0.45);
+}
+/* Fog bank along the bottom of the viewport: two tiled mist layers drifting at different
+   speeds, faded out toward the top. Each layer is one tile wider than the screen and slides
+   by exactly one tile, so the loop is seamless. */
+.season-fog {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 144px;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, #000 15%, transparent);
+  mask-image: linear-gradient(to top, #000 15%, transparent);
+}
+.fog-layer {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background-repeat: repeat-x;
+  background-position: left bottom;
+}
+.fog-back {
+  width: calc(100% + 640px);
+  background-image:
+    radial-gradient(ellipse 220px 70px at 160px 70%, rgb(216 200 255 / 0.22), transparent 70%),
+    radial-gradient(ellipse 260px 80px at 470px 80%, rgb(216 200 255 / 0.18), transparent 70%);
+  background-size: 640px 100%;
+  animation: fog-drift-back 70s linear infinite;
+}
+.fog-front {
+  width: calc(100% + 900px);
+  background-image:
+    radial-gradient(ellipse 300px 60px at 250px 88%, rgb(235 228 255 / 0.2), transparent 70%),
+    radial-gradient(ellipse 240px 55px at 700px 82%, rgb(235 228 255 / 0.16), transparent 70%);
+  background-size: 900px 100%;
+  animation: fog-drift-front 45s linear infinite;
+}
+@keyframes fog-drift-back {
+  from {
+    transform: translateX(-640px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes fog-drift-front {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-900px);
+  }
+}
+
+/* ---------------- Small phones (≤360px): keep the header on one line ---------------- */
+@media (max-width: 360px) {
+  .title {
+    font-size: 24px;
+  }
+  .meta__label {
+    display: none;
+  }
+  .chip {
+    padding-right: 10px;
+  }
+  .pastday__btn {
+    padding: 0 12px;
+  }
+}
+
+/* The hint under the price field is one line down to 383px. Below that it is set a little
+   smaller so it still fits on one line, and below 350px — where it has to wrap — the helper
+   always keeps two lines of room, so nothing under the field moves when its message changes. */
+@media (max-width: 382px) {
+  .helper {
+    font-size: 12px;
+    letter-spacing: -0.02em;
+  }
+}
+@media (max-width: 350px) {
+  .helper {
+    min-height: 34px;
+  }
+}
+
+/* ---------------- Narrower than any phone (heavy zoom, split screens) ----------------
+   Not a designed size: just make sure nothing overlaps or runs off the side. */
+@media (max-width: 300px) {
+  :root {
+    --circle: min(40px, calc((100vw - 52px) / 6));
+  }
+  .title {
+    white-space: normal;
+    font-size: 22px;
+    line-height: 1.1;
+  }
+  .try__label {
+    font-size: 11px;
+  }
+  .helper {
+    flex-wrap: wrap;
+    letter-spacing: 0;
+  }
+}
+
+/* ---------------- Short viewports (a phone on its side) ----------------
+   Keep room above the zoomed photo for the clue pill, and for the dots below it. */
+@media (max-height: 480px) {
+  .zoom {
+    padding-top: 30px;
+  }
+  .zoom__stage {
+    max-height: calc(100vh - 30px - 76px);
+    max-height: calc(100dvh - 30px - 76px);
+  }
+  .zoom__foot {
+    margin-top: 12px;
+    gap: 8px;
+  }
+}
+
+/* ---------------- Reduced motion: keep colour and opacity changes, drop movement ---------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  .shutter__leaf {
+    transition: opacity 200ms linear !important;
+    transform: none !important;
+  }
+  .photo__img,
+  .guess,
+  .clues__grid,
+  .zoom__img,
+  .icon-btn svg {
+    transition-property: opacity !important;
+    transform: none !important;
+  }
+  .clues__chev {
+    transition: none;
+  }
+  .verdict__opt {
+    transition-property: opacity, background-color, color;
+  }
+  .verdict__opt.is-chosen {
+    transform: none;
+  }
+  /* Sheets and the toast fade instead of sliding. */
+  .sheet {
+    transform: none !important;
+    opacity: 0;
+    transition: opacity 200ms var(--ease-out) !important;
+  }
+  .sheet.is-shown {
+    opacity: 1;
+  }
+  .toast {
+    transform: none !important;
+    transition: opacity 200ms var(--ease-out) !important;
+  }
+  .rain {
+    display: none;
+  }
+  .fog-layer {
+    animation: none !important;
+  }
+  /* The "locked" note is information, not decoration: it still shows, for its full time. */
+  .zoom__locked {
+    animation-duration: 1500ms !important;
+  }
+}
+
+/* ---------------- Windows High Contrast ---------------- */
+@media (forced-colors: active) {
+  .try[data-state='now'] .try__circle,
+  .tile__content,
+  .field,
+  .chip,
+  .clues,
+  .result,
+  .sheet,
+  .clue-tag,
+  .icon-btn,
+  .photo-btn,
+  .verdict__opt {
+    border: 1px solid CanvasText;
+  }
+  .try[data-state='now'] .try__circle {
+    border-width: 3px;
+  }
+  .shutter__lock {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+  }
+}

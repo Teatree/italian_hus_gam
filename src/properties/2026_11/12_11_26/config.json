@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.8551725, 9.1558325],
+  "mapZoom": 12,
+  "soldPrice": 199000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34410870/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 2,
+    "3": 7,
+    "4": 8,
+    "5": 11,
+    "6": 13
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Triangolo Lariano, Como",
+    "3 rooms 2 baths",
+    "Private Garden",
+    "135 m² of living space",
+    "In da mountains",
+    "Technically 2 floors"
+  ],
+  "priceVerdict": true
+}

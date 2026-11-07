@@ -1,18 +1,33 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-country="it">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#121A26" />
     <meta name="description" content="Guess the price of an Italian 🥐 house in 6 tries" />
-    <title>Guess The House</title>
+    <title>Guess My Casa</title>
+
+    <!-- No-flash theme: runs before the stylesheet. Dark is the default for everyone; only a
+         saved choice ("gmc-theme") switches to light. Keep this before the CSS. -->
+    <script>
+      try {
+        var m = localStorage.getItem('gmc-theme');
+        if (m === 'light' || m === 'dark') document.documentElement.setAttribute('data-theme', m);
+        if (m === 'light') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#FAF3E6');
+      } catch (e) {}
+    </script>
+
+    <!-- Self-hosted fonts (public/fonts): preload the two Latin files so text doesn't jump. -->
+    <link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Link preview (Open Graph / Twitter) shown when the share link is pasted -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Guess The House 🇮🇪" />
+    <meta property="og:title" content="Guess My Casa 🇮🇪" />
     <meta property="og:description" content="Guess the price of an Italian 🥐 house in 6 tries" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Guess The House 🇮🇪" />
+    <meta name="twitter:title" content="Guess My Casa 🇮🇪" />
     <meta name="twitter:description" content="Guess the price of an Italian 🥐 house in 6 tries" />
   </head>
   <body>

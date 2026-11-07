@@ -6,7 +6,7 @@
 //  RESET_TIME_ZONE. The property shown is the one whose folder/slug name matches the
 //  current puzzle date in DD_MM_YY format (e.g. on 8 June 2026 it shows "08_06_26").
 //  So to schedule a house for a given day, just create a folder named with that date.
-//  If no property matches the current day, a "check back soon" screen shows.
+//  If no property matches the current day, the "No casa today" card shows.
 //
 //  ADDING A PROPERTY (no code changes needed):
 //    1. Create src/properties/<YYYY_MM>/<DD_MM_YY>/  (the month folder is just for tidiness;
@@ -16,24 +16,27 @@
 //  The folder is auto-discovered at build time; nothing else to register.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const APP_TITLE = 'Guess The House';
+export const APP_TITLE = 'Guess My Casa';
 
 // ── Per-date theming defaults ───────────────────────────────────────────────────────────────
 // A property's config.json may override these (titleIcon / titleIconUrl / shareFlag) to covertly
 // swap in a house from another country. When a config omits a field, these defaults apply.
-//  • DEFAULT_TITLE_ICON — filename (in public/) of the icon next to the title.
-//  • DEFAULT_TITLE_ICON_URL — where that icon links to.
-//  • DEFAULT_SHARE_FLAG — the flag emoji used in the share text.
+//  • DEFAULT_TITLE_ICON — names the house's country: "<country>_icon.png" picks the flag chip,
+//    the accent colour, the shutters and the confetti (see src/theme/country.ts). The image
+//    itself is no longer drawn; the flag chip next to the countdown replaced the title icon.
+//  • DEFAULT_TITLE_ICON_URL — the "bonus link" the flag chip and the footer point to. A config
+//    can set titleIconUrl to "" for a house with no bonus link.
+//  • DEFAULT_SHARE_FLAG — the flag emoji used in the share text (the 🇮🇪 is a running joke).
 export const DEFAULT_TITLE_ICON = 'italy_icon.png';
 export const DEFAULT_TITLE_ICON_URL = 'https://youtu.be/IGBEp1zTbUw';
 export const DEFAULT_SHARE_FLAG = '🇮🇪';
 
 // ── Halloween dress-up ──────────────────────────────────────────────────────────────────────
 // Houses dated HALLOWEEN_FIRST_DAY..HALLOWEEN_LAST_DAY (DD_MM_YY, inclusive) get the Halloween
-// theme (purple/orange palette, cobwebs, fog, spooky font, candy confetti, tombstone tries…).
+// theme (purple/orange palette, cobwebs, fog, spooky title font, candy confetti, ghost rain…).
 // Hard stop: once the live puzzle day is past HALLOWEEN_LAST_DAY (i.e. from the 10:00 reset on
 // 1 November) the theme is off everywhere — including past-day links to these houses and
-// OVERRIDE_SLUG previews — so it switches itself off with no code change. See src/theme/halloween.tsx.
+// OVERRIDE_SLUG previews — so it switches itself off with no code change. See src/theme/season.tsx.
 export const HALLOWEEN_FIRST_DAY = '27_10_26';
 export const HALLOWEEN_LAST_DAY = '31_10_26';
 
@@ -46,6 +49,22 @@ export const TOLERANCE = 0.1;
 // Single vs double arrow: a guess that misses by more than this fraction of the price is
 // "way off" and gets a double arrow.
 export const FAR_THRESHOLD = 0.3;
+
+// A guess below this is treated as a typo ("450" for 450,000): the field asks for the full
+// price and no try is used. It is a fixed floor, never derived from the house's price, so it
+// can't hint at the answer. The cheapest house so far is €30,000; lower this before
+// scheduling anything under about €11,000, or its winning guesses would be refused.
+export const MIN_GUESS = 10_000;
+
+// ── Ads ─────────────────────────────────────────────────────────────────────────────────────
+// Two reserved slots: a 300×250 box under the map and a 320×50 anchor bar pinned to the bottom
+// of the screen. They are placeholders — no ad tag is wired up yet — so this stays false until
+// real tags exist: with it off neither slot renders and no bottom padding is reserved.
+// To check the layout with the space taken: flip MANUAL_ADS_ENABLED for a local run (don't
+// commit it), or set the environment variable VITE_ADS_ENABLED=1.
+const MANUAL_ADS_ENABLED = false;
+export const ADS_ENABLED: boolean =
+  MANUAL_ADS_ENABLED || (import.meta.env.VITE_ADS_ENABLED as string | undefined) === '1';
 
 // Daily reset: the puzzle switches at this wall-clock hour in this time zone.
 // 'Europe/Kyiv' is Eastern European (EET/EEST) and is daylight-saving aware, so the
