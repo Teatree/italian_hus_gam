@@ -24,7 +24,7 @@ export interface PropertyData {
   // when omitted; set it to "" for a house with no bonus link.
   titleIconUrl?: string;
   // The flag emoji used in the share text (single unicode emoji, e.g. '🇫🇮').
-  // Defaults to DEFAULT_SHARE_FLAG ('🇮🇪') when omitted.
+  // Defaults to the flag of the house's country (from titleIcon) when omitted.
   shareFlag?: string;
   // Opt-in: after pressing Share, ask the player whether the sold price was a steal / fair /
   // rip-off before the text is copied. The vote joins the share text and analytics.

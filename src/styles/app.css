@@ -1284,9 +1284,32 @@ a.chip:active {
   font-family: var(--font-ui);
   outline-offset: -2px;
 }
-/* The dark-mode filter goes on the tiles only — never on the pin or the controls. */
-.map__frame .leaflet-tile-pane {
-  filter: var(--map-filter);
+/* The Satellite / Map toggle, in the map's bottom-left corner, above Leaflet's panes. */
+.map__layer {
+  position: absolute;
+  z-index: 1001;
+  left: 10px;
+  bottom: 10px;
+  height: 36px;
+  padding: 0 12px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: transform var(--dur-xs) var(--ease-out);
+}
+.map__layer:active {
+  transform: scale(0.95);
+}
+.map__layer.is-sat {
+  background: var(--accent);
+  color: var(--on-accent);
 }
 .map__frame .leaflet-bar {
   border: none;

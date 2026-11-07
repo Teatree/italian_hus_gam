@@ -1,7 +1,16 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import L from 'leaflet';
 import { useSeason } from '../theme/season';
+import { LayersIcon } from './Icons';
+
+// Street map (OpenStreetMap) and satellite imagery (Esri World Imagery), switched with the
+// button in the map's corner. Both are free tile services; the dark-mode filter is deliberately
+// not applied to either — the map is always shown as drawn.
+const TILES = {
+  map: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+};
 
 // The pin is a divIcon holding a 28×38 teardrop, anchored at its tip. Its colours are CSS
 // (.gmc-pin in app.css): the body is --accent and the dot --bg, so it follows the theme and
@@ -22,11 +31,11 @@ interface MapViewProps {
   zoom: number;
 }
 
-// A small map centred on the property, with a pin on it. In dark mode (and in a season) the
-// tiles — and only the tiles — are filtered through --map-filter. The mouse wheel zooms the map
-// as soon as the pointer is over it (no click needed first).
+// A small map centred on the property, with a pin on it, and a Satellite / Map toggle. The
+// mouse wheel zooms the map as soon as the pointer is over it (no click needed first).
 export function MapView({ lat, lng, zoom }: MapViewProps) {
   const season = useSeason();
+  const [satellite, setSatellite] = useState(false);
   const icon = useMemo(
     () =>
       season?.pin
@@ -50,9 +59,19 @@ export function MapView({ lat, lng, zoom }: MapViewProps) {
           scrollWheelZoom
           attributionControl={false}
         >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <TileLayer key={satellite ? 'sat' : 'map'} url={satellite ? TILES.satellite : TILES.map} maxNativeZoom={satellite ? 18 : 19} maxZoom={19} />
           <Marker position={[lat, lng]} icon={icon} interactive={false} keyboard={false} />
         </MapContainer>
+        <button
+          className={`map__layer${satellite ? ' is-sat' : ''}`}
+          type="button"
+          onClick={() => setSatellite((s) => !s)}
+          aria-pressed={satellite}
+          aria-label={satellite ? 'Show the street map' : 'Show satellite imagery'}
+        >
+          <LayersIcon />
+          {satellite ? 'Map' : 'Satellite'}
+        </button>
       </div>
     </div>
   );

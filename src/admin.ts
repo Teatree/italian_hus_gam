@@ -26,10 +26,11 @@ export const APP_TITLE = 'Guess My Casa';
 //    itself is no longer drawn; the flag chip next to the countdown replaced the title icon.
 //  • DEFAULT_TITLE_ICON_URL — the "bonus link" the flag chip and the footer point to. A config
 //    can set titleIconUrl to "" for a house with no bonus link.
-//  • DEFAULT_SHARE_FLAG — the flag emoji used in the share text (the 🇮🇪 is a running joke).
+//  • DEFAULT_SHARE_FLAG — the flag emoji used in the share text when a config has none and no
+//    country can be told from its titleIcon (normally the country's own flag is used).
 export const DEFAULT_TITLE_ICON = 'italy_icon.png';
 export const DEFAULT_TITLE_ICON_URL = 'https://youtu.be/IGBEp1zTbUw';
-export const DEFAULT_SHARE_FLAG = '🇮🇪';
+export const DEFAULT_SHARE_FLAG = '🇮🇹';
 
 // ── Halloween dress-up ──────────────────────────────────────────────────────────────────────
 // Houses dated HALLOWEEN_FIRST_DAY..HALLOWEEN_LAST_DAY (DD_MM_YY, inclusive) get the Halloween

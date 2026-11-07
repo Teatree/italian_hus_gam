@@ -28,8 +28,8 @@ export function buildEmojiGrid(guesses: Guess[], maxTries: number): string {
 }
 
 // The full text copied to the clipboard: title (with flag), a flag + spaced emoji grid, a
-// result line, and a link back to the game. The `flag` emoji (both occurrences) is per-date so
-// a swapped-in non-Italian house shares its own country's flag. On a win we share the closest
+// result line, and a link back to the game. The `flag` emoji (both occurrences) is the house's
+// country's flag (config `shareFlag`, else the flag of its `titleIcon` country). On a win we share the closest
 // guess's percentage off — but never the euro amount, so it doesn't give away the actual price.
 // On a loss we skip the percentage entirely and just own it.
 export function buildShareText(

@@ -138,6 +138,15 @@ export function ShareIcon({ size = 20, className }: IconProps) {
   );
 }
 
+export function LayersIcon({ size = 16 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" strokeWidth="2.2" {...stroke} aria-hidden="true">
+      <path d="M12 3l9 5-9 5-9-5 9-5z" />
+      <path d="M3 13l9 5 9-5" />
+    </svg>
+  );
+}
+
 export function LockIcon({ size = 12 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" strokeWidth="2.5" {...stroke} aria-hidden="true">

@@ -9,7 +9,7 @@ import { formatEuro } from './game/format';
 import { loadGame, saveGame } from './game/storage';
 import { fireConfetti, startRain } from './fx/celebrate';
 import { prefersReducedMotion, useReducedMotion } from './lib/motion';
-import type { CountryCode } from './theme/country';
+import { COUNTRY, type CountryCode } from './theme/country';
 import { useSeason } from './theme/season';
 import { AdSlot } from './components/Ads';
 import { CluesPanel } from './components/CluesPanel';
@@ -345,7 +345,7 @@ export function Game({ property, country, nextResetMs, isPastDay, paused }: Game
       MAX_TRIES,
       dayUrl(property.slug),
       closestPercentOff,
-      property.shareFlag,
+      property.shareFlag ?? COUNTRY[country].emoji,
       v,
     );
     return { text, done: copyToClipboard(text) };

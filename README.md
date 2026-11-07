@@ -101,7 +101,7 @@ src/properties/2026_06/08_06_26/
   "prop_pictures": { "1": 12, "2": 7, "3": 1, "4": 4, "5": 20, "6": 9 },
   "titleIcon": "italy_icon.png",
   "titleIconUrl": "https://youtu.be/IGBEp1zTbUw",
-  "shareFlag": "🇮🇪",
+  "shareFlag": "🇮🇹",
   "facts": [
     "Located near Montescudo, Rimini",
     "270 m² of living space",
@@ -269,7 +269,7 @@ falls back to the Italy default if omitted):
 - `titleIconUrl` — the "bonus link" behind the flag chip. Defaults to the
   bundled bonus video; set it to `""` for a house with no bonus link.
 - `shareFlag` — the flag emoji used in the share text (both flag spots). Pass any single unicode
-  emoji, e.g. `"🇫🇮"`. Defaults to `"🇮🇪"`. It never changes how the page looks, except as the
+  emoji, e.g. `"🇫🇮"`. Defaults to the flag of the house's country (from `titleIcon`). It never changes how the page looks, except as the
   fallback below.
 
 These defaults live in `src/admin.ts` (`DEFAULT_TITLE_ICON` / `DEFAULT_TITLE_ICON_URL` /
@@ -289,7 +289,7 @@ falls back to Italy (with one console warning in development).
 | `greece_icon.png` | 🇬🇷 | `gr` | Spíti Nº *n* · Hellas | `#6AAEE0` / `#17649F` | `#1F5FA0` |
 | `finland_icon.png` | 🇫🇮 | `fi` | Talo Nº *n* · Suomi | `#86B4EC` / `#1D4F91` | `#7A5A3E` |
 
-`🇮🇪` (the default joke flag) maps to nothing on purpose, so those houses stay Italian.
+An unknown flag maps to nothing, so those houses stay Italian.
 
 **The house number** *n* is the house's position among all scheduled houses, oldest first:
 

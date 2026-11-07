@@ -8,8 +8,7 @@ import type { PropertyData } from '../types';
 //
 //  The country sets <html data-country="…">, which picks the accent colour, the shutter
 //  colour and the CSS flag (tokens.css), plus the chip text ("Maison Nº 12 · France") and the
-//  confetti colours. It does NOT touch the share flag — that stays whatever the config says,
-//  including the 🇮🇪 running joke.
+//  confetti colours, and the share flag when the config doesn't name one.
 //
 //  To add a country: one [data-country="xx"] line in src/styles/tokens.css, one entry in
 //  COUNTRY below, and its "<name>_icon" / flag emoji in the two lookup tables.
@@ -21,15 +20,16 @@ interface Country {
   name: string; // the country's own name for itself
   word: string; // its word for "house"
   flag: string[]; // flag colours, used for the win confetti
+  emoji: string; // the flag emoji, for the share text
 }
 
 export const COUNTRY: Record<CountryCode, Country> = {
-  it: { name: 'Italia', word: 'Casa', flag: ['#009246', '#F4F5F0', '#CE2B37'] },
-  es: { name: 'España', word: 'Casa', flag: ['#AA151B', '#F1BF00', '#AA151B'] },
-  pt: { name: 'Portugal', word: 'Casa', flag: ['#046A38', '#DA291C', '#FFE900'] },
-  fr: { name: 'France', word: 'Maison', flag: ['#0055A4', '#F4F5F0', '#EF4135'] },
-  gr: { name: 'Hellas', word: 'Spíti', flag: ['#0D5EAF', '#F4F5F0', '#0D5EAF'] },
-  fi: { name: 'Suomi', word: 'Talo', flag: ['#002F6C', '#F4F5F0', '#002F6C'] },
+  it: { name: 'Italia', word: 'Casa', flag: ['#009246', '#F4F5F0', '#CE2B37'], emoji: '🇮🇹' },
+  es: { name: 'España', word: 'Casa', flag: ['#AA151B', '#F1BF00', '#AA151B'], emoji: '🇪🇸' },
+  pt: { name: 'Portugal', word: 'Casa', flag: ['#046A38', '#DA291C', '#FFE900'], emoji: '🇵🇹' },
+  fr: { name: 'France', word: 'Maison', flag: ['#0055A4', '#F4F5F0', '#EF4135'], emoji: '🇫🇷' },
+  gr: { name: 'Hellas', word: 'Spíti', flag: ['#0D5EAF', '#F4F5F0', '#0D5EAF'], emoji: '🇬🇷' },
+  fi: { name: 'Suomi', word: 'Talo', flag: ['#002F6C', '#F4F5F0', '#002F6C'], emoji: '🇫🇮' },
 };
 
 export const DEFAULT_COUNTRY: CountryCode = 'it';
@@ -44,7 +44,7 @@ const ICON_COUNTRY: Record<string, CountryCode> = {
   finland: 'fi',
 };
 
-// Share flag → country. 🇮🇪 is deliberately absent: it is the default joke flag on Italian houses.
+// Share flag → country.
 const FLAG_COUNTRY: Record<string, CountryCode> = {
   '🇮🇹': 'it',
   '🇪🇸': 'es',
