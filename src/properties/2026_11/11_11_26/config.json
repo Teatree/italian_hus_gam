@@ -1,0 +1,26 @@
+{
+  "coordinates": [45.8022397, 8.5388611],
+  "mapZoom": 12,
+  "soldPrice": 1600000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/37128640/",
+  "prop_pictures": {
+    "1": 23,
+    "2": 6,
+    "3": 3,
+    "4": 19,
+    "5": 22,
+    "6": 34
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇪",
+  "facts": [
+    "Located in Lesa",
+    "Built in 1930",
+    "35m to Verbania by Car",
+    "13 rooms 6 baths",
+    "440 m² of living space",
+    "Private Garden"
+  ],
+  "priceVerdict": true
+}

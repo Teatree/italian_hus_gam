@@ -86,7 +86,7 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // The "bonus link" behind the flag chip and in the footer. A config can blank it ("").
+  // The "bonus link" behind the flag chip. A config can blank it ("").
   const bonusUrl = property?.titleIconUrl ?? DEFAULT_TITLE_ICON_URL;
   // "Play yesterday's casa" on the empty-day card, only if yesterday had a house.
   const yesterday = previousDateKey(dateKey);
@@ -128,7 +128,6 @@ export default function App() {
               country={country}
               nextResetMs={nextResetMs}
               isPastDay={isPastDay}
-              bonusUrl={bonusUrl}
               paused={helpOpen}
             />
           ) : (

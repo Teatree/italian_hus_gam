@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ADS_ENABLED, APP_TITLE, FAR_THRESHOLD, MAX_TRIES, RESET_HOUR, TOLERANCE } from './admin';
+import { ADS_ENABLED, APP_TITLE, FAR_THRESHOLD, MAX_TRIES, TOLERANCE } from './admin';
 import { track, randomId } from './analytics';
 import type { Guess, GameStatus, PropertyConfig, Verdict } from './types';
 import { evaluateGuess, percentOff, revealedCount } from './game/logic';
@@ -30,8 +30,6 @@ interface GameProps {
   nextResetMs: number;
   // True when a shared link opened an earlier day's house rather than today's.
   isPastDay: boolean;
-  // The "bonus link" for the footer; empty when the house has none.
-  bonusUrl: string;
   // An app-level overlay (the how-to-play sheet) is open: hold the carousel.
   paused: boolean;
 }
@@ -71,7 +69,7 @@ function placeOf(property: PropertyConfig): string {
 //    shutter cascade) is started by the guess that ends the game, in handleSubmit — never by a
 //    render or an effect on `status`. So a finished game restored from storage just appears in
 //    its final state, and nothing replays on a reload.
-export function Game({ property, country, nextResetMs, isPastDay, bonusUrl, paused }: GameProps) {
+export function Game({ property, country, nextResetMs, isPastDay, paused }: GameProps) {
   const season = useSeason();
   const reducedMotion = useReducedMotion();
   const soldPrice = property.soldPrice;
@@ -185,7 +183,6 @@ export function Game({ property, country, nextResetMs, isPastDay, bonusUrl, paus
   const currentIndex = isPlaying ? guesses.length : winIndex >= 0 ? winIndex : MAX_TRIES - 1;
   const viewedIndex = selected ?? latestIndex;
   const photoIndex = Math.max(0, Math.min(viewedIndex, images.length - 1));
-  const reviewing = isPlaying && viewedIndex !== currentIndex;
 
   // A guess that hit the price exactly (€0 / 0% off) — "right on the money".
   const isExact = guesses.some((g) => g.value === soldPrice);
@@ -421,8 +418,6 @@ export function Game({ property, country, nextResetMs, isPastDay, bonusUrl, paus
         clue={clues[viewedIndex] ?? ''}
         newClueTick={newClueTick}
         isOver={isOver}
-        backToTry={reviewing ? currentIndex + 1 : null}
-        onBack={() => setSelected(null)}
         onStep={stepPhoto}
         onZoom={() => setZoomOpen(true)}
         frameRef={photoFrameRef}
@@ -476,18 +471,6 @@ export function Game({ property, country, nextResetMs, isPastDay, bonusUrl, paus
 
       {ADS_ENABLED && <AdSlot />}
 
-      <footer className="footer">
-        A new casa every day at {String(RESET_HOUR).padStart(2, '0')}:00
-        {bonusUrl && (
-          <>
-            {' · '}
-            <a href={bonusUrl} target="_blank" rel="noopener noreferrer">
-              bonus link
-            </a>
-          </>
-        )}
-      </footer>
-
       {/* Screen-reader feedback after a wrong guess, e.g. "€300,000 is far too low. Try 2 of 6." */}
       <p className="sr-only" role="status" aria-live="polite">
         {announcement}
@@ -500,7 +483,6 @@ export function Game({ property, country, nextResetMs, isPastDay, bonusUrl, paus
         index={photoIndex}
         clue={clues[viewedIndex] ?? ''}
         revealed={revealed}
-        isOver={isOver}
         onStep={stepPhoto}
         originRef={photoFrameRef}
       />

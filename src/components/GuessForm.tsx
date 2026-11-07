@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type RefObject } from 'react';
-import { FAR_THRESHOLD, MIN_GUESS, TOLERANCE } from '../admin';
+import { MIN_GUESS } from '../admin';
 import { cleanPriceDigits, formatEuro, formatPriceDigits } from '../game/format';
 import { prefersReducedMotion, retrigger } from '../lib/motion';
 import type { Guess } from '../types';
@@ -15,8 +15,6 @@ interface GuessFormProps {
   // The price field, so the game can keep the keyboard up between guesses and close it at the end.
   inputRef: RefObject<HTMLInputElement>;
 }
-
-const pct = (fraction: number) => Math.round(fraction * 100);
 
 // The price field: one tall pill with the € prefix, the input and the Guess button inside it,
 // and a helper line underneath. It stays in the same place for the whole game.
@@ -103,7 +101,7 @@ export function GuessForm({ guesses, maxTries, leaving, onSubmit, inputRef }: Gu
         ) : lastTry ? (
           'Last try — make it count'
         ) : (
-          `Within ${pct(TOLERANCE)}% wins · ↑ higher · ↓ lower · ↑↑ = ${pct(FAR_THRESHOLD)}%+ off`
+          'Hint: ↑ - go higher · ↓ go lower · ↑↑/↓↓ go way higher/lower'
         )}
       </p>
     </form>

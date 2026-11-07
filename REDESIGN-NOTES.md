@@ -64,7 +64,7 @@ this codebase. Branch: `redesign/guess-my-casa`.
 | `App.tsx` (shell + `<Game>` in one file) | `App.tsx` is the page shell; the game moved to `Game.tsx` | `src/App.tsx`, `src/Game.tsx` |
 | `Header` (title + title-icon link) | Awning, title, theme toggle, "?" button, flag chip (the bonus link) + countdown | `components/Header.tsx`, `components/Countdown.tsx` |
 | `NewGameTimer` under the tries | Countdown in the header's meta row, again on the result card, and on the empty-day card | `components/Countdown.tsx` |
-| `ImageViewer` + `n / 6` badge | `Photo`: clue pill above a 4:3 frame, two-layer crossfade, expand button, carousel arrows, "Back to try N →" chip | `components/Photo.tsx`, `components/CluePill.tsx` |
+| `ImageViewer` + `n / 6` badge | `Photo`: clue pill above a 4:3 frame, two-layer crossfade, expand button, carousel arrows (the "Back to try N →" chip was removed on 2026-11-06 at the owner's request) | `components/Photo.tsx`, `components/CluePill.tsx` |
 | `Lightbox` | `Zoom`: FLIP open/close, clue pill, dots, caption; arrows, swipe and ←/→ after the game | `components/Zoom.tsx` |
 | `FactsList` (hints list / desktop side column) | Removed. The clue pill shows the current clue; `CluesPanel` holds all six behind shutters | `components/CluesPanel.tsx` |
 | `TriesRow` (24px numbered buttons) | `TryCircles`: 46px circles with the arrow or check inside and the value below | `components/TryCircles.tsx` |
@@ -75,7 +75,7 @@ this codebase. Branch: `redesign/guess-my-casa`.
 | "Copied" on the button | Button turns green + `Toast`; `CopySheet` if the copy is refused | `components/Toast.tsx` |
 | `PastDayBanner` (amber, container width) | Edge-to-edge sticky banner in the accent colour; the meta row shows the date | `components/PastDayBanner.tsx` |
 | `ComeBackScreen` | `NoCasa` card | `components/NoCasa.tsx` |
-| `MapView` (240px, blue pin, wheel zoom on) | 180px, accent pin, tile-only dark filter, wheel zoom after a click | `components/MapView.tsx` |
+| `MapView` (240px, blue pin, wheel zoom on) | 234px (180px until 2026-11-06), accent pin, tile-only dark filter, wheel zoom on hover (the click-first guard and the OSM credit line were removed on 2026-11-06 at the owner's request) | `components/MapView.tsx` |
 | `theme/halloween.tsx` (`data-theme="halloween"`) | `theme/season.tsx` (data-driven seasons, `data-season`); Halloween's own pieces stay in `halloween.tsx` | `src/theme/` |
 | — | Dark/light, countries | `theme/theme.ts`, `theme/country.ts` |
 | — | Confetti and loss rain | `src/fx/celebrate.ts` |

@@ -1,8 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
-import { currentOpener, prefersReducedMotion, trapTab, useScrollLock } from '../lib/motion';
+import { currentOpener, prefersReducedMotion, retrigger, trapTab, useScrollLock } from '../lib/motion';
 import { CluePill } from './CluePill';
-import { ChevronIcon, CloseIcon, HouseIcon } from './Icons';
+import { ChevronIcon, CloseIcon, HouseIcon, LockIcon } from './Icons';
 
 interface ZoomProps {
   open: boolean;
@@ -11,10 +11,8 @@ interface ZoomProps {
   // The photo on screen (0-based) and its clue — the same selection the page shows.
   index: number;
   clue: string;
-  // How many photos are unlocked (lights the dots).
+  // How many photos are unlocked (lights the dots, and limits where the arrows can go).
   revealed: number;
-  // After the game the zoom is a carousel too: arrows, swipe and ←/→.
-  isOver: boolean;
   onStep: (delta: number) => void;
   // The photo frame on the page: the zoom grows out of it and shrinks back into it.
   originRef: RefObject<HTMLElement>;
@@ -31,10 +29,17 @@ const UNCLIPPED = 'inset(0px 0px 0px 0px round 0px)';
 // on the page and animates to its place while the backdrop fades to near-black; closing runs
 // it backwards. It is a modal dialog: focus goes to the close button and stays inside, Escape
 // closes it, the page behind can't scroll, and focus returns to whatever opened it.
-export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onStep, originRef }: ZoomProps) {
+//
+// The arrows, a sideways swipe and ←/→ move between photos. While some photos are still locked
+// the player can only move among the unlocked ones: asking for a locked one is refused — the
+// photo jiggles and a "locked" note flashes. Once every photo is unlocked (the game is over, or
+// five wrong guesses in) it is a plain carousel that wraps round, and nothing is ever refused.
+export function Zoom({ open, onClose, images, index, clue, revealed, onStep, originRef }: ZoomProps) {
   const total = images.length;
   const [phase, setPhase] = useState<Phase>('closed');
   const [failed, setFailed] = useState(false);
+  // The last refused step: `tick` keys the note so it replays, `delta` says which way was asked.
+  const [refused, setRefused] = useState({ tick: 0, delta: 1 });
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -42,8 +47,23 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
   const opener = useRef<HTMLElement | null>(null);
   const request = useRef(0);
   const lastIndex = useRef(index);
-  const live = useRef({ onClose, onStep, isOver });
-  live.current = { onClose, onStep, isOver };
+
+  const allUnlocked = revealed >= total;
+  const lockedAt = (delta: number) => {
+    const target = index + delta;
+    return !allUnlocked && (target < 0 || target >= revealed);
+  };
+  function step(delta: number) {
+    if (!lockedAt(delta)) return onStep(delta);
+    const img = imgRef.current;
+    if (img) {
+      img.style.setProperty('--dir', delta > 0 ? '-1' : '1');
+      retrigger(img, 'is-refuse');
+    }
+    setRefused((r) => ({ tick: r.tick + 1, delta }));
+  }
+  const live = useRef({ onClose, step });
+  live.current = { onClose, step };
 
   useEffect(() => {
     if (open) {
@@ -122,6 +142,7 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
     img.src = images[index];
     lastIndex.current = index;
     setFailed(false);
+    setRefused({ tick: 0, delta: 1 });
     const start = prefersReducedMotion() ? null : flipFrom();
     if (start) {
       img.style.transform = start.transform;
@@ -162,7 +183,7 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
     const img = imgRef.current;
     const back = reduced ? null : flipFrom();
     if (img && back) {
-      img.classList.remove('is-swipe-out', 'is-swipe-pre', 'is-swipe-in');
+      img.classList.remove('is-swipe-out', 'is-swipe-pre', 'is-swipe-in', 'is-refuse');
       img.style.clipPath = UNCLIPPED; // a like-for-like start value, so the clip can animate
       void img.offsetWidth;
       img.classList.add('is-flip');
@@ -188,7 +209,7 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
     if (el && document.contains(el)) el.focus({ preventScroll: true });
   }, [phase]);
 
-  // Stepping to another photo while zoomed (after the game): the current one fades and slides
+  // Stepping to another photo while zoomed: the current one fades and slides
   // out, the source swaps, and the new one fades in from the other side.
   useEffect(() => {
     if (phase !== 'open') return;
@@ -212,7 +233,7 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
     }
 
     img.style.setProperty('--dir', forward ? '-1' : '1');
-    img.classList.remove('is-swipe-pre', 'is-swipe-in', 'is-flip');
+    img.classList.remove('is-swipe-pre', 'is-swipe-in', 'is-flip', 'is-refuse');
     img.classList.add('is-swipe-out');
     const timers: number[] = [];
     timers.push(
@@ -238,13 +259,13 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
   const mounted = phase !== 'closed';
   useScrollLock(mounted);
 
-  // Escape closes; ←/→ step photos once the game is over; Tab stays inside the dialog.
+  // Escape closes; ←/→ step photos; Tab stays inside the dialog.
   useEffect(() => {
     if (!mounted) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') live.current.onClose();
-      else if (e.key === 'ArrowRight' && live.current.isOver) live.current.onStep(1);
-      else if (e.key === 'ArrowLeft' && live.current.isOver) live.current.onStep(-1);
+      else if (e.key === 'ArrowRight') live.current.step(1);
+      else if (e.key === 'ArrowLeft') live.current.step(-1);
       else trapTab(e, rootRef.current);
     };
     const onResize = () => measure();
@@ -284,7 +305,7 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
           if (swipeStart.current === null) return;
           const dx = e.clientX - swipeStart.current;
           swipeStart.current = null;
-          if (Math.abs(dx) > SWIPE_PX && isOver) onStep(dx < 0 ? 1 : -1);
+          if (Math.abs(dx) > SWIPE_PX) step(dx < 0 ? 1 : -1);
         }}
         onPointerCancel={() => {
           swipeStart.current = null;
@@ -297,6 +318,7 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
           alt={`Listing photo ${index + 1} of ${total}`}
           draggable={false}
           onLoad={measure}
+          onAnimationEnd={(e) => e.currentTarget.classList.remove('is-refuse')}
           onError={(e) => {
             e.currentTarget.classList.add('is-broken');
             setFailed(true);
@@ -308,25 +330,37 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
           </div>
         )}
         <CluePill text={clue} index={index} total={total} zoom />
-        {isOver && (
+        {total > 1 && (
           <>
             <button
-              className="photo-btn photo__nav photo__nav--prev"
+              className={`photo-btn photo__nav photo__nav--prev${lockedAt(-1) ? ' is-end' : ''}`}
               type="button"
-              onClick={() => onStep(-1)}
-              aria-label="Previous photo"
+              onClick={() => step(-1)}
+              aria-label={lockedAt(-1) ? 'Previous photo (this is the first one)' : 'Previous photo'}
             >
-              <ChevronIcon dir="left" />
+              <ChevronIcon dir="left" size={26} />
             </button>
             <button
-              className="photo-btn photo__nav photo__nav--next"
+              className={`photo-btn photo__nav photo__nav--next${lockedAt(1) ? ' is-locked' : ''}`}
               type="button"
-              onClick={() => onStep(1)}
-              aria-label="Next photo"
+              onClick={() => step(1)}
+              aria-label={lockedAt(1) ? 'Next photo (locked)' : 'Next photo'}
             >
-              <ChevronIcon dir="right" />
+              {lockedAt(1) ? <LockIcon size={20} /> : <ChevronIcon dir="right" size={26} />}
             </button>
           </>
+        )}
+        {refused.tick > 0 && (
+          <p key={refused.tick} className="zoom__locked" role="status">
+            {refused.delta > 0 ? (
+              <>
+                <LockIcon size={16} />
+                Locked — a wrong guess unlocks it
+              </>
+            ) : (
+              'This is the first photo'
+            )}
+          </p>
         )}
       </div>
       <div className="zoom__foot">
@@ -340,7 +374,7 @@ export function Zoom({ open, onClose, images, index, clue, revealed, isOver, onS
         </div>
         <p className="zoom__cap">
           Photo {index + 1} of {total}
-          {isOver ? ' · swipe or use the arrows' : revealed < total ? ' · more unlock with each miss' : ''}
+          {allUnlocked ? ' · swipe or use the arrows' : ' · more unlock with each miss'}
         </p>
       </div>
     </div>,

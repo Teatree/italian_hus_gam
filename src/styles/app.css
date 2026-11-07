@@ -271,6 +271,8 @@ a.chip:active {
 /* ---------------- Game column ---------------- */
 .game {
   padding-top: var(--gap);
+  /* Air under the map: half the map's height. */
+  padding-bottom: 117px;
   display: flex;
   flex-direction: column;
   gap: var(--gap);
@@ -443,11 +445,16 @@ a.chip:active {
 .photo-btn:active {
   transform: scale(0.92);
 }
+/* Small on purpose: the whole photo opens the zoom too, so this is only a signpost. */
 .photo__zoom {
-  right: 10px;
-  bottom: 10px;
+  right: 8px;
+  bottom: 8px;
+  width: 30px;
+  height: 30px;
   cursor: zoom-in;
 }
+/* Only the zoom has arrows (see .zoom .photo__nav); the page photo is swiped, or steered
+   with the try circles and clue tiles. */
 .photo__nav {
   top: calc(50% - 22px);
   opacity: 0;
@@ -458,36 +465,6 @@ a.chip:active {
 }
 .photo__nav--next {
   right: 10px;
-}
-.is-over .photo__nav {
-  opacity: 1;
-  pointer-events: auto;
-}
-.back-chip {
-  position: absolute;
-  z-index: 2;
-  left: 10px;
-  bottom: 10px;
-  height: var(--tap);
-  padding: 0 16px;
-  border: none;
-  border-radius: var(--radius-pill);
-  background: var(--accent);
-  color: var(--on-accent);
-  font-size: 14px;
-  font-weight: 800;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateX(-12px);
-  pointer-events: none;
-  transition:
-    opacity var(--dur-s) var(--ease-out),
-    transform var(--dur-m) var(--ease-out);
-}
-.back-chip.is-shown {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
 }
 
 /* ---------------- Try circles ---------------- */
@@ -614,12 +591,38 @@ a.chip:active {
     0 0 0 5px var(--text);
 }
 
-.try.pop .try__arrow,
-.try.pop .try__check {
-  animation: pop 420ms var(--ease-spring) 180ms both;
+/* A guess landing: the whole badge — already in its final colours, arrow or check inside —
+   drops from above and snaps into place, and the value appears under it as it hits. A way-off
+   guess (double arrow) is a slap: it comes from further, hits harder, rattles, throws off a
+   shockwave ring and jolts the whole row. */
+.try.pop .try__circle,
+.try.pop .try__num {
+  transition: none;
+}
+.try.pop .try__circle {
+  animation: slam 380ms linear both;
 }
 .try.pop .try__label {
-  animation: labelUp 360ms var(--ease-out) 260ms both;
+  animation: labelUp 260ms var(--ease-out) 170ms both;
+}
+.try.pop-far .try__circle {
+  animation: slap 640ms linear both;
+  z-index: 1;
+}
+.try.pop-far .try__circle::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 3px solid var(--miss);
+  pointer-events: none;
+  animation: shock 520ms var(--ease-out) 150ms both;
+}
+.try.pop-far .try__label {
+  animation: labelUp 260ms var(--ease-out) 190ms both;
+}
+.tries.is-slapped {
+  animation: jolt 380ms linear 150ms both;
 }
 .try.now-in .try__circle {
   animation: nowIn 520ms var(--ease-spring) 250ms both;
@@ -632,14 +635,77 @@ a.chip:active {
     nowIn 520ms var(--ease-spring) 250ms both,
     breathe 2.2s var(--ease-in-out) 800ms infinite;
 }
-@keyframes pop {
+@keyframes slam {
   0% {
     opacity: 0;
-    transform: scale(0.4);
+    transform: translateY(-30px) scale(1.7);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.35);
+  }
+  42% {
+    opacity: 1;
+    transform: translateY(3px) scale(0.86);
+    animation-timing-function: var(--ease-out);
+  }
+  72% {
+    transform: translateY(-1px) scale(1.07);
+    animation-timing-function: var(--ease-in-out);
   }
   100% {
     opacity: 1;
+    transform: none;
+  }
+}
+@keyframes slap {
+  0% {
+    opacity: 0;
+    transform: translateY(-52px) scale(2.7) rotate(-20deg);
+    animation-timing-function: cubic-bezier(0.7, 0, 0.95, 0.3);
+  }
+  24% {
+    opacity: 1;
+    transform: translateY(5px) scale(0.74) rotate(5deg);
+    animation-timing-function: var(--ease-out);
+  }
+  38% {
+    transform: translate(-6px, -2px) scale(1.18) rotate(-9deg);
+  }
+  52% {
+    transform: translate(6px, 0) scale(0.95) rotate(7deg);
+  }
+  66% {
+    transform: translate(-4px, 0) scale(1.04) rotate(-4deg);
+  }
+  82% {
+    transform: translate(2px, 0) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes shock {
+  0% {
+    opacity: 0.9;
     transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+@keyframes jolt {
+  0%,
+  100% {
+    transform: none;
+  }
+  20% {
+    transform: translateY(4px);
+  }
+  45% {
+    transform: translateY(-2px);
+  }
+  70% {
+    transform: translateY(1px);
   }
 }
 @keyframes labelUp {
@@ -1202,13 +1268,10 @@ a.chip:active {
 /* ---------------- Map ---------------- */
 .map {
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
 }
 .map__frame {
   position: relative;
-  height: 180px;
+  height: 234px;
   border-radius: var(--radius-photo);
   overflow: hidden;
   background: var(--raised);
@@ -1253,25 +1316,6 @@ a.chip:active {
 }
 .map__frame .leaflet-bar a.leaflet-disabled {
   color: var(--dim);
-}
-.map figcaption {
-  font-size: 12px;
-  color: var(--dim);
-  text-align: right;
-}
-.map figcaption a {
-  color: inherit;
-  text-decoration: none;
-  /* A 44px-tall tap target around a one-line link, without changing the caption's height:
-     it reaches up over the gap (and the last few px of the map) and down into the gap below. */
-  position: relative;
-  z-index: 1;
-  display: inline-block;
-  padding: 16px 0 11px;
-  margin: -16px 0 -11px;
-}
-.map figcaption a:hover {
-  text-decoration: underline;
 }
 /* The pin is a divIcon: Leaflet's white box is dropped and the teardrop takes its colours
    straight from the tokens, so it follows the theme and the country with no JS. */
@@ -1344,21 +1388,6 @@ a.chip:active {
   font-size: 13px;
 }
 
-.footer {
-  text-align: center;
-  font-size: 14px;
-  color: var(--muted);
-  padding: 4px 0 18px;
-}
-.footer a {
-  color: var(--accent);
-  text-decoration: underline;
-  /* A 44px-tall tap target without changing the line's height (mostly downward, into the
-     footer's own bottom padding, so it never meets the map credit's target above). */
-  display: inline-block;
-  padding: 9px 0 18px;
-  margin: -9px 0 -18px;
-}
 
 /* ---------------- No casa today ---------------- */
 .no-casa {
@@ -1795,10 +1824,82 @@ a.chip:active {
     opacity 200ms var(--ease-out),
     transform var(--dur-xs) var(--ease-out);
 }
+/* The zoom's own arrows: big, solid white, always there — during play too. */
 .zoom .photo__nav {
-  top: calc(50% - 22px);
+  width: 52px;
+  height: 52px;
+  top: calc(50% - 26px);
   opacity: 1;
   pointer-events: auto;
+  background: #ffffff;
+  color: #10141c;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
+}
+/* Nowhere to go that way yet: the next arrow turns into a quiet padlock (the photo after this
+   one is locked) and the previous arrow dims on the first photo. Both still take the tap,
+   which answers with the refusal. */
+.zoom .photo__nav.is-locked,
+.zoom .photo__nav.is-end {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  box-shadow: none;
+}
+/* Refused: the photo lunges toward the locked side and rattles back. --dir is -1 when the
+   player asked for the next photo, 1 for the previous one. */
+.zoom__img.is-refuse {
+  animation: refuse 460ms var(--ease-out);
+}
+@keyframes refuse {
+  0% {
+    transform: none;
+  }
+  18% {
+    transform: translateX(calc(var(--dir, -1) * 26px));
+  }
+  40% {
+    transform: translateX(calc(var(--dir, -1) * -14px));
+  }
+  60% {
+    transform: translateX(calc(var(--dir, -1) * 9px));
+  }
+  80% {
+    transform: translateX(calc(var(--dir, -1) * -4px));
+  }
+  100% {
+    transform: none;
+  }
+}
+.zoom__locked {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 14px;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.82);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  animation: lockedNote 1500ms linear both;
+}
+@keyframes lockedNote {
+  0% {
+    opacity: 0;
+  }
+  8%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 .zoom:not(.is-shown) .clue-tag,
 .zoom:not(.is-shown) .zoom__close,
@@ -1974,11 +2075,20 @@ a.chip:active {
   .pastday__btn {
     padding: 0 12px;
   }
-  /* The rules reminder stays on one line, so the helper is the same height in every state
-     and nothing below the field moves when it changes. */
+}
+
+/* The hint under the price field is one line down to 383px. Below that it is set a little
+   smaller so it still fits on one line, and below 350px — where it has to wrap — the helper
+   always keeps two lines of room, so nothing under the field moves when its message changes. */
+@media (max-width: 382px) {
   .helper {
     font-size: 12px;
     letter-spacing: -0.02em;
+  }
+}
+@media (max-width: 350px) {
+  .helper {
+    min-height: 34px;
   }
 }
 
@@ -2033,7 +2143,6 @@ a.chip:active {
     transform: none !important;
   }
   .photo__img,
-  .back-chip,
   .guess,
   .clues__grid,
   .zoom__img,
@@ -2068,6 +2177,10 @@ a.chip:active {
   }
   .fog-layer {
     animation: none !important;
+  }
+  /* The "locked" note is information, not decoration: it still shows, for its full time. */
+  .zoom__locked {
+    animation-duration: 1500ms !important;
   }
 }
 

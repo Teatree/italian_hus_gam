@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type RefObject } from 'react';
 import { prefersReducedMotion } from '../lib/motion';
 import { useSeason } from '../theme/season';
 import { CluePill } from './CluePill';
-import { ChevronIcon, ExpandIcon, HouseIcon } from './Icons';
+import { ExpandIcon, HouseIcon } from './Icons';
 
 interface PhotoProps {
   images: string[];
@@ -11,11 +11,8 @@ interface PhotoProps {
   clue: string;
   // Bumped when a wrong guess unlocks a new photo + clue (replays the pill's entrance).
   newClueTick: number;
-  // The game has ended: the photo becomes a carousel (arrows, swipe, slower crossfade).
+  // The game has ended: the photo becomes a carousel (swipe, slower crossfade).
   isOver: boolean;
-  // While the player is reviewing an earlier try during play: the try number to go back to.
-  backToTry: number | null;
-  onBack: () => void;
   onStep: (delta: number) => void;
   onZoom: () => void;
   // The 4:3 frame, exposed so the zoom can animate out of it and the page can scroll to it.
@@ -50,8 +47,6 @@ export function Photo({
   clue,
   newClueTick,
   isOver,
-  backToTry,
-  onBack,
   onStep,
   onZoom,
   frameRef,
@@ -161,11 +156,6 @@ export function Photo({
     onZoom();
   }
 
-  const reviewing = backToTry !== null;
-  // Keep showing the last try number while the chip fades out.
-  const backLabel = useRef(backToTry);
-  if (backToTry !== null) backLabel.current = backToTry;
-
   return (
     <figure className={`photo${isOver ? ' is-over' : ''}`}>
       <div
@@ -202,42 +192,13 @@ export function Photo({
         {season?.PhotoDecor && <season.PhotoDecor />}
 
         <button
-          className="photo-btn photo__nav photo__nav--prev"
-          type="button"
-          onClick={() => onStep(-1)}
-          aria-label="Previous photo"
-          disabled={!isOver}
-          aria-hidden={!isOver}
-        >
-          <ChevronIcon dir="left" />
-        </button>
-        <button
-          className="photo-btn photo__nav photo__nav--next"
-          type="button"
-          onClick={() => onStep(1)}
-          aria-label="Next photo"
-          disabled={!isOver}
-          aria-hidden={!isOver}
-        >
-          <ChevronIcon dir="right" />
-        </button>
-        <button
-          className={`back-chip${reviewing ? ' is-shown' : ''}`}
-          type="button"
-          onClick={onBack}
-          tabIndex={reviewing ? 0 : -1}
-          aria-hidden={!reviewing}
-        >
-          Back to try {backLabel.current ?? 1} →
-        </button>
-        <button
           className="photo-btn photo__zoom"
           type="button"
           onClick={onZoom}
           aria-label="Enlarge photo"
           aria-haspopup="dialog"
         >
-          <ExpandIcon />
+          <ExpandIcon size={14} />
         </button>
       </div>
 

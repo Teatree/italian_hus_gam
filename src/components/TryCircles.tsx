@@ -17,8 +17,8 @@ interface TryCirclesProps {
   // After a win the tries that were never needed fade to the quieter "unused" look. It lags
   // 2 seconds behind a live win; a restored game starts with it already on.
   unusedReady: boolean;
-  // The try whose guess landed a moment ago (it plays the arrow/check pop, and the next circle
-  // bounces in as "now"); null when nothing is animating.
+  // The try whose guess landed a moment ago (its badge slams down — a harder "slap" when the
+  // guess was way off — and the next circle bounces in as "now"); null when nothing is animating.
   justGuessed: number | null;
   onSelect: (index: number) => void;
 }
@@ -59,9 +59,12 @@ export function TryCircles({
   onSelect,
 }: TryCirclesProps) {
   const n = guesses.length;
+  const isFar = (g: Guess | undefined) => g?.direction === 'up-far' || g?.direction === 'down-far';
+  // A way-off guess that just landed jolts the whole row as the badge hits.
+  const slapped = justGuessed !== null && isFar(guesses[justGuessed]);
 
   return (
-    <ol className="tries" aria-label="Your six tries">
+    <ol className={`tries${slapped ? ' is-slapped' : ''}`} aria-label="Your six tries">
       {Array.from({ length: maxTries }, (_, i) => {
         const guess: Guess | undefined = guesses[i];
         let state: TryState;
@@ -82,6 +85,7 @@ export function TryCircles({
         const cls = [
           'try',
           justGuessed === i && 'pop',
+          justGuessed === i && isFar(guess) && 'pop-far',
           justGuessed !== null && justGuessed + 1 === i && state === 'now' && 'now-in',
           ringed && 'is-ringed',
           last && 'is-last',

@@ -266,7 +266,7 @@ falls back to the Italy default if omitted):
 - `titleIcon` — names the house's **country** as `<country>_icon.png` (see the table below). It
   drives the flag chip, the accent colour, the shutters and the win confetti. Defaults to
   `italy_icon.png`. (The image itself is no longer drawn: the flag chip replaced the title icon.)
-- `titleIconUrl` — the "bonus link" behind the flag chip and in the footer. Defaults to the
+- `titleIconUrl` — the "bonus link" behind the flag chip. Defaults to the
   bundled bonus video; set it to `""` for a house with no bonus link.
 - `shareFlag` — the flag emoji used in the share text (both flag spots). Pass any single unicode
   emoji, e.g. `"🇫🇮"`. Defaults to `"🇮🇪"`. It never changes how the page looks, except as the
