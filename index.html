@@ -22,24 +22,16 @@
     <link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin />
 
-    <!-- Link preview (Open Graph / Twitter) shown when the share link is pasted -->
+    <!-- Link preview (Open Graph / Twitter) shown when the share link is pasted. Text only, on
+         purpose: no og:image, so Discord shows no picture with the link. -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Guess My Casa" />
     <meta property="og:url" content="https://guessmy.casa/" />
     <meta property="og:title" content="Guess My Casa" />
     <meta property="og:description" content="Guess the price of a Mediterranean house in 6 tries" />
-    <!-- The preview picture (public/og.png, 800×800). It is square and the Twitter card is
-         "summary" on purpose: Discord, Slack and X then show it as a small thumbnail beside
-         the text rather than a big banner under it. Previewers need an absolute URL, so it
-         names the live domain: update it if the site moves. -->
-    <meta property="og:image" content="https://guessmy.casa/og.png" />
-    <meta property="og:image:width" content="800" />
-    <meta property="og:image:height" content="800" />
-    <meta property="og:image:alt" content="Guess My Casa — guess the price of a Mediterranean house in 6 tries" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Guess My Casa" />
     <meta name="twitter:description" content="Guess the price of a Mediterranean house in 6 tries" />
-    <meta name="twitter:image" content="https://guessmy.casa/og.png" />
   </head>
   <body>
     <div id="root"></div>
