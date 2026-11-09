@@ -8,7 +8,7 @@ import { dayUrl } from './game/dayLink';
 import { formatEuro } from './game/format';
 import { loadGame, saveGame } from './game/storage';
 import { fireConfetti, startRain } from './fx/celebrate';
-import { prefersReducedMotion, useReducedMotion } from './lib/motion';
+import { isPC, prefersReducedMotion, useReducedMotion } from './lib/motion';
 import { COUNTRY, type CountryCode } from './theme/country';
 import { useSeason } from './theme/season';
 import { AdSlot } from './components/Ads';
@@ -110,8 +110,9 @@ export function Game({ property, country, nextResetMs, isPastDay, paused }: Game
   const [justGuessed, setJustGuessed] = useState<number | null>(null);
   // Bumped whenever a wrong guess unlocks a new photo and clue.
   const [newClueTick, setNewClueTick] = useState(0);
-  // The Clues panel is collapsed on every visit; its state is deliberately not saved.
-  const [cluesOpen, setCluesOpen] = useState(false);
+  // The Clues panel starts collapsed on phones and tablets, and open on a PC, where it sits
+  // beside the photo (app.css). Its state is deliberately not saved.
+  const [cluesOpen, setCluesOpen] = useState(isPC);
   const [zoomOpen, setZoomOpen] = useState(false);
   const [verdictOpen, setVerdictOpen] = useState(false);
   // The share text, when the browser refused to copy it (opens the copy-fallback sheet).

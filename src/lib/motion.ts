@@ -6,6 +6,13 @@ export function prefersReducedMotion(): boolean {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+// "On a PC": a window wide enough for the Clues column beside the photo, driven by a mouse or
+// trackpad. The same query as the @media (min-width/pointer) block in app.css — keep in step.
+export const PC_QUERY = '(min-width: 920px) and (pointer: fine)';
+export function isPC(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia(PC_QUERY).matches;
+}
+
 // The same setting as React state, for the few places that render differently because of it.
 export function useReducedMotion(): boolean {
   const [reduced, setReduced] = useState(prefersReducedMotion);

@@ -2084,6 +2084,38 @@ a.chip:active {
   }
 }
 
+/* ---------------- PC: the Clues beside the photo ----------------
+   Wide window + mouse (the same query as PC_QUERY in src/lib/motion.ts). The column grows by
+   one Clues column; the game becomes a two-column grid with everything else in the left column
+   at its usual 440px and the Clues panel on the right, as one list of six tiles. The panel is
+   still the same drop-down — it just starts open here. */
+@media (min-width: 920px) and (pointer: fine) {
+  .column {
+    max-width: var(--column-max-pc);
+  }
+  .game {
+    display: grid;
+    grid-template-columns: var(--column-max) var(--side-w);
+    grid-template-rows: auto auto auto auto;
+    column-gap: var(--side-gap);
+    align-items: start;
+  }
+  /* The column is wider than before, so the photo frame keeps the page's 4:3 from its own
+     width, not the column's. */
+  .game > * {
+    grid-column: 1;
+    min-width: 0;
+  }
+  .game > .clues {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: start;
+  }
+  .clues__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* ---------------- Small phones (≤360px): keep the header on one line ---------------- */
 @media (max-width: 360px) {
   .title {

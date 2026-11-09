@@ -21,7 +21,9 @@ interface GuessFormProps {
 //
 // Two kinds of slip are caught here and cost no try: a price that is obviously short of the
 // full amount, and a price already guessed. Either one shakes the field and explains itself in
-// the helper line; the message clears on the next keystroke.
+// the helper line; the message clears on the next keystroke. A run of nothing but zeros is not
+// a slip: it is a real guess of €0 (shown as "0" in the history), which the rules then call
+// far too low.
 export function GuessForm({ guesses, maxTries, leaving, onSubmit, inputRef }: GuessFormProps) {
   // Digits only; the field shows them with comma grouping ("450,000").
   const [digits, setDigits] = useState('');
@@ -45,7 +47,7 @@ export function GuessForm({ guesses, maxTries, leaving, onSubmit, inputRef }: Gu
     e.preventDefault();
     if (!digits || leaving) return; // an empty field does nothing
     const value = Number(digits);
-    if (value < MIN_GUESS) return fail('Enter the full price, e.g. 450,000');
+    if (value !== 0 && value < MIN_GUESS) return fail('Enter the full price, e.g. 450,000');
     if (guesses.some((g) => g.value === value)) return fail(`You already tried ${formatEuro(value)}`);
 
     setDigits('');
