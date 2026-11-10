@@ -18,21 +18,27 @@ export type CountryCode = 'it' | 'es' | 'pt' | 'fr' | 'gr' | 'fi';
 
 interface Country {
   name: string; // the country's own name for itself
+  english: string; // its name in English, for the photos' alt text
   word: string; // its word for "house"
   flag: string[]; // flag colours, used for the win confetti
   emoji: string; // the flag emoji, for the share text
 }
 
 export const COUNTRY: Record<CountryCode, Country> = {
-  it: { name: 'Italia', word: 'Casa', flag: ['#009246', '#F4F5F0', '#CE2B37'], emoji: '🇮🇹' },
-  es: { name: 'España', word: 'Casa', flag: ['#AA151B', '#F1BF00', '#AA151B'], emoji: '🇪🇸' },
-  pt: { name: 'Portugal', word: 'Casa', flag: ['#046A38', '#DA291C', '#FFE900'], emoji: '🇵🇹' },
-  fr: { name: 'France', word: 'Maison', flag: ['#0055A4', '#F4F5F0', '#EF4135'], emoji: '🇫🇷' },
-  gr: { name: 'Hellas', word: 'Spíti', flag: ['#0D5EAF', '#F4F5F0', '#0D5EAF'], emoji: '🇬🇷' },
-  fi: { name: 'Suomi', word: 'Talo', flag: ['#002F6C', '#F4F5F0', '#002F6C'], emoji: '🇫🇮' },
+  it: { name: 'Italia', english: 'Italy', word: 'Casa', flag: ['#009246', '#F4F5F0', '#CE2B37'], emoji: '🇮🇹' },
+  es: { name: 'España', english: 'Spain', word: 'Casa', flag: ['#AA151B', '#F1BF00', '#AA151B'], emoji: '🇪🇸' },
+  pt: { name: 'Portugal', english: 'Portugal', word: 'Casa', flag: ['#046A38', '#DA291C', '#FFE900'], emoji: '🇵🇹' },
+  fr: { name: 'France', english: 'France', word: 'Maison', flag: ['#0055A4', '#F4F5F0', '#EF4135'], emoji: '🇫🇷' },
+  gr: { name: 'Hellas', english: 'Greece', word: 'Spíti', flag: ['#0D5EAF', '#F4F5F0', '#0D5EAF'], emoji: '🇬🇷' },
+  fi: { name: 'Suomi', english: 'Finland', word: 'Talo', flag: ['#002F6C', '#F4F5F0', '#002F6C'], emoji: '🇫🇮' },
 };
 
 export const DEFAULT_COUNTRY: CountryCode = 'it';
+
+// The alt text of a listing photo: what it shows and where. Never anything about the price.
+export function photoAlt(country: CountryCode, index: number, total: number): string {
+  return `House for sale in ${COUNTRY[country].english}, photo ${index + 1} of ${total}`;
+}
 
 // "<name>_icon.png" → country.
 const ICON_COUNTRY: Record<string, CountryCode> = {

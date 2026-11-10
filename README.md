@@ -391,6 +391,10 @@ This repo includes `render.yaml` for a **Static Site**. Either:
 - **Blueprint:** push to a Git repo, then in Render choose *New → Blueprint* and pick the repo
   (Render reads `render.yaml`), **or**
 - **Manual:** *New → Static Site*, set **Build Command** `npm install && npm run build` and
-  **Publish Directory** `dist`, and add a rewrite rule `/*` → `/index.html`.
+  **Publish Directory** `dist`. Add no rewrite rule (an unknown address should answer 404), and
+  under *Headers* add `Cache-Control: public, max-age=31536000, immutable` for the path `/assets/*`.
+
+A service that was set up by hand does not read `render.yaml`, so repeat any change to that file
+in the dashboard.
 
 Share the resulting `*.onrender.com` URL.

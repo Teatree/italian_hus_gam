@@ -41,6 +41,11 @@ export const DEFAULT_SHARE_FLAG = '🇮🇹';
 export const HALLOWEEN_FIRST_DAY = '27_10_26';
 export const HALLOWEEN_LAST_DAY = '31_10_26';
 
+// The three numbers below, and the reset hour and zone further down, are also written out in
+// words in two places that this file cannot reach: the "How to play" row at the bottom of
+// index.html (plain HTML, there before any script runs) and the page description in its head.
+// Change one here and change it there too.
+
 // How many tries the player gets (matches the number of images & facts per property).
 export const MAX_TRIES = 6;
 
@@ -68,6 +73,7 @@ export const ADS_ENABLED: boolean =
   MANUAL_ADS_ENABLED || (import.meta.env.VITE_ADS_ENABLED as string | undefined) === '1';
 
 // Daily reset: the puzzle switches at this wall-clock hour in this time zone.
+// (index.html says "10:00 Kyiv time" in its two rows: keep it in step with these.)
 // 'Europe/Kyiv' is Eastern European (EET/EEST) and is daylight-saving aware, so the
 // reset stays at 10:00 on the local clock all year.
 export const RESET_HOUR = 10;

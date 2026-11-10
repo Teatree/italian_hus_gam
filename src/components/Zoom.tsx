@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { currentOpener, prefersReducedMotion, retrigger, trapTab, useScrollLock } from '../lib/motion';
+import { photoAlt, type CountryCode } from '../theme/country';
 import { CluePill } from './CluePill';
 import { ChevronIcon, CloseIcon, HouseIcon, LockIcon } from './Icons';
 
@@ -8,6 +9,8 @@ interface ZoomProps {
   open: boolean;
   onClose: () => void;
   images: string[];
+  // The house's country, for the alt text.
+  country: CountryCode;
   // The photo on screen (0-based) and its clue — the same selection the page shows.
   index: number;
   clue: string;
@@ -34,7 +37,7 @@ const UNCLIPPED = 'inset(0px 0px 0px 0px round 0px)';
 // the player can only move among the unlocked ones: asking for a locked one is refused — the
 // photo jiggles and a "locked" note flashes. Once every photo is unlocked (the game is over, or
 // five wrong guesses in) it is a plain carousel that wraps round, and nothing is ever refused.
-export function Zoom({ open, onClose, images, index, clue, revealed, onStep, originRef }: ZoomProps) {
+export function Zoom({ open, onClose, images, country, index, clue, revealed, onStep, originRef }: ZoomProps) {
   const total = images.length;
   const [phase, setPhase] = useState<Phase>('closed');
   const [failed, setFailed] = useState(false);
@@ -315,7 +318,7 @@ export function Zoom({ open, onClose, images, index, clue, revealed, onStep, ori
           ref={imgRef}
           // Its classes are driven through the ref (FLIP, swipe, broken), never by a render.
           className="zoom__img"
-          alt={`Listing photo ${index + 1} of ${total}`}
+          alt={photoAlt(country, index, total)}
           draggable={false}
           onLoad={measure}
           onAnimationEnd={(e) => e.currentTarget.classList.remove('is-refuse')}

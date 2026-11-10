@@ -2,11 +2,15 @@
 <html lang="en" data-theme="dark" data-country="it">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#121A26" />
-    <meta name="description" content="Guess the price of a Mediterranean house in 6 tries" />
-    <title>Guess My Casa</title>
+    <meta name="description" content="Can you guess what this house costs? A real home for sale in Italy or elsewhere in Europe every day. Six tries, and each miss unlocks a new photo and clue." />
+    <title>Guess My Casa: Daily House Price Guessing Game</title>
+    <!-- One address for search engines: every ?day= link and the spare domain point here. -->
+    <link rel="canonical" href="https://guessmy.casa/" />
 
     <!-- No-flash theme: runs before the stylesheet. Dark is the default for everyone; only a
          saved choice ("gmc-theme") switches to light. Keep this before the CSS. -->
@@ -17,6 +21,22 @@
         if (m === 'light') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#FAF3E6');
       } catch (e) {}
     </script>
+
+    <!-- Until the game has drawn itself its box is empty; hold a full screen for it, so the two
+         rows written below it in this file never show at the top of the page meanwhile. -->
+    <style>
+      #root:empty {
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+    </style>
+    <noscript>
+      <style>
+        #root {
+          display: none;
+        }
+      </style>
+    </noscript>
 
     <!-- Self-hosted fonts (public/fonts): preload the two Latin files so text doesn't jump. -->
     <link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
@@ -32,9 +52,75 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Guess My Casa" />
     <meta name="twitter:description" content="Guess the price of a Mediterranean house in 6 tries" />
+
+    <!-- What the site is, for search engines. Facts only: no ratings, no prices. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "url": "https://guessmy.casa/",
+            "name": "Guess My Casa",
+            "alternateName": ["GuessMyCasa", "guessmy.casa"],
+            "inLanguage": "en"
+          },
+          {
+            "@type": "VideoGame",
+            "name": "Guess My Casa",
+            "url": "https://guessmy.casa/",
+            "description": "A daily game where you guess the asking price of a real house for sale in six tries.",
+            "genre": "Puzzle",
+            "gamePlatform": "Web browser",
+            "playMode": "SinglePlayer",
+            "isAccessibleForFree": true,
+            "inLanguage": "en"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
+    <noscript>
+      <p class="noscript">Guess My Casa needs JavaScript to run. Turn it on in your browser and reload the page to play today's house.</p>
+    </noscript>
+
     <div id="root"></div>
+
+    <!-- Two closed rows under the game: what the site is and how it is played. They are plain
+         HTML on purpose, so the words are in the page before any script runs (the "?" button
+         in the header still opens the how-to-play sheet). Styled by .foot in src/styles/app.css.
+         KEEP IN SYNC with src/admin.ts: 6 tries (MAX_TRIES), 10% (TOLERANCE), 30%
+         (FAR_THRESHOLD), 10:00 Kyiv time (RESET_HOUR, RESET_TIME_ZONE). -->
+    <footer class="foot">
+      <details class="foot__row">
+        <summary>
+          <h2>About Guess My Casa</h2>
+          <svg class="foot__chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+        </summary>
+        <div class="foot__body">
+          <p>Guess My Casa is a free daily house price guessing game. Every day one real home that is up for sale goes on the board. Most are in Italy, with the odd one in Spain, Greece or Finland.</p>
+          <p>The price you are guessing is the real asking price from the listing. Once the game is over you can open the listing and look around the house yourself.</p>
+          <p>A new casa goes up every day at 10:00 Kyiv time. When you are done, you can share your result without giving the price away.</p>
+        </div>
+      </details>
+      <details class="foot__row">
+        <summary>
+          <h2>How to play</h2>
+          <svg class="foot__chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+        </summary>
+        <div class="foot__body">
+          <ol>
+            <li>Look at the photo and the clue, then guess the asking price of today's casa.</li>
+            <li>You get 6 tries. Land within 10% of the price and you win.</li>
+            <li>Miss, and an arrow points the way: ↑ go higher, ↓ go lower. Two arrows mean you are more than 30% off.</li>
+            <li>Every miss opens one more photo and one more clue.</li>
+            <li>Come back tomorrow. A new casa goes up every day at 10:00 Kyiv time.</li>
+          </ol>
+        </div>
+      </details>
+    </footer>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

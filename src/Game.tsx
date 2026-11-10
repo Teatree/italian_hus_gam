@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { ADS_ENABLED, APP_TITLE, FAR_THRESHOLD, MAX_TRIES, TOLERANCE } from './admin';
 import { track, randomId } from './analytics';
 import type { Guess, GameStatus, PropertyConfig, Verdict } from './types';
@@ -14,7 +14,6 @@ import { useSeason } from './theme/season';
 import { AdSlot } from './components/Ads';
 import { CluesPanel } from './components/CluesPanel';
 import { GuessForm } from './components/GuessForm';
-import { MapView } from './components/MapView';
 import { Photo } from './components/Photo';
 import { ResultCard } from './components/ResultCard';
 import { CopySheet, VerdictSheet } from './components/Sheets';
@@ -41,6 +40,17 @@ const AUTOPLAY_START_MS = 4000; // the photo carousel starts advancing by itself
 const AUTOPLAY_EVERY_MS = 5000; // one photo every 5 seconds
 const COPIED_MS = 2500; // how long "Copied!" and the toast stay up
 const GUESS_ANIM_MS = 1400; // how long a circle keeps its "just guessed" animation classes
+const FIRST_PHOTO_WAIT_MS = 4000; // the longest the map and the next photo wait for the first photo
+
+// Leaflet is the heaviest code on the page and the map sits under everything else, so it is
+// a separate file, fetched after the first photo instead of ahead of it.
+const MapView = lazy(() => import('./components/MapView').then((m) => ({ default: m.MapView })));
+// What stands in for the map until then: its frame, empty, at the same size.
+const mapPlaceholder = (
+  <div className="map">
+    <div className="map__frame" />
+  </div>
+);
 
 // A saved verdict is only trusted if it is one of the three real votes (older saves may hold
 // a legacy "skipped" marker).
@@ -207,15 +217,25 @@ export function Game({ property, country, nextResetMs, isPastDay, paused }: Game
     return () => window.clearInterval(id);
   }, [autoplay, overlayOpen, reducedMotion, viewedIndex]);
 
+  // The photo the page opens on comes first. Until it is in (or has failed), nothing else is
+  // downloaded: not the next photo, not the map. The timer is only a safety net, so a photo
+  // that hangs can't hold the rest of the page back for good.
+  const [firstPhotoIn, setFirstPhotoIn] = useState(false);
+  useEffect(() => {
+    const id = window.setTimeout(() => setFirstPhotoIn(true), FIRST_PHOTO_WAIT_MS);
+    return () => window.clearTimeout(id);
+  }, []);
+
   // Fetch what will be needed next before it is asked for: the following photo while playing,
   // the whole set once the carousel can show any of them. The crossfade still waits for the
   // image to decode, so a slow connection only ever delays a fade, never shows half a photo.
   useEffect(() => {
+    if (!firstPhotoIn) return;
     const ahead = isOver ? images : images.slice(latestIndex + 1, latestIndex + 2);
     ahead.forEach((src) => {
       new Image().src = src;
     });
-  }, [isOver, latestIndex, images]);
+  }, [firstPhotoIn, isOver, latestIndex, images]);
 
   // Bring the photo (and the clue pill above it) back on screen if it has scrolled out of
   // view, leaving 8px of air — below the past-day banner when that is pinned to the top.
@@ -415,12 +435,14 @@ export function Game({ property, country, nextResetMs, isPastDay, paused }: Game
     <main className="game">
       <Photo
         images={images}
+        country={country}
         index={photoIndex}
         clue={clues[viewedIndex] ?? ''}
         newClueTick={newClueTick}
         isOver={isOver}
         onStep={stepPhoto}
         onZoom={() => setZoomOpen(true)}
+        onFirstPhoto={() => setFirstPhotoIn(true)}
         frameRef={photoFrameRef}
       />
 
@@ -468,7 +490,14 @@ export function Game({ property, country, nextResetMs, isPastDay, paused }: Game
         onSelect={selectTry}
       />
 
-      <MapView lat={property.coordinates[0]} lng={property.coordinates[1]} zoom={property.mapZoom ?? 12} />
+      {/* The empty frame has the map's exact size, so the page never moves when it arrives. */}
+      <Suspense fallback={mapPlaceholder}>
+        {firstPhotoIn ? (
+          <MapView lat={property.coordinates[0]} lng={property.coordinates[1]} zoom={property.mapZoom ?? 12} />
+        ) : (
+          mapPlaceholder
+        )}
+      </Suspense>
 
       {ADS_ENABLED && <AdSlot />}
 
@@ -481,6 +510,7 @@ export function Game({ property, country, nextResetMs, isPastDay, paused }: Game
         open={zoomOpen}
         onClose={() => setZoomOpen(false)}
         images={images}
+        country={country}
         index={photoIndex}
         clue={clues[viewedIndex] ?? ''}
         revealed={revealed}

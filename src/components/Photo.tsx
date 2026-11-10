@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { prefersReducedMotion } from '../lib/motion';
+import { photoAlt, type CountryCode } from '../theme/country';
 import { useSeason } from '../theme/season';
 import { CluePill } from './CluePill';
 import { ExpandIcon, HouseIcon } from './Icons';
 
 interface PhotoProps {
   images: string[];
+  // The house's country, for the alt text.
+  country: CountryCode;
   // Which photo is on screen (0-based) and the clue that belongs to it.
   index: number;
   clue: string;
@@ -15,6 +18,9 @@ interface PhotoProps {
   isOver: boolean;
   onStep: (delta: number) => void;
   onZoom: () => void;
+  // Called once, when the photo the page opened on has arrived (or failed): the page holds
+  // back everything else it wants to download until then.
+  onFirstPhoto?: () => void;
   // The 4:3 frame, exposed so the zoom can animate out of it and the page can scroll to it.
   frameRef: RefObject<HTMLDivElement>;
 }
@@ -43,12 +49,14 @@ function ready(img: HTMLImageElement): Promise<void> {
 // over from wherever the running fade happens to be.
 export function Photo({
   images,
+  country,
   index,
   clue,
   newClueTick,
   isOver,
   onStep,
   onZoom,
+  onFirstPhoto,
   frameRef,
 }: PhotoProps) {
   const season = useSeason();
@@ -57,7 +65,7 @@ export function Photo({
   const layerB = useRef<HTMLImageElement>(null);
   const frontIsA = useRef(true);
   const request = useRef(0);
-  const [first] = useState(() => ({ src: images[index], alt: altFor(index, total) }));
+  const [first] = useState(() => ({ src: images[index], alt: photoAlt(country, index, total) }));
   // The photo on screen failed to load: show the house outline instead.
   const [failed, setFailed] = useState(false);
 
@@ -74,7 +82,7 @@ export function Photo({
 
   useEffect(() => {
     const src = images[index];
-    const alt = altFor(index, total);
+    const alt = photoAlt(country, index, total);
     const front = frontIsA.current ? layerA.current : layerB.current;
     const back = frontIsA.current ? layerB.current : layerA.current;
     if (!front || !back) return;
@@ -117,10 +125,25 @@ export function Photo({
       () => swap(true),
       () => swap(false),
     );
-  }, [images, index, total, isOver, season]);
+  }, [images, country, index, total, isOver, season]);
+
+  // The photo the page opens on is the first thing a player looks at, so it is fetched ahead
+  // of everything else (fetchpriority below) and the page is told when it is in.
+  const firstReported = useRef(false);
+  function reportFirstPhoto() {
+    if (firstReported.current) return;
+    firstReported.current = true;
+    onFirstPhoto?.();
+  }
+  // A photo that was already in the browser's cache may be complete before React listens.
+  useEffect(() => {
+    if (layerA.current?.complete) reportFirstPhoto();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // The very first photo isn't crossfaded in, so catch its load failure here.
   function handleError(e: React.SyntheticEvent<HTMLImageElement>) {
+    reportFirstPhoto();
     const img = e.currentTarget;
     const front = frontIsA.current ? layerA.current : layerB.current;
     if (img !== front) return;
@@ -170,8 +193,11 @@ export function Photo({
           src={first.src}
           data-src={first.src}
           alt={first.alt}
+          // Lower-case on purpose: React 18 does not know the camel-cased prop.
+          {...{ fetchpriority: 'high' }}
           draggable={false}
           onClick={openZoom}
+          onLoad={reportFirstPhoto}
           onError={handleError}
         />
         <img
@@ -205,8 +231,4 @@ export function Photo({
       <CluePill text={clue} index={index} total={total} newTick={newClueTick} />
     </figure>
   );
-}
-
-function altFor(index: number, total: number): string {
-  return `Listing photo ${index + 1} of ${total}`;
 }

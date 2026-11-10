@@ -75,12 +75,6 @@ button:disabled {
 
 .app {
   position: relative;
-  min-height: 100vh;
-  min-height: 100dvh;
-}
-/* Room for the sticky anchor ad — only reserved while ads are switched on. */
-.app.has-anchor {
-  padding-bottom: calc(var(--anchor-h) + env(safe-area-inset-bottom));
 }
 
 /* ---------------- Past-day banner (sticky, edge to edge) ---------------- */
@@ -271,8 +265,8 @@ a.chip:active {
 /* ---------------- Game column ---------------- */
 .game {
   padding-top: var(--gap);
-  /* Air under the map: half the map's height. */
-  padding-bottom: 117px;
+  /* The About and How-to-play rows follow (.foot); the air under the page is theirs. */
+  padding-bottom: var(--gap);
   display: flex;
   flex-direction: column;
   gap: var(--gap);
@@ -1411,6 +1405,90 @@ a.chip:active {
   font-size: 13px;
 }
 
+/* ---------------- About / How to play (two closed rows under the game) ----------------
+   Written straight into index.html, outside the React tree, as native <details>: the words
+   are in the page before any script runs, and opening a row needs no JavaScript. They share
+   the column's width and the Clues bar's shape, drawn quieter (an outline, no fill). */
+.foot {
+  max-width: var(--column-max);
+  margin: 0 auto;
+  /* Air under the page: half the map's height. */
+  padding: 0 var(--gutter) 117px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+/* Room for the sticky anchor ad, only while ads are switched on. */
+#root:has(.has-anchor) ~ .foot {
+  padding-bottom: calc(117px + var(--anchor-h) + env(safe-area-inset-bottom));
+}
+.foot__row {
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.foot__row > summary {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px 0 14px;
+  border-radius: 20px;
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.foot__row > summary::-webkit-details-marker {
+  display: none;
+}
+.foot__row h2 {
+  flex: 1;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+}
+.foot__chev {
+  flex: none;
+  color: var(--dim);
+}
+.foot__row[open] .foot__chev {
+  transform: rotate(180deg);
+}
+.foot__body {
+  padding: 0 16px 16px 14px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.foot__body p {
+  margin: 0;
+}
+.foot__body p + p {
+  margin-top: 10px;
+}
+.foot__body ol {
+  margin: 0;
+  padding: 0 0 0 20px;
+  list-style: decimal;
+}
+.foot__body li + li {
+  margin-top: 6px;
+}
+.foot__body li::marker {
+  color: var(--dim);
+  font-weight: 700;
+}
+/* Only seen with JavaScript switched off (index.html hides the empty game box then). */
+.noscript {
+  max-width: var(--column-max);
+  margin: 0 auto;
+  padding: 28px var(--gutter);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+}
 
 /* ---------------- No casa today ---------------- */
 .no-casa {
@@ -2246,6 +2324,7 @@ a.chip:active {
   .result,
   .sheet,
   .clue-tag,
+  .foot__row,
   .icon-btn,
   .photo-btn,
   .verdict__opt {
