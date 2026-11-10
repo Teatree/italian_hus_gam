@@ -28,10 +28,9 @@
   --font-ui: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   /* ---- Geometry ---- */
-  --column-max: 440px;          /* the single column (phones, tablets) */
-  --side-w: 360px;              /* PC only: the Clues column to the right of the photo */
+  --column-max: 440px;          /* the single column, on every screen */
+  --side-w: 360px;              /* PC only: the Clues panel hung off the column's right edge */
   --side-gap: 24px;
-  --column-max-pc: calc(var(--column-max) + var(--side-gap) + var(--side-w));
   --gutter: 16px;               /* page side padding */
   --gap: 16px;                  /* vertical rhythm between main blocks */
   --radius-photo: 20px;

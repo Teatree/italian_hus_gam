@@ -2085,34 +2085,31 @@ a.chip:active {
 }
 
 /* ---------------- PC: the Clues beside the photo ----------------
-   Wide window + mouse (the same query as PC_QUERY in src/lib/motion.ts). The column grows by
-   one Clues column; the game becomes a two-column grid with everything else in the left column
-   at its usual 440px and the Clues panel on the right, as one list of six tiles. The panel is
-   still the same drop-down — it just starts open here. */
-@media (min-width: 920px) and (pointer: fine) {
-  .column {
-    max-width: var(--column-max-pc);
-  }
+   Wide window + mouse (the same query as PC_QUERY in src/lib/motion.ts). The centred column
+   stays exactly where it is; the Clues panel is taken out of the flow and hung off its right
+   edge, as one list of six shorter tiles, top-aligned with the photo. The panel is still the
+   same drop-down — it just starts open here. The window must be wide enough for the panel on
+   one side and the same empty space on the other, so the column never shifts. */
+@media (min-width: 1240px) and (pointer: fine) {
   .game {
-    display: grid;
-    grid-template-columns: var(--column-max) var(--side-w);
-    grid-template-rows: auto auto auto auto;
-    column-gap: var(--side-gap);
-    align-items: start;
-  }
-  /* The column is wider than before, so the photo frame keeps the page's 4:3 from its own
-     width, not the column's. */
-  .game > * {
-    grid-column: 1;
-    min-width: 0;
+    position: relative;
   }
   .game > .clues {
-    grid-column: 2;
-    grid-row: 1 / -1;
-    align-self: start;
+    position: absolute;
+    top: 28px; /* level with the photo frame, under the clue pill's overhang */
+    left: calc(100% + var(--side-gap));
+    width: var(--side-w);
   }
   .clues__grid {
     grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .tile {
+    height: 56px;
+  }
+  .tile__content {
+    padding: 7px 11px;
+    gap: 1px;
   }
 }
 

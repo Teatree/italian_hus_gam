@@ -6,9 +6,9 @@ export function prefersReducedMotion(): boolean {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-// "On a PC": a window wide enough for the Clues column beside the photo, driven by a mouse or
-// trackpad. The same query as the @media (min-width/pointer) block in app.css — keep in step.
-export const PC_QUERY = '(min-width: 920px) and (pointer: fine)';
+// "On a PC": a window wide enough for the Clues panel beside the column (with the same room
+// spare on the other side), driven by a mouse or trackpad. The same query as the @media (min-width/pointer) block in app.css — keep in step.
+export const PC_QUERY = '(min-width: 1240px) and (pointer: fine)';
 export function isPC(): boolean {
   return typeof window !== 'undefined' && window.matchMedia(PC_QUERY).matches;
 }
