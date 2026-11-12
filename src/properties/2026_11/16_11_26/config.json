@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.8535252, 11.2102035],
+  "mapZoom": 12,
+  "soldPrice": 200000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/37446602/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 3,
+    "3": 5,
+    "4": 13,
+    "5": 19,
+    "6": 8
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇹",
+  "facts": [
+    "Located in Finale Emilia",
+    "Private Garden",
+    "5 rooms 3 baths",
+    "1h 5m to Bologna by Car",
+    "176 m² of living space",
+    "Land plot of 200 m²"
+  ],
+  "priceVerdict": true
+}

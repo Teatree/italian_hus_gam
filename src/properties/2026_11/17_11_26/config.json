@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.7344412, 10.8780379],
+  "mapZoom": 12,
+  "soldPrice": 820000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/25126571/",
+  "prop_pictures": {
+    "1": 2,
+    "2": 3,
+    "3": 5,
+    "4": 8,
+    "5": 16,
+    "6": 23
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇹",
+  "facts": [
+    "Located in Morbidina-Nazioni-Santa Croce, Carpi",
+    "Land plot of 3,400 m²",
+    "457 m² of living space",
+    "2 floors",
+    "Built in 2016",
+    "50m to Bologna by Car"
+  ],
+  "priceVerdict": true
+}

@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.7903823, 10.9013379],
+  "mapZoom": 12,
+  "soldPrice": 620000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/34307230/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 9,
+    "3": 19,
+    "4": 13,
+    "5": 23,
+    "6": 26
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇹",
+  "facts": [
+    "Located in Cibeno Pile-Due Ponti, Carpi",
+    "30m to Modena by Car",
+    "270 m² of living space",
+    "1 floors",
+    "6 rooms 2 baths",
+    "Built in 2016"
+  ],
+  "priceVerdict": true
+}

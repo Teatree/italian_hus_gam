@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.5768649, 10.8403129],
+  "mapZoom": 12,
+  "soldPrice": 198000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36079765/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 12,
+    "3": 6,
+    "4": 29,
+    "5": 34,
+    "6": 16
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇹",
+  "facts": [
+    "Located in Formigine",
+    "4 rooms 1 baths",
+    "Built in 1970",
+    "141 m² of living space",
+    "3rd floor without a life",
+    "No photos of the kitchen... suspicious"
+  ],
+  "priceVerdict": true
+}
