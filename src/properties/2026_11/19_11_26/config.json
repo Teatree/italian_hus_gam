@@ -1,0 +1,26 @@
+{
+  "coordinates": [44.2591515, 12.3579362],
+  "mapZoom": 12,
+  "soldPrice": 840000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/33508000/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 18,
+    "3": 20,
+    "4": 26,
+    "5": 32,
+    "6": 40
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇹",
+  "facts": [
+    "Located in Centro, Cervia",
+    "5 rooms 2 baths",
+    "126 m² of living space",
+    "Private Garden",
+    "30m to Ravenna by Car",
+    "Land plot of 200 m²"
+  ],
+  "priceVerdict": true
+}
