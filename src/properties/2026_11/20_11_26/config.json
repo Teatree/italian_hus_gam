@@ -1,0 +1,26 @@
+{
+  "coordinates": [40.8633903, 14.1882992],
+  "mapZoom": 12,
+  "soldPrice": 295000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/36712231/",
+  "prop_pictures": {
+    "1": 1,
+    "2": 6,
+    "3": 10,
+    "4": 13,
+    "5": 22,
+    "6": 29
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇹",
+  "facts": [
+    "Located in Camaldoli, Naples",
+    "Built in 1980",
+    "210 m² of living space",
+    "3 floors",
+    "5 rooms 3 baths",
+    "It's high up on a hill"
+  ],
+  "priceVerdict": true
+}

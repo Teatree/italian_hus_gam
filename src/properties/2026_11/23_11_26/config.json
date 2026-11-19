@@ -1,0 +1,26 @@
+{
+  "coordinates": [40.5453349, 14.2344674],
+  "mapZoom": 12,
+  "soldPrice": 1450000,
+  "propertyUrl": "https://www.idealista.it/en/immobile/35405548/",
+  "prop_pictures": {
+    "1": 12,
+    "2": 10,
+    "3": 11,
+    "4": 46,
+    "5": 8,
+    "6": 16
+  },
+  "titleIcon": "italy_icon.png",
+  "titleIconUrl": "https://youtu.be/zWaymcVmJ-A",
+  "shareFlag": "🇮🇹",
+  "facts": [
+    "Located in Capri",
+    "Built in 1950",
+    "75 m² of living space",
+    "1h to Naples by Car",
+    "1 floors",
+    "2 rooms 1 baths"
+  ],
+  "priceVerdict": true
+}
